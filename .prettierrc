@@ -19,7 +19,10 @@
     "^@/lib/(.*)$",
     "^@/hooks/(.*)$",
     "^@/constants/(.*)$",
+    "^@/types/(.*)$",
+    "^@/styles/(.*)$",
     "^@/components/(.*)$",
+    "^@/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
