@@ -8,7 +8,7 @@
   font-weight: 45 920;
   font-style: normal;
   font-display: swap;
-  src: url('/public/fonts/PretendardVariable.woff2') format('woff2-variations');
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
 
 /* ==========================================================================
@@ -79,168 +79,167 @@
    TYPOGRAPHY UTILITIES
    ========================================================================== */
 
-/* Text 3xl (32px / 42px) */
 @utility text3xl-bold {
-  font-size: 32px;
-  line-height: 42px;
+  font-size: 2rem; /* 32px */
+  line-height: 2.625rem; /* 42px */
   font-weight: 700;
 }
 @utility text3xl-semibold {
-  font-size: 32px;
-  line-height: 42px;
+  font-size: 2rem;
+  line-height: 2.625rem;
   font-weight: 600;
 }
 
 /* Text 2xl (24px / 32px) */
 @utility text2xl-bold {
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
   font-weight: 700;
 }
 @utility text2xl-semibold {
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem;
+  line-height: 2rem;
   font-weight: 600;
 }
 @utility text2xl-medium {
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem;
+  line-height: 2rem;
   font-weight: 500;
 }
 @utility text2xl-regular {
-  font-size: 24px;
-  line-height: 32px;
+  font-size: 1.5rem;
+  line-height: 2rem;
   font-weight: 400;
 }
 
 /* Text xl (20px / 32px) */
 @utility textxl-bold {
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 1.25rem; /* 20px */
+  line-height: 2rem; /* 32px */
   font-weight: 700;
 }
 @utility textxl-semibold {
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 1.25rem;
+  line-height: 2rem;
   font-weight: 600;
 }
 @utility textxl-medium {
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 1.25rem;
+  line-height: 2rem;
   font-weight: 500;
 }
 @utility textxl-regular {
-  font-size: 20px;
-  line-height: 32px;
+  font-size: 1.25rem;
+  line-height: 2rem;
   font-weight: 400;
 }
 
 /* Text 2lg (18px / 26px) */
 @utility text2lg-bold {
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.625rem; /* 26px */
   font-weight: 700;
 }
 @utility text2lg-semibold {
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
   font-weight: 600;
 }
 @utility text2lg-medium {
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
   font-weight: 500;
 }
 @utility text2lg-regular {
-  font-size: 18px;
-  line-height: 26px;
+  font-size: 1.125rem;
+  line-height: 1.625rem;
   font-weight: 400;
 }
 
 /* Text lg (16px / 26px) */
 @utility textlg-bold {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 1rem; /* 16px */
+  line-height: 1.625rem; /* 26px */
   font-weight: 700;
 }
 @utility textlg-semibold {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 1rem;
+  line-height: 1.625rem;
   font-weight: 600;
 }
 @utility textlg-medium {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 1rem;
+  line-height: 1.625rem;
   font-weight: 500;
 }
 @utility textlg-regular {
-  font-size: 16px;
-  line-height: 26px;
+  font-size: 1rem;
+  line-height: 1.625rem;
   font-weight: 400;
 }
 
 /* Text md (14px / 24px) */
 @utility textmd-bold {
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5rem; /* 24px */
   font-weight: 700;
 }
 @utility textmd-semibold {
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   font-weight: 600;
 }
 @utility textmd-medium {
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   font-weight: 500;
 }
 @utility textmd-regular {
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
   font-weight: 400;
 }
 
 /* Text sm (13px / 22px) */
 @utility textsm-bold {
-  font-size: 13px;
-  line-height: 22px;
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.375rem; /* 22px */
   font-weight: 700;
 }
 @utility textsm-semibold {
-  font-size: 13px;
-  line-height: 22px;
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
   font-weight: 600;
 }
 @utility textsm-medium {
-  font-size: 13px;
-  line-height: 22px;
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
   font-weight: 500;
 }
 @utility textsm-regular {
-  font-size: 13px;
-  line-height: 22px;
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
   font-weight: 400;
 }
 
 /* Text xs (12px / 18px) */
 @utility textxs-bold {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.125rem; /* 18px */
   font-weight: 700;
 }
 @utility textxs-semibold {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
   font-weight: 600;
 }
 @utility textxs-medium {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
   font-weight: 500;
 }
 @utility textxs-regular {
-  font-size: 12px;
-  line-height: 18px;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
   font-weight: 400;
 }
