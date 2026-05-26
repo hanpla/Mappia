@@ -1,4 +1,4 @@
-import { IconProps } from '@/types/icon';
+import { IconProps } from '@/types/svg';
 
 export default function IconCalendarCheck({
   size = 24,

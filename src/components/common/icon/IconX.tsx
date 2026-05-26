@@ -1,6 +1,6 @@
-import { IconProps } from '@/types/icon';
+import { IconProps } from '@/types/svg';
 
-export default function IconX40px({ size = 40, color, ...props }: IconProps) {
+export default function IconX({ size = 40, color, ...props }: IconProps) {
   return (
     <svg
       width={size}

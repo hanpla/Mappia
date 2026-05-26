@@ -1,6 +1,6 @@
-import { IconProps } from '@/types/icon';
+import { IconProps } from '@/types/svg';
 
-export default function IconTextBoxCehck({
+export default function IconTextBoxCheck({
   size = 24,
   color,
   ...props
