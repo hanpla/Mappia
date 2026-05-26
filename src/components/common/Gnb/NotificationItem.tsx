@@ -48,7 +48,8 @@ export default function NotificationItem({
   const type = detectType(data.content);
   const keyword = KEYWORD_MAP[type];
   const color = COLOR_MAP[type];
-  const parts = data.content.split(keyword);
+  const hasKeyword = data.content.includes(keyword);
+  const parts = hasKeyword ? data.content.split(keyword) : [data.content];
 
   return (
     <div
@@ -69,9 +70,15 @@ export default function NotificationItem({
         </button>
       </div>
       <p className="mb-1 pr-6 text-sm font-normal text-[#111322]">
-        {parts[0]}
-        <span style={{ color }}>{keyword}</span>
-        {parts.slice(1).join(keyword)}
+        {hasKeyword ? (
+          <>
+            {parts[0]}
+            <span style={{ color }}>{keyword}</span>
+            {parts.slice(1).join(keyword)}
+          </>
+        ) : (
+          data.content
+        )}
       </p>
       <p className="text-xs font-normal text-[#A4A1AA]">
         {formatTimeAgo(data.createdAt)}
