@@ -5,7 +5,7 @@ interface ChipProps {
   count: number;
 }
 
-const CHIP_STATUS = {
+const CHIP_STATUS: Record<ChipStatus, { label: string; style: string }> = {
   seat: {
     label: '잔여',
     style: 'bg-[#FFFFFF] text-[#0085FF]',
