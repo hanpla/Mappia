@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import UserSection from './UserSection';
+import AuthButtons from './AuthButtons';
 
 export default function Gnb() {
   return (
@@ -9,7 +9,7 @@ export default function Gnb() {
         <Link href="/" className="cursor-pointer">
           <span>Logo</span>
         </Link>
-        <UserSection />
+        <AuthButtons />
       </div>
     </div>
   );
