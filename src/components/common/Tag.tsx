@@ -4,7 +4,7 @@ interface TagProps {
   status: TagStatus;
 }
 
-const TAG_STATUS = {
+const TAG_STATUS: Record<TagStatus, { label: string; style: string }> = {
   approved: {
     label: '예약 승인',
     style: 'bg-[#FFF4E8] text-[#FF7C1D]',
