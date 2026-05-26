@@ -18,7 +18,7 @@ export default function UserProfile() {
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex cursor-pointer items-center justify-center gap-2.5"
       >
-        <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100">
+        <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100">
           {profileSrc ? (
             <Image
               src={profileSrc}
