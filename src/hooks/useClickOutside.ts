@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export function useClickOutside<T extends HTMLElement>(
   onClickOutside: () => void,
@@ -6,9 +6,9 @@ export function useClickOutside<T extends HTMLElement>(
   const ref = useRef<T>(null);
   const callbackRef = useRef(onClickOutside);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     callbackRef.current = onClickOutside;
-  });
+  }, [onClickOutside]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {

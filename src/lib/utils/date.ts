@@ -1,5 +1,6 @@
 export function formatTimeAgo(createdAt: string): string {
   const diff = Date.now() - new Date(createdAt).getTime();
+  if (diff < 60000) return '방금 전';
   const minutes = Math.floor(diff / 60000);
   if (minutes < 60) return `${minutes}분 전`;
   const hours = Math.floor(minutes / 60);
