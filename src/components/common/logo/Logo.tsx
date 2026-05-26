@@ -1,12 +1,10 @@
 import { IconProps } from '@/types/svg';
 
 export default function Logo({ size = 320, ...props }: IconProps) {
-  // Calculate aspect ratio to preserve scaling when size is specified
   const defaultWidth = 320;
   const defaultHeight = 200;
   const aspectRatio = defaultWidth / defaultHeight;
 
-  // If size is provided, we scale width and height proportionally
   const width = size;
   const height = typeof size === 'number' ? size / aspectRatio : size;
 
