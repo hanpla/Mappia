@@ -1,6 +1,6 @@
 import { IconProps } from '@/types/svg';
 
-export default function IconMeatball40px({
+export default function IconMeatball({
   size = 40,
   color,
   ...props
