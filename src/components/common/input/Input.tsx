@@ -14,13 +14,14 @@ export default function Input({
   leftIcon,
   rightIcon,
   hasError,
+  className = '',
   ...props
 }: InputProps) {
   return (
     <div
       className={`border-gray-A4A flex h-14 items-center rounded-sm border bg-white transition-colors duration-200 ${
         hasError ? 'border-red-FF4' : 'focus-within:border-[#8B7355]'
-      }`}
+      } ${className}`}
     >
       {leftIcon && (
         <span className="text-gray-A1A flex shrink-0 items-center">
