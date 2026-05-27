@@ -1,6 +1,6 @@
-import { IconProps } from '@/types/icon';
+import { IconProps } from '@/types/svg';
 
-export default function IconVisibilityOn24px({
+export default function IconVisibilityOn({
   size = 24,
   color,
   ...props

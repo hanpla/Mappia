@@ -1,4 +1,4 @@
-import { IconProps } from '@/types/icon';
+import { IconProps } from '@/types/svg';
 
 export default function IconEmpty({ size = 240, color, ...props }: IconProps) {
   return (
