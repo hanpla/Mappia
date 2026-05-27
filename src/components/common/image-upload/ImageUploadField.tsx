@@ -6,7 +6,6 @@ import ImageUploadBox from './ImageUploadBox';
 interface ImageUploadFieldProps {
   name: string;
   label: string;
-  isRequired?: boolean;
   maxCount: number;
   images: File[];
   onChange: (images: File[]) => void;
@@ -48,7 +47,7 @@ export default function ImageUploadField({
         )}
         {images.map((file, index) => (
           <ImagePreview
-            key={`${file.name}-${index}`}
+            key={file.name + '-' + file.size + '-' + file.lastModified}
             file={file}
             onRemove={() => handleRemove(index)}
           />

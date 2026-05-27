@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { startTransition, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import IconX from '@/components/common/icon/IconX';
 
@@ -11,28 +11,24 @@ interface ImagePreviewProps {
 }
 
 export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const [url, setUrl] = useState<string>('');
+  const [url] = useState(() => URL.createObjectURL(file));
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
-    startTransition(() => {
-      setUrl(objectUrl);
-    });
-
     return () => {
-      URL.revokeObjectURL(objectUrl);
+      URL.revokeObjectURL(url);
     };
-  }, [file]);
-
-  if (!url)
-    return (
-      <div className="h-32 w-32 shrink-0 animate-pulse rounded-xl bg-gray-200" />
-    );
+  }, [url]);
 
   return (
     <div className="relative h-32 w-32 shrink-0">
       <div className="absolute inset-0 overflow-hidden rounded-xl">
-        <Image src={url} alt="미리보기 이미지" fill className="object-cover" />
+        <Image
+          src={url}
+          alt="미리보기 이미지"
+          fill
+          className="object-cover"
+          unoptimized
+        />
       </div>
       <button
         type="button"

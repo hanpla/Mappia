@@ -59,7 +59,7 @@ export default function ImageUploadBox({
       onClick={handleClick}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      className="border-gary-4B4 flex h-32 w-32 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed bg-transparent transition-colors hover:bg-gray-100"
+      className="border-gray-4B4 flex h-32 w-32 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed bg-transparent transition-colors hover:bg-gray-100"
     >
       <input
         type="file"
