@@ -2,7 +2,6 @@ import Link from 'next/link';
 
 import LogoText from '../logo/LogoText';
 import AuthButtons from './AuthButtons';
-import UserSection from './UserSection';
 
 export default function Gnb() {
   return (
@@ -12,7 +11,6 @@ export default function Gnb() {
           <LogoText width={116} height={31} />
         </Link>
         <AuthButtons />
-        <UserSection />
       </div>
     </div>
   );
