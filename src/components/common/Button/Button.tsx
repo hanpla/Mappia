@@ -1,9 +1,9 @@
 import React from 'react';
 
 const SIZE_STYLES = {
-  lg: 'w-[350px] h-[48px] py-[14px] px-[136px]',
-  md: 'w-[144px] h-[48px] py-[8px] px-[12px]',
-  sm: 'w-[108px] h-[38px] py-[10px] px-[20px]',
+  lg: 'h-[48px] py-[14px] px-[32px]',
+  md: 'h-[48px] py-[8px] px-[12px]',
+  sm: 'h-[38px] py-[10px] px-[20px]',
 };
 
 const FONT_STYLES = {
