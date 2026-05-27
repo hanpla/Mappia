@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
 export interface InputFieldProps {
-  label: string;
+  label?: string;
   error?: string | null;
-  htmlFor: string;
+  htmlFor?: string;
   children: ReactNode;
   className?: string;
 }

@@ -13,7 +13,6 @@ export interface SelectOption {
 }
 
 export interface SelectInputProps {
-  id: string;
   name: string;
   options: SelectOption[];
   value: string;
