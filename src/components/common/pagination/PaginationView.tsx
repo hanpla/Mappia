@@ -18,11 +18,12 @@ export default function PaginationView({
   visiblePageCount = 5,
   onPageChange,
 }: PaginationViewProps) {
-  const totalPages = Math.ceil(totalCount / pageSize);
+  const totalPages = pageSize > 0 ? Math.ceil(totalCount / pageSize) : 0;
 
   if (totalPages <= 1) return null;
 
-  const currentGroupIndex = Math.floor((currentPage - 1) / visiblePageCount);
+  const clampedPage = Math.min(Math.max(1, currentPage), totalPages);
+  const currentGroupIndex = Math.floor((clampedPage - 1) / visiblePageCount);
   const startPage = currentGroupIndex * visiblePageCount + 1;
   const endPage = Math.min(startPage + visiblePageCount - 1, totalPages);
 
@@ -31,11 +32,11 @@ export default function PaginationView({
     (_, i) => startPage + i,
   );
 
-  const prevPage = currentPage - 1;
-  const nextPage = currentPage + 1;
+  const prevPage = clampedPage - 1;
+  const nextPage = clampedPage + 1;
 
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
+  const isFirstPage = clampedPage === 1;
+  const isLastPage = clampedPage === totalPages;
 
   const commonButton =
     'flex items-center justify-center w-[40px] h-[40px] md:w-[55px] md:h-[55px] rounded-[15px] border';
@@ -50,6 +51,7 @@ export default function PaginationView({
         disabled={isFirstPage}
         onClick={() => onPageChange(prevPage)}
         className={isFirstPage ? disabledButton : baseButton}
+        aria-label="이전 페이지"
       >
         <IconPaginationLeft color={isFirstPage ? '#A1A1A1' : '#6B5747'} />
       </button>
@@ -63,6 +65,7 @@ export default function PaginationView({
             type="button"
             onClick={() => onPageChange(page)}
             className={isActive ? activeButton : baseButton}
+            aria-current={isActive ? 'page' : undefined}
           >
             {page}
           </button>
@@ -74,6 +77,7 @@ export default function PaginationView({
         disabled={isLastPage}
         onClick={() => onPageChange(nextPage)}
         className={isLastPage ? disabledButton : baseButton}
+        aria-label="다음 페이지"
       >
         <IconPaginationRight color={isLastPage ? '#A1A1A1' : '#6B5747'} />
       </button>

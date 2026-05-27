@@ -22,10 +22,15 @@ export default function Pagination({
   const currentPage = Number(searchParams?.get('page')) || 1;
 
   const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams?.toString());
+    const [pathname, queryString] = baseUrl.split('?');
+    const params = new URLSearchParams(queryString);
+
+    searchParams?.forEach((value, key) => {
+      params.set(key, value);
+    });
 
     params.set('page', page.toString());
-    router.push(`${baseUrl}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   return (
