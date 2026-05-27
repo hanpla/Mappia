@@ -15,7 +15,6 @@ interface ImageUploadFieldProps {
 export default function ImageUploadField({
   name,
   label,
-  isRequired = false,
   maxCount,
   images,
   onChange,
@@ -37,7 +36,6 @@ export default function ImageUploadField({
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-1">
         <h3 className="text2xl-bold text-black-1B1">{label}</h3>
-        {isRequired && <span className="text-red-FF4">*</span>}
       </div>
       <div className="flex flex-wrap gap-3.5">
         {images.length < maxCount && (
