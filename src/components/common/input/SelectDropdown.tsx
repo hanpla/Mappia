@@ -27,7 +27,7 @@ export default function SelectDropdown({
               onClick={() => onSelect(option.value)}
               className={`textlg-regular flex w-full cursor-pointer items-center px-4 py-3 text-left transition-colors duration-150 ${
                 isSelected
-                  ? 'bg-nomad-112 text-white'
+                  ? 'bg-[#6B5747] text-white'
                   : 'text-black-1B1 hover:bg-gray-FAF'
               }`}
             >
