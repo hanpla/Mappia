@@ -32,7 +32,7 @@ const eslintConfig = defineConfig([
         ecmaFeatures: {
           jsx: true,
         },
-        project: './tsconfig.json',
+        projectService: true,
       },
     },
     rules: {
@@ -80,7 +80,7 @@ const eslintConfig = defineConfig([
             },
             { pattern: '@/**', group: 'internal' },
           ],
-          pathGroupsExcludedImportTypes: ['react', 'next'],
+          pathGroupsExcludedImportTypes: [],
           'newlines-between': 'ignore',
         },
       ],
