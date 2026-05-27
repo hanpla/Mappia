@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import Gnb from '@/components/common/Gnb/Gnb';
+import Gnb from '@/components/common/gnb/Gnb';
 
 export default function MainLayout({
   children,
