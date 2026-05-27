@@ -16,7 +16,7 @@ git checkout develop
 git pull origin develop
 
 git checkout -b feat/#이슈번호-기능이름
-# 예시: git checkout -b feat/#12-login
+# 예시: git checkout -b feat/12-login
 ```
 
 ## 3. 기능 구현 및 커밋
@@ -28,7 +28,7 @@ git checkout -b feat/#이슈번호-기능이름
 작업이 완료되면 원격 저장소에 푸시합니다.
 
 ```bash
-git push origin feat/#이슈번호-기능이름
+git push origin feat/이슈번호-기능이름
 ```
 
 - GitHub에서 `develop` 브랜치를 대상으로 PR을 생성합니다.
