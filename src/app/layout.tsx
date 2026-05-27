@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="antialiased">
-      <body>{children}</body>
+      <body className="bg-[#f2ebdc]">{children}</body>
     </html>
   );
 }
