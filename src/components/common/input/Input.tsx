@@ -35,7 +35,7 @@ export default function Input({
         {...props}
       />
       {rightIcon && (
-        <span className="text-gray-A1A flex shrink-0 cursor-pointer items-center">
+        <span className="text-gray-A1A flex shrink-0 items-center">
           {rightIcon}
         </span>
       )}
