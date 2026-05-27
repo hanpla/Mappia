@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import Footer from '@/components/common/footer/Footer';
 import Gnb from '@/components/common/gnb/Gnb';
 
 export default function MainLayout({
@@ -8,9 +9,10 @@ export default function MainLayout({
   children: ReactNode;
 }>) {
   return (
-    <main>
+    <>
       <Gnb />
-      {children}
-    </main>
+      <main>{children}</main>
+      <Footer />
+    </>
   );
 }
