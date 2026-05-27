@@ -2,29 +2,49 @@
 
 import { useState } from 'react';
 
-import { useClickOutside } from '@/hooks/useClickOutside';
+import useClickOutside from '@/hooks/useClickOutside';
 
-import NotificationDropdown from './NotificationDropdown';
+import IconNotification from '../icon/IconNotification';
+import IconNotificationDot from '../icon/IconNotificationDot';
+import NotificationDropdown, {
+  INITIAL_NOTIFICATIONS,
+} from './NotificationDropdown';
 import UserProfile from './UserProfile';
 
 export default function UserSection() {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const notificationRef = useClickOutside<HTMLDivElement>(() =>
     setIsNotificationOpen(false),
   );
 
+  const handleDismiss = (id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
   return (
     <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
-      <div ref={notificationRef} className="relative">
+      <div
+        ref={notificationRef}
+        className="relative flex items-center justify-center"
+      >
         <button onClick={() => setIsNotificationOpen((prev) => !prev)}>
-          알림
+          {notifications.length > 0 ? (
+            <IconNotificationDot size="24" />
+          ) : (
+            <IconNotification size="24" />
+          )}
         </button>
         {isNotificationOpen && (
-          <NotificationDropdown onClose={() => setIsNotificationOpen(false)} />
+          <NotificationDropdown
+            notifications={notifications}
+            onDismiss={handleDismiss}
+            onClose={() => setIsNotificationOpen(false)}
+          />
         )}
       </div>
       <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
-        <div className="mx-4 h-5.5 w-px bg-[#DDDDDD]" />
+        <div className="h-5.5 w-px bg-[#DDDDDD]" />
         <UserProfile />
       </div>
     </div>

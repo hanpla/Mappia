@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 
-import { useClickOutside } from '@/hooks/useClickOutside';
+import useClickOutside from '@/hooks/useClickOutside';
 
 import UserDropdown from './UserDropdown';
 

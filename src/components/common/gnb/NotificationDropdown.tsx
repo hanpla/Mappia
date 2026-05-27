@@ -1,10 +1,6 @@
-'use client';
-
-import { useState } from 'react';
-
 import NotificationItem, { NotificationData } from './NotificationItem';
 
-const INITIAL_NOTIFICATIONS: NotificationData[] = [
+export const INITIAL_NOTIFICATIONS: NotificationData[] = [
   {
     id: 1,
     teamId: 'team-1',
@@ -65,18 +61,16 @@ const INITIAL_NOTIFICATIONS: NotificationData[] = [
 ];
 
 interface NotificationDropdownProps {
+  notifications: NotificationData[];
+  onDismiss: (id: number) => void;
   onClose: () => void;
 }
 
 export default function NotificationDropdown({
+  notifications,
+  onDismiss,
   onClose,
 }: NotificationDropdownProps) {
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
-
-  const handleDismiss = (id: number) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
-
   return (
     <div
       className="absolute top-full right-0 z-50 mt-2 w-96 rounded-lg bg-[#CED8D5] p-4"
@@ -99,7 +93,7 @@ export default function NotificationDropdown({
           <NotificationItem
             key={notification.id}
             data={notification}
-            onDismiss={() => handleDismiss(notification.id)}
+            onDismiss={() => onDismiss(notification.id)}
           />
         ))}
       </div>
