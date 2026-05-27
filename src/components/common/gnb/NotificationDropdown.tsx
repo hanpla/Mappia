@@ -72,10 +72,7 @@ export default function NotificationDropdown({
   onClose,
 }: NotificationDropdownProps) {
   return (
-    <div
-      className="absolute top-full right-0 z-50 mt-2 w-96 rounded-lg bg-[#CED8D5] p-4"
-      style={{ boxShadow: '0px 2px 8px rgba(120, 116, 134, 0.25)' }}
-    >
+    <div className="absolute top-full right-0 z-50 mt-2 w-96 rounded-lg bg-[#CED8D5] p-4 shadow-[0px_2px_8px_rgba(120,116,134,0.25)]">
       <div className="mb-3 flex items-center justify-between">
         <span className="font-medium text-[#111322]">
           알림 {notifications.length}개

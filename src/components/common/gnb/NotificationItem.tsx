@@ -24,10 +24,16 @@ const KEYWORD_MAP: Record<NotificationType, string> = {
   new: '새로 들어왔어요',
 };
 
-const COLOR_MAP: Record<NotificationType, string> = {
-  approved: '#0080FF',
-  rejected: '#FF472E',
-  new: '#00AC07',
+const DOT_CLASS_MAP: Record<NotificationType, string> = {
+  approved: 'bg-[#0080FF]',
+  rejected: 'bg-[#FF472E]',
+  new: 'bg-[#00AC07]',
+};
+
+const TEXT_CLASS_MAP: Record<NotificationType, string> = {
+  approved: 'text-[#0080FF]',
+  rejected: 'text-[#FF472E]',
+  new: 'text-[#00AC07]',
 };
 
 function detectType(content: string): NotificationType {
@@ -47,20 +53,13 @@ export default function NotificationItem({
 }: NotificationItemProps) {
   const type = detectType(data.content);
   const keyword = KEYWORD_MAP[type];
-  const color = COLOR_MAP[type];
   const hasKeyword = data.content.includes(keyword);
   const parts = hasKeyword ? data.content.split(keyword) : [data.content];
 
   return (
-    <div
-      className="rounded-lg border border-[#E5E4E7] bg-white p-4"
-      style={{ boxShadow: '0px 2px 8px rgba(125, 121, 134, 0.25)' }}
-    >
+    <div className="rounded-lg border border-[#E5E4E7] bg-white p-4 shadow-[0px_2px_8px_rgba(125,121,134,0.25)]">
       <div className="mb-2 flex items-center justify-between">
-        <div
-          className="h-1.25 w-1.25 rounded-full"
-          style={{ backgroundColor: color }}
-        />
+        <div className={`h-1.25 w-1.25 rounded-full ${DOT_CLASS_MAP[type]}`} />
         <button
           onClick={onDismiss}
           aria-label="알림 닫기"
@@ -73,7 +72,7 @@ export default function NotificationItem({
         {hasKeyword ? (
           <>
             {parts[0]}
-            <span style={{ color }}>{keyword}</span>
+            <span className={TEXT_CLASS_MAP[type]}>{keyword}</span>
             {parts.slice(1).join(keyword)}
           </>
         ) : (
