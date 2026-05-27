@@ -15,7 +15,7 @@ export default function SelectDropdown({
 }: SelectDropdownProps) {
   return (
     <ul
-      className="border-gray-DDD shadow-dropdown absolute top-full right-0 left-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-sm border bg-white py-2"
+      className="border-gray-DDD shadow-dropdown absolute top-full right-0 left-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-md border bg-white py-2"
       role="listbox"
     >
       {options.map((option) => {
