@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 export interface InputFieldProps {
   label: string;
   error?: string | null;
-  htmlFor?: string;
+  htmlFor: string;
   children: ReactNode;
   className?: string;
 }
