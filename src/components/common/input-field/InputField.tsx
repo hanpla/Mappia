@@ -20,7 +20,7 @@ export default function InputField({
       {label && (
         <label
           htmlFor={htmlFor}
-          className="textlg-regular text-black-1B1 flex items-center font-medium"
+          className="textlg-regular text-black-1B1 flex items-center"
         >
           {label}
         </label>
