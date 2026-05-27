@@ -19,7 +19,7 @@ export default function SelectTrigger({
       type="button"
       onClick={onToggle}
       className={`flex h-14 w-full cursor-pointer items-center justify-between rounded-sm border bg-white px-4 text-left transition-colors duration-200 outline-none ${
-        isOpen ? 'border-nomad-8B7' : 'border-gray-A4A focus:border-nomad-8B7'
+        isOpen ? 'focus:border-[#8B7355]' : 'border-gray-A4A'
       }`}
       aria-haspopup="listbox"
       aria-expanded={isOpen}
