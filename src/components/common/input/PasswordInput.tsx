@@ -15,21 +15,21 @@ export default function PasswordInput({
   hasError,
   ...props
 }: PasswordInputProps) {
-  const [visible, setVisible] = useState(false);
-  const toggleVisible = () => setVisible((prev) => !prev);
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisible = () => setIsVisible((prev) => !prev);
 
   return (
     <Input
-      type={visible ? 'text' : 'password'}
+      type={isVisible ? 'text' : 'password'}
       hasError={hasError}
       rightIcon={
         <button
           type="button"
           onClick={toggleVisible}
           className="mr-2 flex items-center justify-center focus:outline-none"
-          aria-label={visible ? '비밀번호 숨기기' : '비밀번호 표시'}
+          aria-label={isVisible ? '비밀번호 숨기기' : '비밀번호 표시'}
         >
-          {visible ? (
+          {isVisible ? (
             <IconVisibilityOn {...ICON_PROPS} />
           ) : (
             <IconVisibilityOff {...ICON_PROPS} />
