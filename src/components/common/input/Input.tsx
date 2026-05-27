@@ -31,7 +31,7 @@ export default function Input({
       <input
         id={id}
         type={type}
-        className="textlg-regular h-full flex-1 border-0 px-2 outline-none"
+        className="textlg-regular h-full min-w-0 flex-1 border-0 px-2 outline-none"
         placeholder={placeholder}
         {...props}
       />
