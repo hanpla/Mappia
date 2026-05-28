@@ -44,13 +44,13 @@ export default function Dropdown<T extends string | number>({
 
   return (
     <div ref={ref} className="relative w-full">
-      <div
-        onClick={handleTriggerClick}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-      >
-        {trigger({ isOpen, selectedOption })}
-      </div>
+      {trigger({
+        isOpen,
+        selectedOption,
+        onClick: handleTriggerClick,
+        'aria-haspopup': 'listbox',
+        'aria-expanded': isOpen,
+      })}
 
       {isOpen && (
         <ul
