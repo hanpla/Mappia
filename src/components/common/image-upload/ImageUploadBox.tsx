@@ -48,6 +48,8 @@ export default function ImageUploadBox({
 
   return (
     <div
+      role="button"
+      aria-label="이미지 추가"
       onClick={trigger}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
