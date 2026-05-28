@@ -3,7 +3,7 @@
 import IconBed from '@/components/common/icon/IconBed';
 import Input from '@/components/common/input/Input';
 
-import Button from '../common/Button/Button';
+import Button from '../common/button/Button';
 
 export interface SearchbarProps {
   value: string;
