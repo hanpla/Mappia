@@ -1,9 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 import IconX from '@/components/common/icon/IconX';
-import { useEffect, useState } from 'react';
 
 interface ImagePreviewProps {
   file: File;
@@ -11,9 +11,7 @@ interface ImagePreviewProps {
 }
 
 export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const [url, setUrl] = useState<string>(
-    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  );
+  const [url, setUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const objectUrl = URL.createObjectURL(file);
@@ -26,13 +24,15 @@ export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
   return (
     <div className="relative h-32 w-32 shrink-0">
       <div className="absolute inset-0 overflow-hidden rounded-xl">
-        <Image
-          src={url}
-          alt="미리보기 이미지"
-          fill
-          className="object-cover"
-          unoptimized
-        />
+        {url && (
+          <Image
+            src={url}
+            alt="미리보기 이미지"
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        )}
       </div>
       <button
         type="button"
