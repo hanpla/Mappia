@@ -27,14 +27,16 @@ export default function LoginForm() {
               htmlFor="email"
               className="textlg-regular"
             >
-              <Input
-                id="email"
-                type="email"
-                placeholder="이메일을 입력해 주세요"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="rounded-2xl"
-              />
+      <Input
+        id="email"
+        type="email"
+        placeholder="이메일을 입력해 주세요"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        className="rounded-2xl"
+        autoComplete="username"
+        required
+      />
             </InputField>
             <InputField
               label="비밀번호"
