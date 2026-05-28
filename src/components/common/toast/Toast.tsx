@@ -17,7 +17,7 @@ const TOAST_STYLES: Record<ToastType, string> = {
   information: 'bg-khaki-6B5',
 };
 
-const TOAST_ICONS: Record<ToastType, string> = {
+const TOAST_ICONS = {
   success: successIcon,
   error: errorIcon,
   information: informationIcon,
