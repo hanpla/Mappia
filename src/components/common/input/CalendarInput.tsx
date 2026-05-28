@@ -1,5 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 import IconCalendar from '@/components/common/icon/IconCalendar';
 
 export interface CalendarInputProps extends ComponentPropsWithoutRef<'button'> {
@@ -19,15 +21,17 @@ export default function CalendarInput({
   ...props
 }: CalendarInputProps) {
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className="relative w-full">
       {name && <input type="hidden" name={name} value={value || ''} />}
 
       <button
         id={id}
         onClick={onToggle}
-        className={`flex h-14 w-full cursor-pointer items-center justify-between rounded-sm border bg-white px-4 text-left transition-colors duration-200 outline-none ${
-          isOpen ? 'border-[#8B7355]' : 'border-gray-A4A'
-        }`}
+        className={twMerge(
+          'flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border bg-white px-4 text-left transition-colors duration-200 outline-none',
+          isOpen ? 'border-[#8B7355]' : 'border-gray-A4A',
+          className,
+        )}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         {...props}

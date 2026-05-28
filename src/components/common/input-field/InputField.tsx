@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 export interface InputFieldProps {
   label?: string;
   error?: string | null;
@@ -16,7 +18,7 @@ export default function InputField({
   className = '',
 }: InputFieldProps) {
   return (
-    <div className={`flex w-full flex-col gap-2 ${className}`}>
+    <div className={twMerge('flex w-full flex-col gap-2', className)}>
       {label && (
         <label
           htmlFor={htmlFor}

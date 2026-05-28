@@ -1,3 +1,5 @@
+import { twMerge } from 'tailwind-merge';
+
 import IconChevronDown from '@/components/common/icon/IconChevronDown';
 import IconChevronUp from '@/components/common/icon/IconChevronUp';
 
@@ -6,6 +8,7 @@ interface SelectTriggerProps {
   selectedLabel?: string;
   placeholder: string;
   onToggle: () => void;
+  className?: string;
 }
 
 export default function SelectTrigger({
@@ -13,14 +16,17 @@ export default function SelectTrigger({
   selectedLabel,
   placeholder,
   onToggle,
+  className = '',
 }: SelectTriggerProps) {
   return (
     <button
       type="button"
       onClick={onToggle}
-      className={`flex h-14 w-full cursor-pointer items-center justify-between rounded-sm border bg-white px-4 text-left transition-colors duration-200 outline-none ${
-        isOpen ? 'focus:border-[#8B7355]' : 'border-gray-A4A'
-      }`}
+      className={twMerge(
+        'flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border bg-white px-4 text-left transition-colors duration-200 outline-none',
+        isOpen ? 'focus:border-[#8B7355]' : 'border-gray-A4A',
+        className,
+      )}
       aria-haspopup="listbox"
       aria-expanded={isOpen}
     >
