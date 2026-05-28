@@ -7,13 +7,13 @@ import Button from '../common/Button/Button';
 
 export interface SearchbarProps {
   value: string;
-  onChange: (value: string) => void;
+  setValue: (value: string) => void;
   className?: string;
 }
 
 export default function Searchbar({
   value,
-  onChange,
+  setValue,
   className = '',
 }: SearchbarProps) {
   return (
@@ -30,8 +30,9 @@ export default function Searchbar({
           name="keyword"
           placeholder="내가 원하는 체험은"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           leftIcon={<IconBed color="#8b7c55" />}
+          labelType="floating"
           className="min-w-0 flex-1"
         />
         <Button
