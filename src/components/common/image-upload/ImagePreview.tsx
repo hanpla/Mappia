@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 import IconX from '@/components/common/icon/IconX';
 
@@ -10,14 +9,18 @@ interface ImagePreviewProps {
   onRemove: () => void;
 }
 
-export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const [url] = useState(() => URL.createObjectURL(file));
+const blobUrlCache = new WeakMap<File, string>();
 
-  useEffect(() => {
-    return () => {
-      URL.revokeObjectURL(url);
-    };
-  }, [url]);
+function getOrCreateBlobUrl(file: File): string {
+  const cached = blobUrlCache.get(file);
+  if (cached) return cached;
+  const url = URL.createObjectURL(file);
+  blobUrlCache.set(file, url);
+  return url;
+}
+
+export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
+  const url = getOrCreateBlobUrl(file);
 
   return (
     <div className="relative h-32 w-32 shrink-0">
