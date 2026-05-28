@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 
 import useClickOutside from '@/hooks/useClickOutside';
 
