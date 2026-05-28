@@ -12,6 +12,12 @@ export interface DropdownOption<T> {
   value: T;
 }
 
+export interface DropdownTriggerProps {
+  onClick: () => void;
+  'aria-haspopup': 'listbox';
+  'aria-expanded': boolean;
+}
+
 interface DropdownProps<T> {
   options: DropdownOption<T>[];
   value?: T;
@@ -19,6 +25,7 @@ interface DropdownProps<T> {
   trigger: (state: {
     isOpen: boolean;
     selectedOption?: DropdownOption<T>;
+    triggerProps: DropdownTriggerProps;
   }) => ReactNode;
 }
 
@@ -42,15 +49,15 @@ export default function Dropdown<T extends string | number>({
     setIsOpen(false);
   };
 
+  const triggerProps: DropdownTriggerProps = {
+    onClick: handleTriggerClick,
+    'aria-haspopup': 'listbox',
+    'aria-expanded': isOpen,
+  };
+
   return (
     <div ref={ref} className="relative w-full">
-      <div
-        onClick={handleTriggerClick}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-      >
-        {trigger({ isOpen, selectedOption })}
-      </div>
+      {trigger({ isOpen, selectedOption, triggerProps })}
 
       {isOpen && (
         <ul
