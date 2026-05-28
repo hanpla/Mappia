@@ -1,6 +1,6 @@
 import { IconProps } from '@/types/svg';
 
-export default function LogoHead1({ size = 500, ...props }: IconProps) {
+export default function LogoSurprise({ size = 500, ...props }: IconProps) {
   const defaultWidth = 500;
   const defaultHeight = 500;
   const aspectRatio = defaultWidth / defaultHeight;
