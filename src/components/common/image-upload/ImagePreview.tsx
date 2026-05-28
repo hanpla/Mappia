@@ -3,24 +3,25 @@
 import Image from 'next/image';
 
 import IconX from '@/components/common/icon/IconX';
+import { useEffect, useState } from 'react';
 
 interface ImagePreviewProps {
   file: File;
   onRemove: () => void;
 }
 
-const blobUrlCache = new WeakMap<File, string>();
-
-function getOrCreateBlobUrl(file: File): string {
-  const cached = blobUrlCache.get(file);
-  if (cached) return cached;
-  const url = URL.createObjectURL(file);
-  blobUrlCache.set(file, url);
-  return url;
-}
-
 export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const url = getOrCreateBlobUrl(file);
+  const [url, setUrl] = useState<string>(
+    'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  );
+
+  useEffect(() => {
+    const objectUrl = URL.createObjectURL(file);
+    setUrl(objectUrl);
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [file]);
 
   return (
     <div className="relative h-32 w-32 shrink-0">
