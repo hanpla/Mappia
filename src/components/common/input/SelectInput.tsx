@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { twMerge } from 'tailwind-merge';
-
 import useClickOutside from '@/hooks/useClickOutside';
 
 import SelectDropdown from './SelectDropdown';
@@ -48,7 +46,7 @@ export default function SelectInput({
   };
 
   return (
-    <div className={twMerge('relative', className)} ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <input type="hidden" name={name} value={value || ''} />
 
       <SelectTrigger
@@ -56,6 +54,7 @@ export default function SelectInput({
         selectedLabel={selectedOption?.label}
         placeholder={placeholder}
         onToggle={handleToggle}
+        className={className}
       />
 
       {isOpen && (
