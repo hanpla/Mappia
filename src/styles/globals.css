@@ -21,11 +21,13 @@
   --color-black-1B1: #1b1b1b;
   --color-nomad-112: #112211;
   --color-black-242: #242429;
+  --color-black-333: #333236;
 
   /* Gray */
   --color-gray-FAF: #fafafa;
   --color-gray-EEE: #eeeeee;
   --color-gray-DDD: #dddddd;
+  --color-gray-D6D: #d6d5d9;
   --color-gray-CBC: #cbc9cf;
   --color-gray-ADA: #adaeb8;
   --color-gray-A4A: #a4a1aa;
@@ -54,6 +56,21 @@
 
   /* Yellow */
   --color-yellow-FFC: #ffc23d;
+
+  /* White */
+  --color-white-FFF: #ffffff;
+
+  /* Ivory */
+  --color-ivory-F2E: #f2ebdc;
+
+  /* Beige */
+  --color-beige-8B7: #8b7355;
+
+  /* Khaki */
+  --color-khaki-6B5: #6b5747;
+
+  /* Brown */
+  --color-brown-2A2: #2a2218;
 
   /* Shadows */
   --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.08);
