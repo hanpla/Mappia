@@ -26,7 +26,7 @@ export default function Input({
   return (
     <div
       className={twMerge(
-        'border-gray-A4A flex h-14 items-center rounded-sm border bg-white transition-colors duration-200',
+        'border-gray-A4A flex h-14 items-center rounded-2xl border bg-white transition-colors duration-200',
         hasError ? 'border-red-FF4' : 'focus-within:border-[#8B7355]',
         className,
       )}
@@ -40,7 +40,7 @@ export default function Input({
         <input
           id={id}
           type={type}
-          className="textlg-regular peer h-full w-full min-w-0 border-0 px-2 outline-none"
+          className={`textlg-regular peer h-full w-full min-w-0 border-0 px-4 outline-none ${leftIcon && 'pl-2'}`}
           placeholder={isFloating ? ' ' : placeholder}
           {...props}
         />

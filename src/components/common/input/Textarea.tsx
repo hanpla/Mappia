@@ -18,7 +18,7 @@ export default function Textarea({
       id={id}
       rows={rows}
       className={twMerge(
-        'textlg-regular border-gray-A4A w-full resize-none rounded-sm border bg-white px-3 py-3 transition-colors duration-200 outline-none focus:border-[#8B7355]',
+        'textlg-regular border-gray-A4A w-full resize-none rounded-2xl border bg-white px-3 py-3 transition-colors duration-200 outline-none focus:border-[#8B7355]',
         className,
       )}
       placeholder={placeholder}
