@@ -22,7 +22,17 @@ export default function ImageUploadField({
     const remainingCount = maxCount - images.length;
     if (remainingCount <= 0) return;
 
-    const filesToUpload = newFiles.slice(0, remainingCount);
+    const filesToUpload = newFiles
+      .filter(
+        (f) =>
+          !images.some(
+            (img) =>
+              img.name === f.name &&
+              img.size === f.size &&
+              img.lastModified === f.lastModified,
+          ),
+      )
+      .slice(0, remainingCount);
     onChange([...images, ...filesToUpload]);
   };
 
