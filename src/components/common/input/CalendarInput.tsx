@@ -1,5 +1,7 @@
 import { ComponentPropsWithoutRef } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 import IconCalendar from '@/components/common/icon/IconCalendar';
 
 export interface CalendarInputProps extends ComponentPropsWithoutRef<'button'> {
@@ -19,7 +21,7 @@ export default function CalendarInput({
   ...props
 }: CalendarInputProps) {
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={twMerge('relative w-full', className)}>
       {name && <input type="hidden" name={name} value={value || ''} />}
 
       <button
