@@ -26,7 +26,7 @@ export default function CalendarInput({
         id={id}
         onClick={onToggle}
         className={`flex h-14 w-full cursor-pointer items-center justify-between rounded-sm border bg-white px-4 text-left transition-colors duration-200 outline-none ${
-          isOpen ? 'border-nomad-8B7' : 'border-gray-A4A focus:border-nomad-8B7'
+          isOpen ? 'border-[#8B7355]' : 'border-gray-A4A'
         }`}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
