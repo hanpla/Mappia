@@ -17,14 +17,14 @@ interface DropdownProps<T> {
   options: DropdownOption<T>[];
   value?: T;
   onChange: (value: T) => void;
-  placeholder?: string;
+  placeholder: string;
 }
 
 export default function Dropdown<T extends string | number>({
   options,
   value,
   onChange,
-  placeholder = '카테고리',
+  placeholder,
 }: DropdownProps<T>) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
