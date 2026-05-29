@@ -28,7 +28,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ko" className="antialiased">
-      <body className="bg-[#f2ebdc]">
+      <body className="bg-[#f2ebdc]" suppressHydrationWarning>
         <QueryProvider>
           <AuthStoreProvider initialProps={{ isLogin: !!user, user }}>
             {children}
