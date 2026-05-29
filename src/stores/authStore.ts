@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -24,15 +25,15 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       refreshToken: null,
       isLoggedIn: false,
       setAuth: (user, accessToken, refreshToken) => {
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+        Cookies.set('accessToken', accessToken, { expires: 7 });
         set({ user, accessToken, refreshToken, isLoggedIn: true });
       },
       setTokens: (accessToken, refreshToken) => {
-        document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+        Cookies.set('accessToken', accessToken, { expires: 7 });
         set({ accessToken, refreshToken });
       },
       clearAuth: () => {
-        document.cookie = 'accessToken=; path=/; max-age=0';
+        Cookies.remove('accessToken');
         set({
           user: null,
           accessToken: null,
