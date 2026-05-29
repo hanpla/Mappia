@@ -2,9 +2,8 @@ import React from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
-import type { ButtonProps } from '@/types/button';
-
-interface CategoryButtonProps extends ButtonProps {
+interface CategoryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'lg' | 'md' | 'sm';
   isActive?: boolean;
 }
 
