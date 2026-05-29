@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useAuthStore } from '@/stores/authStore';
+import useToastStore from '@/stores/toastStore';
 
 interface UserDropdownProps {
   onClose: () => void;
@@ -12,10 +13,12 @@ interface UserDropdownProps {
 export default function UserDropdown({ onClose }: UserDropdownProps) {
   const router = useRouter();
   const clearAuth = useAuthStore((state) => state.clearAuth);
+  const showToast = useToastStore((state) => state.showToast);
 
   const handleLogout = () => {
     clearAuth();
     onClose();
+    showToast('error', '로그아웃 되었습니다.');
     router.refresh();
     router.push('/');
   };
