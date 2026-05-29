@@ -28,7 +28,7 @@ export default function Button({
   hasHover = true,
   variant = 'solid',
   ...props
-}: ExtendedButtonProps) {
+}: ButtonProps) {
   return (
     <button
       disabled={disabled}
