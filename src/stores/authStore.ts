@@ -10,6 +10,7 @@ interface AuthState {
   refreshToken: string | null;
   setAuth: (authData: LoginResponse) => void;
   setTokens: (accessToken: string, refreshToken: string) => void;
+  setUser: (user: User) => void;
   clearAuth: () => void;
 }
 
@@ -28,6 +29,7 @@ export const useAuthStore = create<AuthState>()(
           refreshToken: authData.refreshToken,
         });
       },
+      setUser: (user) => set({ user }),
       setTokens: (accessToken, refreshToken) => {
         Cookies.set('accessToken', accessToken, { expires: 7 });
         Cookies.set('refreshToken', refreshToken, { expires: 30 });

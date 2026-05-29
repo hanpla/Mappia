@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 
-import { useAuthStore } from '@/stores/authStore';
+import { useIsLogin } from '@/components/common/AuthStoreProvider';
 
 import LogoText from '../logo/LogoText';
 import AuthButtons from './AuthButtons';
 import UserSection from './UserSection';
 
 export default function Gnb() {
-  const isLoggedIn = useAuthStore((state) => !!state.accessToken);
+  const isLogin = useIsLogin();
 
   return (
     <div className="flex h-17.5 items-center justify-center border-b border-[#DDDDDD] px-6 max-md:p-5">
@@ -17,7 +17,7 @@ export default function Gnb() {
         <Link href="/activities" className="cursor-pointer">
           <LogoText width={116} height={31} />
         </Link>
-        {isLoggedIn ? <UserSection /> : <AuthButtons />}
+        {isLogin ? <UserSection /> : <AuthButtons />}
       </div>
     </div>
   );
