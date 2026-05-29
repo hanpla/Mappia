@@ -18,12 +18,26 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateEmail(value: string) {
+  if (!EMAIL_REGEX.test(value)) return '이메일 형식으로 작성해주세요';
+  return '';
+}
+
+function validatePassword(value: string) {
+  if (value.length < 8) return '8자 이상으로 입력해주세요';
+  return '';
+}
+
 export default function LoginForm() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
   const showToast = useToastStore((state) => state.showToast);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: () => login(email, password),
@@ -31,7 +45,7 @@ export default function LoginForm() {
       setAuth(data);
       showToast('success', '로그인에 성공했습니다.');
       router.refresh();
-      router.push('/activities');
+      router.push('/');
     },
     onError: (err) => {
       const message = isAxiosError<{ message: string }>(err)
@@ -44,17 +58,27 @@ export default function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+    setEmailError(emailErr);
+    setPasswordError(passwordErr);
+    if (emailErr || passwordErr) return;
     loginMutate();
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-12">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="flex w-full flex-col gap-12"
+    >
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-7">
           <div className="flex flex-col gap-7">
             <InputField
               label="이메일"
               htmlFor="email"
+              error={emailError}
               className="textlg-regular"
             >
               <Input
@@ -63,14 +87,16 @@ export default function LoginForm() {
                 placeholder="이메일을 입력해 주세요"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={() => setEmailError(validateEmail(email))}
+                hasError={!!emailError}
                 className="rounded-2xl"
                 autoComplete="username"
-                required
               />
             </InputField>
             <InputField
               label="비밀번호"
               htmlFor="password"
+              error={passwordError}
               className="textlg-regular"
             >
               <PasswordInput
@@ -78,8 +104,9 @@ export default function LoginForm() {
                 placeholder="비밀번호를 입력해주세요"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => setPasswordError(validatePassword(password))}
+                hasError={!!passwordError}
                 autoComplete="current-password"
-                required
               />
             </InputField>
           </div>
