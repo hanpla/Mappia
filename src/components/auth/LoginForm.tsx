@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useAuthStore } from '@/stores/authStore';
 
@@ -16,8 +16,13 @@ import PasswordInput from '@/components/common/input/PasswordInput';
 
 export default function LoginForm() {
   const router = useRouter();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const setAuth = useAuthStore((state) => state.setAuth);
   const [email, setEmail] = useState('');
+
+  useEffect(() => {
+    if (isLoggedIn) router.replace('/');
+  }, [isLoggedIn, router]);
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
