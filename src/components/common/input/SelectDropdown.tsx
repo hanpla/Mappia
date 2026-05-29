@@ -15,7 +15,7 @@ export default function SelectDropdown({
 }: SelectDropdownProps) {
   return (
     <ul
-      className="border-gray-DDD shadow-dropdown absolute top-full right-0 left-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-md border bg-white py-2"
+      className="border-gray-EEE shadow-dropdown absolute top-full right-0 left-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-2xl border bg-white p-2"
       role="listbox"
     >
       {options.map((option) => {
@@ -25,16 +25,16 @@ export default function SelectDropdown({
             <button
               type="button"
               onClick={() => onSelect(option.value)}
-              className={`textlg-regular flex w-full cursor-pointer items-center px-4 py-3 text-left transition-colors duration-150 ${
+              className={`textmd-medium flex h-12 w-full items-center gap-2 rounded-lg px-4 text-left transition-colors duration-150 ${
                 isSelected
-                  ? 'bg-[#6B5747] text-white'
+                  ? 'bg-khaki-6B5 text-white-FFF'
                   : 'text-black-1B1 hover:bg-gray-FAF'
               }`}
             >
-              <span className="mr-2 flex h-5 w-5 shrink-0 items-center justify-center">
-                {isSelected && <IconCheck size={16} color="#FFFFFF" />}
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center">
+                {isSelected && <IconCheck size={20} color="#ffffff" />}
               </span>
-              {option.label}
+              <span>{option.label}</span>
             </button>
           </li>
         );

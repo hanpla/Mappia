@@ -24,7 +24,7 @@ export default function SelectTrigger({
       onClick={onToggle}
       className={twMerge(
         'flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border bg-white px-4 text-left transition-colors duration-200 outline-none',
-        isOpen ? 'focus:border-[#8B7355]' : 'border-gray-A4A',
+        isOpen ? 'focus:border-khaki-6B5' : 'border-gray-A4A',
         className,
       )}
       aria-haspopup="listbox"
