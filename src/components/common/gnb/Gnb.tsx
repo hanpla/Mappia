@@ -9,7 +9,7 @@ import AuthButtons from './AuthButtons';
 import UserSection from './UserSection';
 
 export default function Gnb() {
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const isLoggedIn = useAuthStore((state) => !!state.accessToken);
 
   return (
     <div className="flex h-17.5 items-center justify-center border-b border-[#DDDDDD] px-6 max-md:p-5">

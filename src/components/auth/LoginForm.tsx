@@ -28,7 +28,7 @@ export default function LoginForm() {
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: () => login(email, password),
     onSuccess: ({ data }) => {
-      setAuth(data.user, data.accessToken, data.refreshToken);
+      setAuth(data);
       showToast('success', '로그인에 성공했습니다.');
       router.push('/activities');
     },
