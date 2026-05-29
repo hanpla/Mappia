@@ -1,17 +1,16 @@
 import type { User } from '@/types/auth';
 
-export async function getMe(accessToken: string): Promise<User | null> {
+export async function getMe(
+  accessToken: string,
+): Promise<User | null | undefined> {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        next: { revalidate: 60 },
-      },
+      { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     if (!res.ok) return null;
     return res.json();
   } catch {
-    return null;
+    return undefined;
   }
 }

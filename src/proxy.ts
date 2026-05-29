@@ -3,9 +3,12 @@ import type { NextRequest } from 'next/server';
 
 export function proxy(request: NextRequest) {
   const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
   const { pathname } = request.nextUrl;
 
-  if (accessToken && ['/login', '/signup'].includes(pathname)) {
+  const isLoggedIn = !!(accessToken && refreshToken);
+
+  if (isLoggedIn && ['/login', '/signup'].includes(pathname)) {
     return NextResponse.redirect(new URL('/activities', request.url));
   }
 

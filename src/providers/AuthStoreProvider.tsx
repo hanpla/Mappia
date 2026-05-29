@@ -28,7 +28,7 @@ export default function AuthStoreProvider({ children, initialProps }: Props) {
     } else if (initialProps.isLogin && initialProps.user) {
       setUser(initialProps.user);
     }
-  }, [clearAuth, setUser]);
+  }, [clearAuth, setUser, initialProps.isLogin, initialProps.user]);
 
   return (
     <AuthContext.Provider value={initialProps.isLogin}>

@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
 
+import type { TokensResponse } from '@/types/auth';
+
 const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
@@ -53,7 +55,7 @@ instance.interceptors.response.use(
       useAuthStore.getState();
 
     try {
-      const { data } = await axios.post(
+      const { data } = await axios.post<TokensResponse>(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
         { accessToken, refreshToken },
       );

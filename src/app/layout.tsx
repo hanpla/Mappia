@@ -24,13 +24,16 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
 
-  const user = accessToken ? await getMe(accessToken) : null;
+  const result = accessToken ? await getMe(accessToken) : null;
+  // null → 미인증(401), undefined → 네트워크 오류(쿠키 기반으로 판단), null → 토큰 없음
+  const isLogin = result !== undefined ? !!result : !!accessToken;
+  const user = result ?? null;
 
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-[#f2ebdc]">
         <QueryProvider>
-          <AuthStoreProvider initialProps={{ isLogin: !!user, user }}>
+          <AuthStoreProvider initialProps={{ isLogin, user }}>
             {children}
           </AuthStoreProvider>
         </QueryProvider>
