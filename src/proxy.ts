@@ -13,12 +13,12 @@ function isTokenAlive(token: string): boolean {
 }
 
 export function proxy(request: NextRequest) {
-  const refreshToken = request.cookies.get('refreshToken')?.value;
+  const accessToken = request.cookies.get('accessToken')?.value;
   const { pathname } = request.nextUrl;
 
   if (
-    refreshToken &&
-    isTokenAlive(refreshToken) &&
+    accessToken &&
+    isTokenAlive(accessToken) &&
     ['/login', '/signup'].includes(pathname)
   ) {
     return NextResponse.redirect(new URL('/activities', request.url));
