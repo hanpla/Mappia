@@ -31,8 +31,8 @@ export default function CategoryButton({
       className={twMerge(
         'inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border transition-all duration-200',
         isActive
-          ? 'bg-beige-8B7 border-beige-8B7 text-[#FFFFFF]'
-          : 'text-beige-8B7 border-beige-8B7 bg-[#ffffff]',
+          ? 'bg-beige-8B7 border-beige-8B7 text-white-FFF'
+          : 'text-beige-8B7 border-beige-8B7 bg-white-FFF',
         SIZE_STYLES[size],
         FONT_STYLES[size],
         className,
