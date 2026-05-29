@@ -30,6 +30,7 @@ export default function LoginForm() {
     onSuccess: ({ data }) => {
       setAuth(data);
       showToast('success', '로그인에 성공했습니다.');
+      router.refresh();
       router.push('/activities');
     },
     onError: (err) => {

@@ -6,6 +6,7 @@ export async function getMe(accessToken: string): Promise<User | null> {
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
+        next: { revalidate: 60 },
       },
     );
     if (!res.ok) return null;

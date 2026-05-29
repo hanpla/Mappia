@@ -38,10 +38,12 @@ instance.interceptors.response.use(
     if (isRefreshing) {
       return new Promise<string>((resolve, reject) => {
         failedQueue.push({ resolve, reject });
-      }).then((token) => {
-        original.headers.Authorization = `Bearer ${token}`;
-        return instance(original);
-      });
+      })
+        .then((token) => {
+          original.headers.Authorization = `Bearer ${token}`;
+          return instance(original);
+        })
+        .catch((err) => Promise.reject(err));
     }
 
     original._retry = true;
@@ -62,7 +64,9 @@ instance.interceptors.response.use(
     } catch (err) {
       processQueue(err, null);
       clearAuth();
-      window.location.href = '/login';
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
       return Promise.reject(err);
     } finally {
       isRefreshing = false;

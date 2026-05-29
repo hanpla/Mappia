@@ -22,12 +22,13 @@ export default function AuthStoreProvider({ children, initialProps }: Props) {
   const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    if (!initialProps.isLogin) {
+    const { user: storeUser } = useAuthStore.getState();
+    if (!initialProps.isLogin && storeUser) {
       clearAuth();
-    } else if (initialProps.user) {
+    } else if (initialProps.isLogin && initialProps.user) {
       setUser(initialProps.user);
     }
-  }, []);
+  }, [clearAuth, setUser]);
 
   return (
     <AuthContext.Provider value={initialProps.isLogin}>

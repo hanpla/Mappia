@@ -16,6 +16,7 @@ export default function UserDropdown({ onClose }: UserDropdownProps) {
   const handleLogout = () => {
     clearAuth();
     onClose();
+    router.refresh();
     router.push('/');
   };
 

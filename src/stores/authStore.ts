@@ -4,6 +4,9 @@ import { persist } from 'zustand/middleware';
 
 import type { LoginResponse, User } from '@/types/auth';
 
+const ACCESS_TOKEN_EXPIRES_DAYS = 7;
+const REFRESH_TOKEN_EXPIRES_DAYS = 30;
+
 interface AuthState {
   user: User | null;
   accessToken: string | null;
@@ -21,8 +24,12 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
       setAuth: (authData) => {
-        Cookies.set('accessToken', authData.accessToken, { expires: 7 });
-        Cookies.set('refreshToken', authData.refreshToken, { expires: 30 });
+        Cookies.set('accessToken', authData.accessToken, {
+          expires: ACCESS_TOKEN_EXPIRES_DAYS,
+        });
+        Cookies.set('refreshToken', authData.refreshToken, {
+          expires: REFRESH_TOKEN_EXPIRES_DAYS,
+        });
         set({
           user: authData.user,
           accessToken: authData.accessToken,
@@ -31,8 +38,12 @@ export const useAuthStore = create<AuthState>()(
       },
       setUser: (user) => set({ user }),
       setTokens: (accessToken, refreshToken) => {
-        Cookies.set('accessToken', accessToken, { expires: 7 });
-        Cookies.set('refreshToken', refreshToken, { expires: 30 });
+        Cookies.set('accessToken', accessToken, {
+          expires: ACCESS_TOKEN_EXPIRES_DAYS,
+        });
+        Cookies.set('refreshToken', refreshToken, {
+          expires: REFRESH_TOKEN_EXPIRES_DAYS,
+        });
         set({ accessToken, refreshToken });
       },
       clearAuth: () => {
