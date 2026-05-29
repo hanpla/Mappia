@@ -23,17 +23,23 @@ export const useAuthStore = create<AuthState & AuthActions>()(
       accessToken: null,
       refreshToken: null,
       isLoggedIn: false,
-      setAuth: (user, accessToken, refreshToken) =>
-        set({ user, accessToken, refreshToken, isLoggedIn: true }),
-      setTokens: (accessToken, refreshToken) =>
-        set({ accessToken, refreshToken }),
-      clearAuth: () =>
+      setAuth: (user, accessToken, refreshToken) => {
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+        set({ user, accessToken, refreshToken, isLoggedIn: true });
+      },
+      setTokens: (accessToken, refreshToken) => {
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`;
+        set({ accessToken, refreshToken });
+      },
+      clearAuth: () => {
+        document.cookie = 'accessToken=; path=/; max-age=0';
         set({
           user: null,
           accessToken: null,
           refreshToken: null,
           isLoggedIn: false,
-        }),
+        });
+      },
     }),
     { name: 'auth' },
   ),

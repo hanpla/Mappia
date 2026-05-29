@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
+import useToastStore from '@/stores/toastStore';
 
 import { login } from '@/lib/api/auth';
 
@@ -16,24 +20,30 @@ import PasswordInput from '@/components/common/input/PasswordInput';
 
 export default function LoginForm() {
   const router = useRouter();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const setAuth = useAuthStore((state) => state.setAuth);
+  const showToast = useToastStore((state) => state.showToast);
   const [email, setEmail] = useState('');
-
-  useEffect(() => {
-    if (isLoggedIn) router.replace('/');
-  }, [isLoggedIn, router]);
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const { data } = await login(email, password);
+  const { mutate: loginMutate, isPending } = useMutation({
+    mutationFn: () => login(email, password),
+    onSuccess: ({ data }) => {
       setAuth(data.user, data.accessToken, data.refreshToken);
+      showToast('success', '로그인에 성공했습니다.');
       router.push('/activities');
-    } catch (err) {
-      console.error(err);
-    }
+    },
+    onError: (err) => {
+      const message = isAxiosError<{ message: string }>(err)
+        ? (err.response?.data?.message ??
+          '로그인에 실패했습니다. 정보를 확인해 주세요.')
+        : '로그인에 실패했습니다. 정보를 확인해 주세요.';
+      showToast('error', message);
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    loginMutate();
   };
 
   return (
@@ -73,8 +83,8 @@ export default function LoginForm() {
             </InputField>
           </div>
 
-          <Button type="submit" className="w-full">
-            로그인 하기
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? '로그인 중...' : '로그인 하기'}
           </Button>
         </div>
 

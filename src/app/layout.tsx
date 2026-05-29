@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 
 import '@/styles/globals.css';
 
+import QueryProvider from '@/components/common/QueryProvider';
 import ToastContainer from '@/components/common/toast/ToastContainer';
 
 export const metadata: Metadata = {
@@ -18,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-[#f2ebdc]">
-        {children}
+        <QueryProvider>{children}</QueryProvider>
         <ToastContainer />
       </body>
     </html>
