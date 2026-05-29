@@ -63,42 +63,40 @@ export default function LoginForm() {
     >
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-7">
-          <div className="flex flex-col gap-7">
-            <InputField
-              label="이메일"
-              htmlFor="email"
-              error={emailError}
-              className="textlg-regular"
-            >
-              <Input
-                id="email"
-                type="email"
-                placeholder="이메일을 입력해 주세요"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => setEmailError(validateEmail(email))}
-                hasError={!!emailError}
-                className="rounded-2xl"
-                autoComplete="username"
-              />
-            </InputField>
-            <InputField
-              label="비밀번호"
-              htmlFor="password"
-              error={passwordError}
-              className="textlg-regular"
-            >
-              <PasswordInput
-                id="password"
-                placeholder="비밀번호를 입력해주세요"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onBlur={() => setPasswordError(validatePassword(password))}
-                hasError={!!passwordError}
-                autoComplete="current-password"
-              />
-            </InputField>
-          </div>
+          <InputField
+            label="이메일"
+            htmlFor="email"
+            error={emailError}
+            className="textlg-regular"
+          >
+            <Input
+              id="email"
+              type="email"
+              placeholder="이메일을 입력해 주세요"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => setEmailError(validateEmail(email))}
+              hasError={!!emailError}
+              className="rounded-2xl"
+              autoComplete="username"
+            />
+          </InputField>
+          <InputField
+            label="비밀번호"
+            htmlFor="password"
+            error={passwordError}
+            className="textlg-regular"
+          >
+            <PasswordInput
+              id="password"
+              placeholder="비밀번호를 입력해주세요"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onBlur={() => setPasswordError(validatePassword(password))}
+              hasError={!!passwordError}
+              autoComplete="current-password"
+            />
+          </InputField>
 
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? '로그인 중...' : '로그인 하기'}

@@ -8,7 +8,7 @@ import type { User } from '@/types/auth';
 
 interface Props {
   children: ReactNode;
-  initialProps: { isLogin: boolean; user: User | null };
+  user: User | null;
 }
 
 const AuthContext = createContext(false);
@@ -17,18 +17,14 @@ export function useIsLogin() {
   return useContext(AuthContext);
 }
 
-export default function AuthStoreProvider({ children, initialProps }: Props) {
+export default function AuthStoreProvider({ children, user }: Props) {
   const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    if (initialProps.isLogin && initialProps.user) {
-      setUser(initialProps.user);
+    if (user) {
+      setUser(user);
     }
-  }, [setUser, initialProps.isLogin, initialProps.user?.id]);
+  }, [setUser, user?.id]);
 
-  return (
-    <AuthContext.Provider value={initialProps.isLogin}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={!!user}>{children}</AuthContext.Provider>;
 }
