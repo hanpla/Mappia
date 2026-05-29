@@ -6,9 +6,10 @@ import { getMe } from '@/lib/api/me';
 
 import '@/styles/globals.css';
 
-import AuthStoreProvider from '@/components/common/AuthStoreProvider';
-import QueryProvider from '@/components/common/QueryProvider';
 import ToastContainer from '@/components/common/toast/ToastContainer';
+
+import AuthStoreProvider from '@/providers/AuthStoreProvider';
+import QueryProvider from '@/providers/QueryProvider';
 
 export const metadata: Metadata = {
   title: 'Create Next App',

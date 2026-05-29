@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 
-import { useIsLogin } from '@/components/common/AuthStoreProvider';
+import { useIsLogin } from '@/providers/AuthStoreProvider';
 
 import LogoText from '../logo/LogoText';
 import AuthButtons from './AuthButtons';
