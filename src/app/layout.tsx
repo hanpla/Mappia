@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className="antialiased">
-      <body className="bg-[#f2ebdc]">
+      <body className="bg-ivory-F2E">
         {children}
         <ToastContainer />
       </body>

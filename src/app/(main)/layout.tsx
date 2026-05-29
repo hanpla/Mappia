@@ -11,7 +11,9 @@ export default function MainLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Gnb />
-      <main className="grow">{children}</main>
+      <main className="grow">
+        <div className="mx-auto max-w-300 px-2">{children}</div>
+      </main>
       <Footer />
     </div>
   );
