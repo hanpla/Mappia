@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    url: '/',
     title: 'MAPPIA',
     description:
       '캘린더와 지도로 간편하게 탐색하고 예약하는 글로벌 체험 상품 공유 플랫폼',
