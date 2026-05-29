@@ -26,9 +26,13 @@ export const useAuthStore = create<AuthState>()(
       setAuth: (authData) => {
         Cookies.set('accessToken', authData.accessToken, {
           expires: ACCESS_TOKEN_EXPIRES_DAYS,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
         });
         Cookies.set('refreshToken', authData.refreshToken, {
           expires: REFRESH_TOKEN_EXPIRES_DAYS,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
         });
         set({
           user: authData.user,

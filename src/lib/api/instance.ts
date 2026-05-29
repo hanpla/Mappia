@@ -54,6 +54,14 @@ instance.interceptors.response.use(
     const { accessToken, refreshToken, setTokens, clearAuth } =
       useAuthStore.getState();
 
+    if (!refreshToken) {
+      clearAuth();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/login';
+      }
+      return Promise.reject(error);
+    }
+
     try {
       const { data } = await axios.post<TokensResponse>(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,

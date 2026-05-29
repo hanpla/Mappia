@@ -7,7 +7,7 @@ export async function getMe(accessToken: string): Promise<User | null> {
       { headers: { Authorization: `Bearer ${accessToken}` } },
     );
     if (!res.ok) return null;
-    return res.json();
+    return await res.json();
   } catch {
     return null;
   }
