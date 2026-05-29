@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CalendarDate, generateCalendarDates } from '@/lib/utils/calendar';
 
@@ -16,16 +16,13 @@ export default function CalendarReverse({
   className = '',
 }: CalendarReverseProps) {
   const today = new Date();
-  const todayMidnight = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate(),
-  );
-
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-
-  const dates = generateCalendarDates(currentYear, currentMonth);
+  const dates = useMemo(
+    () => generateCalendarDates(currentYear, currentMonth),
+    [currentYear, currentMonth],
+  );
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   const handlePrevMonth = () => {
@@ -49,12 +46,10 @@ export default function CalendarReverse({
   const handleDateClick = (dateItem: CalendarDate, isPast: boolean) => {
     if (isPast) return;
 
-    const dateString = `${dateItem.year}-${String(dateItem.month + 1).padStart(2, '0')}-${String(dateItem.day).padStart(2, '0')}`;
-
-    if (selectedDateStr === dateString) {
+    if (selectedDateStr === dateItem.dateStr) {
       onDateClick?.(null);
     } else {
-      onDateClick?.(dateString);
+      onDateClick?.(dateItem.dateStr);
     }
   };
 
@@ -112,19 +107,9 @@ export default function CalendarReverse({
 
         <div className="grid grid-cols-7 gap-y-1.5 text-center md:gap-y-2">
           {dates.map((dateItem, idx) => {
-            const itemDateStr = `${dateItem.year}-${String(dateItem.month + 1).padStart(2, '0')}-${String(dateItem.day).padStart(2, '0')}`;
-            const targetDate = new Date(
-              dateItem.year,
-              dateItem.month,
-              dateItem.day,
-            );
-            const isPast = targetDate < todayMidnight;
-            const isToday =
-              dateItem.day === today.getDate() &&
-              dateItem.month === today.getMonth() &&
-              dateItem.year === today.getFullYear();
-
-            const isSelected = selectedDateStr === itemDateStr;
+            const isPast = dateItem.dateStr < todayStr;
+            const isToday = dateItem.dateStr === todayStr;
+            const isSelected = selectedDateStr === dateItem.dateStr;
 
             let dayStyles =
               'text-black-333 hover:bg-gray-FAF textsm-regular md:textmd-regular';
