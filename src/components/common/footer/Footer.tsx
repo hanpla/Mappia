@@ -8,8 +8,8 @@ const NAV_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="mt-30 flex min-h-40 items-start bg-[#2A2218] px-6 py-8">
-      <div className="mx-auto flex w-full max-w-300 flex-col-reverse gap-4 md:flex-row md:justify-between">
+    <footer className="bg-brown-2A2 mt-30 min-h-40 py-8">
+      <div className="inner flex flex-col-reverse gap-4 md:flex-row md:justify-between">
         <p className="text-gray-DDD text-base font-normal">
           &copy; 2026 Mappia. All rights reserved.
         </p>
