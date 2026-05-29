@@ -2,34 +2,38 @@ import React from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
+import type { ButtonProps } from '@/types/button';
+
+interface CategoryButtonProps extends ButtonProps {
+  isActive?: boolean;
+}
+
 const SIZE_STYLES = {
-  lg: 'h-[48px] py-[14px] px-[32px]',
-  md: 'h-[48px] py-[8px] px-[12px]',
-  sm: 'h-[38px] py-[10px] px-[20px]',
+  lg: 'h-[58px] py-[16px] px-[30px]',
+  md: 'h-[58px] py-[16px] px-[30px]',
+  sm: 'h-[41px] py-[12px] px-[20px]',
 };
 
 const FONT_STYLES = {
-  lg: 'textlg-bold',
-  md: 'textlg-bold',
-  sm: 'textmd-bold',
+  lg: 'text2lg-medium',
+  md: 'text2lg-medium',
+  sm: 'textlg-medium',
 };
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'lg' | 'md' | 'sm';
-}
 
 export default function CategoryButton({
   children,
   size = 'lg',
   className = '',
-  disabled,
+  isActive = false,
   ...props
-}: ButtonProps) {
+}: CategoryButtonProps) {
   return (
     <button
-      disabled={disabled}
       className={twMerge(
-        'bg-brown-2A2 border-brown-2A2 hover:text-brown-2A2 disabled:bg-beige-8B7 inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border text-[#FFFFFF] transition-all duration-200 hover:bg-white disabled:cursor-not-allowed disabled:border-transparent disabled:text-[#FFFFFF]',
+        'inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border transition-all duration-200',
+        isActive
+          ? 'bg-beige-8B7 border-beige-8B7 text-[#FFFFFF]'
+          : 'text-beige-8B7 border-beige-8B7 bg-[#ffffff]',
         SIZE_STYLES[size],
         FONT_STYLES[size],
         className,
