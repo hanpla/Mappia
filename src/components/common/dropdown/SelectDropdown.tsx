@@ -40,7 +40,7 @@ export default function SelectDropdown({
       <button
         type="button"
         onClick={toggle}
-        className={`bg-white-FFF text-black-1B1 textlg-regular flex h-[56px] w-full cursor-pointer items-center justify-between rounded-[8px] border px-[20px] text-left transition-all duration-200 outline-none ${
+        className={`bg-white-FFF text-black-1B1 textlg-regular flex h-14 w-full cursor-pointer items-center justify-between rounded-lg border px-5 text-left transition-all duration-200 outline-none ${
           isOpen ? 'border-khaki-6B5' : 'border-gray-DDD'
         }`}
       >
@@ -55,7 +55,7 @@ export default function SelectDropdown({
       </button>
 
       {isOpen && (
-        <ul className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-[8px] max-h-[300px] w-full overflow-y-auto rounded-[8px] border p-2 outline-none">
+        <ul className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-2 max-h-75 w-full overflow-y-auto rounded-lg border p-2 outline-none">
           {options.map((option) => {
             const isSelected = option.value === value;
             return (
@@ -63,7 +63,7 @@ export default function SelectDropdown({
                 <button
                   type="button"
                   onClick={() => handleSelect(option.value)}
-                  className={`textlg-regular flex w-full cursor-pointer items-center rounded-md px-[20px] py-[12px] text-left transition-all duration-150 outline-none ${
+                  className={`textlg-regular flex w-full cursor-pointer items-center rounded-md px-5 py-3 text-left transition-all duration-150 outline-none ${
                     isSelected
                       ? 'bg-khaki-6B5 text-white-FFF'
                       : 'text-black-1B1 hover:bg-gray-FAF'
@@ -73,7 +73,7 @@ export default function SelectDropdown({
                     <IconCheck
                       size={20}
                       color="#ffffff"
-                      className="mr-[8px] shrink-0"
+                      className="mr-2 shrink-0"
                     />
                   )}
                   {option.label}

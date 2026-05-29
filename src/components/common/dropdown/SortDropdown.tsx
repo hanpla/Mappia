@@ -47,7 +47,7 @@ export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
       <button
         type="button"
         onClick={toggle}
-        className={`bg-white-FFF text-black-1B1 textlg-medium flex h-[48px] min-w-[120px] cursor-pointer items-center justify-between gap-[8px] rounded-[15px] border px-[20px] transition-all duration-200 outline-none ${
+        className={`bg-white-FFF text-black-1B1 textlg-medium rounded-3.75 flex h-12 min-w-30 cursor-pointer items-center justify-between gap-2 border px-5 transition-all duration-200 outline-none ${
           isOpen ? 'border-khaki-6B5' : 'border-gray-DDD'
         }`}
       >
@@ -60,7 +60,7 @@ export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-[8px] w-[160px] overflow-hidden rounded-[8px] border">
+        <div className="shadow-dropdown border-gray-DDD bg-white-FFF rounded-2 absolute left-0 z-50 mt-2 w-40 overflow-hidden border">
           <ul className="flex flex-col">
             {SORT_OPTIONS.map((option, index) => {
               const isActive = currentSort === option.value;
@@ -73,7 +73,7 @@ export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
                   <button
                     type="button"
                     onClick={() => handleSelect(option.value)}
-                    className={`text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full cursor-pointer py-[14px] text-center transition-all duration-150 outline-none ${
+                    className={`text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full cursor-pointer py-3.5 text-center transition-all duration-150 outline-none ${
                       isActive ? 'text-khaki-6B5 bg-gray-FAF font-semibold' : ''
                     }`}
                   >

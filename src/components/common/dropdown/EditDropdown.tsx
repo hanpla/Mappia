@@ -9,6 +9,9 @@ export interface EditDropdownProps {
   className?: string;
 }
 
+const ITEM_CLASS =
+  'text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full cursor-pointer py-3.5 text-center transition-all duration-150 outline-none';
+
 export default function EditDropdown({
   editUrl,
   onDelete,
@@ -22,24 +25,16 @@ export default function EditDropdown({
 
   return (
     <div
-      className={`shadow-dropdown border-gray-DDD bg-white-FFF absolute right-0 z-50 mt-[4px] w-[160px] overflow-hidden rounded-[8px] border ${className}`}
+      className={`shadow-dropdown border-gray-DDD bg-white-FFF absolute right-0 z-50 mt-1 w-40 overflow-hidden rounded-lg border ${className}`}
     >
       <ul className="flex flex-col">
         <li className="border-gray-EEE border-b">
-          <Link
-            href={editUrl}
-            onClick={onClose}
-            className="text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full py-[14px] text-center transition-all duration-150 outline-none"
-          >
+          <Link href={editUrl} onClick={onClose} className={ITEM_CLASS}>
             수정하기
           </Link>
         </li>
         <li>
-          <button
-            type="button"
-            onClick={handleDelete}
-            className="text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full cursor-pointer py-[14px] text-center transition-all duration-150 outline-none"
-          >
+          <button type="button" onClick={handleDelete} className={ITEM_CLASS}>
             삭제하기
           </button>
         </li>
