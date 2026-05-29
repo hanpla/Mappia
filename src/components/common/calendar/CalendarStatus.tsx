@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { generateCalendarDates } from '@/lib/utils/calendar';
 
@@ -33,9 +33,16 @@ export default function CalendarStatus({
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
 
-  const dates = generateCalendarDates(currentYear, currentMonth);
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
+  const weeks = useMemo(() => {
+    const dates = generateCalendarDates(currentYear, currentMonth);
+    const result = [];
+    for (let i = 0; i < dates.length; i += 7) {
+      result.push(dates.slice(i, i + 7));
+    }
+    return result;
+  }, [currentYear, currentMonth]);
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
       setCurrentYear((prev) => prev - 1);
@@ -53,11 +60,6 @@ export default function CalendarStatus({
       setCurrentMonth((prev) => prev + 1);
     }
   };
-
-  const weeks = [];
-  for (let i = 0; i < dates.length; i += 7) {
-    weeks.push(dates.slice(i, i + 7));
-  }
 
   return (
     <aside className="border-gray-EEE font-pretendard mx-auto flex h-[564px] w-[375px] flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[544px] md:w-[476px] md:p-5 lg:h-[779px] lg:w-[640px] lg:p-6">
@@ -97,16 +99,13 @@ export default function CalendarStatus({
             className="border-gray-EEE grid grid-cols-7 border-t pt-1"
           >
             {week.map((dateItem, idx) => {
-              const dateStr = `${dateItem.year}-${String(dateItem.month + 1).padStart(2, '0')}-${String(dateItem.day).padStart(2, '0')}`;
-              const dayData = eventsData[dateStr];
-
+              const dayData = eventsData[dateItem.dateStr];
               const shouldShowRedDot =
                 dayData && dayData.badges && dayData.badges.length > 0;
-
               return (
                 <div
                   key={idx}
-                  onClick={() => onDateClick?.(dateStr)}
+                  onClick={() => onDateClick?.(dateItem.dateStr)}
                   className="hover:bg-gray-FAF flex min-h-[68px] cursor-pointer flex-col items-center justify-start rounded-xl bg-white p-0.5 transition-colors md:min-h-[64px] lg:min-h-[96px] lg:p-1"
                 >
                   <div className="relative mt-1 flex items-center justify-center px-2 select-none">
