@@ -46,7 +46,7 @@ export default function SelectInput({
   };
 
   return (
-    <div className={`relative ${className}`} ref={containerRef}>
+    <div className="relative" ref={containerRef}>
       <input type="hidden" name={name} value={value || ''} />
 
       <SelectTrigger
@@ -54,6 +54,7 @@ export default function SelectInput({
         selectedLabel={selectedOption?.label}
         placeholder={placeholder}
         onToggle={handleToggle}
+        className={className}
       />
 
       {isOpen && (

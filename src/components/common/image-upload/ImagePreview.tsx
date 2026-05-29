@@ -11,24 +11,28 @@ interface ImagePreviewProps {
 }
 
 export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const [url] = useState(() => URL.createObjectURL(file));
+  const [url, setUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    const objectUrl = URL.createObjectURL(file);
+    setUrl(objectUrl);
     return () => {
-      URL.revokeObjectURL(url);
+      URL.revokeObjectURL(objectUrl);
     };
-  }, [url]);
+  }, [file]);
 
   return (
     <div className="relative h-32 w-32 shrink-0">
       <div className="absolute inset-0 overflow-hidden rounded-xl">
-        <Image
-          src={url}
-          alt="미리보기 이미지"
-          fill
-          className="object-cover"
-          unoptimized
-        />
+        {url && (
+          <Image
+            src={url}
+            alt="미리보기 이미지"
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        )}
       </div>
       <button
         type="button"
