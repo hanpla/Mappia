@@ -11,24 +11,13 @@ import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
 import { login } from '@/lib/api/auth';
+import { validateEmail, validatePassword } from '@/lib/utils/validation';
 
 import Button from '@/components/common/button/Button';
 import IconKakao from '@/components/common/icon/IconKakao';
 import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function validateEmail(value: string) {
-  if (!EMAIL_REGEX.test(value)) return '이메일 형식으로 작성해주세요';
-  return '';
-}
-
-function validatePassword(value: string) {
-  if (value.length < 8) return '8자 이상으로 입력해주세요';
-  return '';
-}
 
 export default function LoginForm() {
   const router = useRouter();
