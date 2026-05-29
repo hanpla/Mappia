@@ -44,3 +44,6 @@ GEMINI.md
 
 # claude code
 .claude/
+
+# agents
+.agents/
