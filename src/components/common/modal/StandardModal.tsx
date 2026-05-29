@@ -26,7 +26,7 @@ export default function StandardModal({
   isGlobal = true,
   onClose,
 }: StandardModalProps) {
-  const hasCustomWidth = className.includes('w-');
+  const hasCustomWidth = /(?:^|\s)(?:[a-z]+:)?(?:min-|max-)?w-/.test(className);
   const widthStyle = hasCustomWidth ? '' : 'w-full max-w-[385px]';
 
   return (

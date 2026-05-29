@@ -12,6 +12,9 @@ interface ModalProps {
   onClose: () => void;
 }
 
+let globalModalCount = 0;
+let originalOverflow = '';
+
 export default function Modal({
   isOpen,
   children,
@@ -29,17 +32,22 @@ export default function Modal({
     };
     window.addEventListener('keydown', handleKeyDown);
 
-    let prevOverflow = '';
     if (isGlobal) {
-      prevOverflow = window.getComputedStyle(document.body).overflow;
-      document.body.style.overflow = 'hidden';
+      if (globalModalCount === 0) {
+        originalOverflow = window.getComputedStyle(document.body).overflow;
+        document.body.style.overflow = 'hidden';
+      }
+      globalModalCount++;
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
 
       if (isGlobal) {
-        document.body.style.overflow = prevOverflow;
+        globalModalCount--;
+        if (globalModalCount === 0) {
+          document.body.style.overflow = originalOverflow;
+        }
       }
     };
   }, [isOpen, isGlobal, onClose]);
