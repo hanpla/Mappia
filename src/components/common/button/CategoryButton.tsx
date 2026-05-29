@@ -2,8 +2,6 @@ import React from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
-import type { ButtonProps } from '@/types/button';
-
 const SIZE_STYLES = {
   lg: 'h-[48px] py-[14px] px-[32px]',
   md: 'h-[48px] py-[8px] px-[12px]',
@@ -16,7 +14,11 @@ const FONT_STYLES = {
   sm: 'textmd-bold',
 };
 
-export default function Button({
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'lg' | 'md' | 'sm';
+}
+
+export default function CategoryButton({
   children,
   size = 'lg',
   className = '',
