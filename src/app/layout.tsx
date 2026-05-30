@@ -51,7 +51,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ko" className="antialiased">
-      <body className="bg-ivory-F2E" suppressHydrationWarning>
+      <body className="bg-ivory-F2E">
         <QueryProvider>
           <AuthStoreProvider user={user}>{children}</AuthStoreProvider>
         </QueryProvider>
