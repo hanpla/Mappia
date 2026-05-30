@@ -47,7 +47,7 @@ export default function CardFooter({
           className="hover:bg-gray-FAF flex size-8 items-center justify-center rounded-full transition-colors"
           aria-label="메뉴 열기"
         >
-          <IconMeatball size={24} />
+          <IconMeatball size={24} className="cursor-pointer" />
         </button>
 
         {isDropdownOpen && (
