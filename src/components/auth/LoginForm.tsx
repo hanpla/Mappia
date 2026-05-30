@@ -19,6 +19,8 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
+const LOGIN_ERROR_MESSAGE = '로그인에 실패했습니다. 정보를 확인해 주세요.';
+
 export default function LoginForm() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -38,9 +40,8 @@ export default function LoginForm() {
     },
     onError: (err) => {
       const message = isAxiosError<{ message: string }>(err)
-        ? (err.response?.data?.message ??
-          '로그인에 실패했습니다. 정보를 확인해 주세요.')
-        : '로그인에 실패했습니다. 정보를 확인해 주세요.';
+        ? (err.response?.data?.message ?? LOGIN_ERROR_MESSAGE)
+        : LOGIN_ERROR_MESSAGE;
       showToast('error', message);
     },
   });

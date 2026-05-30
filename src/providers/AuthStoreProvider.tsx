@@ -21,10 +21,8 @@ export default function AuthStoreProvider({ children, user }: Props) {
   const setUser = useAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    if (user) {
-      setUser(user);
-    }
-  }, [setUser, user?.id]);
+    setUser(user);
+  }, [setUser, user]);
 
   return <AuthContext.Provider value={!!user}>{children}</AuthContext.Provider>;
 }
