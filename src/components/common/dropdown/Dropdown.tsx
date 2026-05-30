@@ -17,6 +17,7 @@ interface EditProps {
   type: 'edit';
   editUrl: string;
   onDelete: () => void;
+  onEdit?: () => void;
   onClose?: () => void;
   className?: string;
 }
@@ -54,11 +55,12 @@ export default function Dropdown(props: DropdownProps) {
     return <FilterDropdown filterKey={filterKey} />;
   }
   if (props.type === 'edit') {
-    const { editUrl, onDelete, onClose, className } = props;
+    const { editUrl, onDelete, onEdit, onClose, className } = props;
     return (
       <EditDropdown
         editUrl={editUrl}
         onDelete={onDelete}
+        onEdit={onEdit}
         onClose={onClose}
         className={className}
       />

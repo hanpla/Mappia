@@ -11,9 +11,16 @@ import Dropdown from '../common/dropdown/Dropdown';
 interface CardFooterProps {
   price: number;
   activityId?: number;
+  onEdit?: (id: number) => void;
+  onDelete?: (id: number) => void;
 }
 
-export default function CardFooter({ price, activityId }: CardFooterProps) {
+export default function CardFooter({
+  price,
+  activityId,
+  onEdit,
+  onDelete,
+}: CardFooterProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
@@ -46,10 +53,18 @@ export default function CardFooter({ price, activityId }: CardFooterProps) {
         {isDropdownOpen && (
           <Dropdown
             type="edit"
-            editUrl="/edit"
-            onDelete={() => {
-              console.log('삭제 실행', activityId);
+            editUrl={activityId ? `/profile/manages/${activityId}/edit` : '#'}
+            onEdit={() => {
+              if (activityId) {
+                onEdit?.(activityId);
+              }
             }}
+            onDelete={() => {
+              if (activityId) {
+                onDelete?.(activityId);
+              }
+            }}
+            onClose={() => setIsDropdownOpen(false)}
           />
         )}
       </div>

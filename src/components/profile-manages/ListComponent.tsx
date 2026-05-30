@@ -60,24 +60,12 @@ const fetchActivities = async (): Promise<Activity[]> => {
 export default async function ListComponent() {
   const activities = await fetchActivities();
 
-  const handleEdit = (id: number) => {
-    console.log(`수정할 체험 ID: ${id}`);
-  };
-
-  const handleDelete = (id: number) => {
-    console.log(`삭제할 체험 ID: ${id}`);
-  };
-
   return (
     <div>
       {activities.length === 0 ? (
         <EmptySpace />
       ) : (
-        <ManageList
-          activities={activities}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <ManageList activities={activities} />
       )}
     </div>
   );
