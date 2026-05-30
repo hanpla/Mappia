@@ -11,6 +11,7 @@ import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
 import { login } from '@/lib/api/auth';
+import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import { validateEmail, validatePassword } from '@/lib/utils/validation';
 
 import Button from '@/components/common/button/Button';
@@ -120,9 +121,9 @@ export default function LoginForm() {
           <div className="bg-gray-CBC h-px flex-1" />
         </div>
 
-        <button type="button" aria-label="카카오 로그인">
+        <a href={getKakaoAuthUrl()} aria-label="카카오 로그인">
           <IconKakao size={72} />
-        </button>
+        </a>
       </div>
     </form>
   );
