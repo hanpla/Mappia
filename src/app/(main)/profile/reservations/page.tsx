@@ -1,37 +1,17 @@
-import EmptySpace from '@/components/profile-reservations/EmptySpace';
+import { Suspense } from 'react';
+
+import ReservationsContent from '@/components/profile-reservations/ReservationsContent';
+import ReservationsSkeleton from '@/components/profile-reservations/ReservationsSkeleton';
 import Title from '@/components/profile-reservations/Title';
 
-const MOCK_DATA = [
-  {
-    date: '2024-01-09',
-    reservations: {
-      completed: 1,
-      confirmed: 0,
-      pending: 1,
-    },
-  },
-  {
-    date: '2025-01-09',
-    reservations: {
-      completed: 0,
-      confirmed: 1,
-      pending: 0,
-    },
-  },
-];
-
-export default function MyReservationsPage() {
+export default function ReservationsPage() {
   return (
-    <div className="mt-5">
+    <div className="mt-6 md:mt-8">
       <Title />
-      {MOCK_DATA.length === 0 && <EmptySpace />}
 
-      {MOCK_DATA.length > 0 && (
-        <div className="mt-5">
-          <div>SelectDropdown 영역</div>
-          <div>캘린더 영역</div>
-        </div>
-      )}
+      <Suspense fallback={<ReservationsSkeleton />}>
+        <ReservationsContent />
+      </Suspense>
     </div>
   );
 }
