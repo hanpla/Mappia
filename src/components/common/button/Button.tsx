@@ -2,10 +2,16 @@ import React from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'lg' | 'md' | 'sm';
+  hasHover?: boolean;
+  variant?: 'solid' | 'outline';
+}
+
 const SIZE_STYLES = {
-  lg: 'h-[48px] py-[14px] px-[32px]',
-  md: 'h-[48px] py-[8px] px-[12px]',
-  sm: 'h-[38px] py-[10px] px-[20px]',
+  lg: 'h-[48px] px-[32px]',
+  md: 'h-[48px] px-[12px]',
+  sm: 'h-[38px] px-[20px]',
 };
 
 const FONT_STYLES = {
@@ -14,22 +20,29 @@ const FONT_STYLES = {
   sm: 'textmd-bold',
 };
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  size?: 'lg' | 'md' | 'sm';
-}
-
 export default function Button({
   children,
   size = 'lg',
   className = '',
   disabled,
+  hasHover = true,
+  variant = 'solid',
   ...props
 }: ButtonProps) {
   return (
     <button
       disabled={disabled}
       className={twMerge(
-        'bg-black-1B1 text-gray-FAF border-black-1B1 hover:text-black-1B1 disabled:bg-gray-A1A disabled:text-gray-FAF inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[6px] border transition-all duration-200 hover:bg-white disabled:cursor-not-allowed disabled:border-transparent',
+        'disabled:bg-beige-8B7 disabled:text-white-FFF inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:border-transparent',
+        variant === 'solid'
+          ? [
+              'bg-brown-2A2 border-brown-2A2 text-white-FFF',
+              hasHover ? 'hover:text-brown-2A2 hover:bg-white-FFF' : '',
+            ]
+          : [
+              'border-brown-2A2 text-brown-2A2 bg-white-FFF',
+              hasHover ? 'hover:bg-brown-2A2 hover:text-white-FFF' : '',
+            ],
         SIZE_STYLES[size],
         FONT_STYLES[size],
         className,
