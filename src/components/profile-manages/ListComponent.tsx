@@ -1,4 +1,4 @@
-import { Activity } from '@/types/activitiy';
+import { Activity } from '@/types/activity';
 
 import EmptySpace from './EmptySpace';
 import ManageList from './ManageList';

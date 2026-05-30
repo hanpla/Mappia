@@ -1,4 +1,4 @@
-import { Activity } from '@/types/activitiy';
+import { Activity } from '@/types/activity';
 
 import Card from './Card';
 

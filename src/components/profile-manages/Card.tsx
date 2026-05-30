@@ -1,4 +1,4 @@
-import { Activity } from '@/types/activitiy';
+import { Activity } from '@/types/activity';
 
 import CardFooter from './CardFooter';
 import CardInfo from './CardInfo';
