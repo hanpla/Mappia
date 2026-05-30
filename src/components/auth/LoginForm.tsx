@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
 import { login } from '@/lib/api/auth';
+import { getApiErrorMessage } from '@/lib/utils/error';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import { validateEmail, validatePassword } from '@/lib/utils/validation';
 
@@ -40,10 +40,7 @@ export default function LoginForm() {
       router.push('/');
     },
     onError: (err) => {
-      const message = isAxiosError<{ message: string }>(err)
-        ? (err.response?.data?.message ?? LOGIN_ERROR_MESSAGE)
-        : LOGIN_ERROR_MESSAGE;
-      showToast('error', message);
+      showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));
     },
   });
 

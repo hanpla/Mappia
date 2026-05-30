@@ -9,6 +9,7 @@ import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
 import { signInKakao, signUpKakao } from '@/lib/api/auth';
+import { getApiErrorMessage } from '@/lib/utils/error';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 
 import type { LoginResponse } from '@/types/auth';
@@ -54,10 +55,7 @@ export default function KakaoCallback({ code, state }: Props) {
     };
 
     const fail = (err: unknown) => {
-      const message = isAxiosError<{ message: string }>(err)
-        ? (err.response?.data?.message ?? KAKAO_ERROR_MESSAGE)
-        : KAKAO_ERROR_MESSAGE;
-      showToast('error', message);
+      showToast('error', getApiErrorMessage(err, KAKAO_ERROR_MESSAGE));
       router.replace('/login');
     };
 
@@ -82,10 +80,10 @@ export default function KakaoCallback({ code, state }: Props) {
       try {
         result = (await signInKakao(code)).data;
       } catch (err) {
-        // 백엔드가 4xx로 응답(미가입 등)했을 때만 가입용으로 재인증(새 코드 발급).
-        // 5xx/네트워크 오류는 재인증해도 소용없으므로 에러를 표시한다.
+        // 백엔드가 404로 응답(미가입)했을 때만 가입용으로 재인증(새 코드 발급).
+        // 그 외 4xx(잘못된 요청 등)나 5xx/네트워크 오류는 재인증해도 소용없으므로 에러를 표시한다.
         const status = isAxiosError(err) ? err.response?.status : undefined;
-        if (status && status >= 400 && status < 500) {
+        if (status === 404) {
           // replace로 죽은 콜백(code=A)을 history에 남기지 않는다.
           window.location.replace(getKakaoAuthUrl('signup'));
         } else {
