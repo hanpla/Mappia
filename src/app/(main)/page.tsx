@@ -3,6 +3,8 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
+import type { Activity } from '@/types/activity';
+
 import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
@@ -10,28 +12,26 @@ import IconChevronRight from '@/components/common/icon/IconChevronRight';
 import Pagination from '@/components/common/pagination/Pagination';
 import Searchbar from '@/components/searchbar/Searchbar';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// 목업용이라 카드 표시에 필요한 필드만 추출했습니다.
+type CardActivity = Pick<
+  Activity,
+  | 'id'
+  | 'title'
+  | 'rating'
+  | 'reviewCount'
+  | 'price'
+  | 'bannerImageUrl'
+  | 'category'
+>;
 
-interface Activity {
-  id: number;
-  title: string;
-  rating: number;
-  reviewCount: number;
-  price: number;
-  imageUrl: string;
-  category: string;
-}
-
-// ─── Mock Data ────────────────────────────────────────────────────────────────
-
-const POPULAR_ACTIVITIES: Activity[] = [
+const POPULAR_ACTIVITIES: CardActivity[] = [
   {
     id: 1,
     title: '함께 배우면 즐거운 스트릿 댄스',
     rating: 4.9,
     reviewCount: 793,
     price: 38000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
     category: '문화·예술',
   },
@@ -41,7 +41,7 @@ const POPULAR_ACTIVITIES: Activity[] = [
     rating: 4.9,
     reviewCount: 593,
     price: 5600,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
     category: '투어',
   },
@@ -51,7 +51,7 @@ const POPULAR_ACTIVITIES: Activity[] = [
     rating: 4.9,
     reviewCount: 241,
     price: 38000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&q=80',
     category: '스포츠',
   },
@@ -61,20 +61,20 @@ const POPULAR_ACTIVITIES: Activity[] = [
     rating: 3.9,
     reviewCount: 106,
     price: 42800,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&q=80',
     category: '투어',
   },
 ];
 
-const ALL_ACTIVITIES: Activity[] = [
+const ALL_ACTIVITIES: CardActivity[] = [
   {
     id: 5,
     title: '해안가 마을에서 1주일 살아보기',
     rating: 2.9,
     reviewCount: 67,
     price: 217000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&q=80',
     category: '투어',
   },
@@ -84,7 +84,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.0,
     reviewCount: 113,
     price: 6000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=400&q=80',
     category: '문화·예술',
   },
@@ -94,7 +94,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.1,
     reviewCount: 85,
     price: 35000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
     category: '스포츠',
   },
@@ -104,7 +104,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 3.9,
     reviewCount: 108,
     price: 42800,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=400&q=80',
     category: '투어',
   },
@@ -114,7 +114,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 2.9,
     reviewCount: 67,
     price: 217000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80',
     category: '관광',
   },
@@ -124,7 +124,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.0,
     reviewCount: 113,
     price: 6000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80',
     category: '관광',
   },
@@ -134,7 +134,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.1,
     reviewCount: 85,
     price: 35000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=80',
     category: '투어',
   },
@@ -144,7 +144,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 3.9,
     reviewCount: 108,
     price: 42800,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=400&q=80',
     category: '투어',
   },
@@ -154,7 +154,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.9,
     reviewCount: 793,
     price: 38000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
     category: '문화·예술',
   },
@@ -164,7 +164,7 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.9,
     reviewCount: 593,
     price: 5600,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
     category: '투어',
   },
@@ -174,18 +174,17 @@ const ALL_ACTIVITIES: Activity[] = [
     rating: 4.9,
     reviewCount: 241,
     price: 38000,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&q=80',
     category: '스포츠',
   },
-
   {
     id: 16,
     title: '피오르 체험',
     rating: 3.9,
     reviewCount: 106,
     price: 42800,
-    imageUrl:
+    bannerImageUrl:
       'https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&q=80',
     category: '투어',
   },
@@ -201,13 +200,13 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function PopularActivityCard({ activity }: { activity: Activity }) {
+function PopularActivityCard({ activity }: { activity: CardActivity }) {
   return (
     <div className="group relative w-56 flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
       <div className="relative h-40 overflow-hidden md:h-96">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={activity.imageUrl}
+          src={activity.bannerImageUrl}
           alt={activity.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -232,13 +231,13 @@ function PopularActivityCard({ activity }: { activity: Activity }) {
   );
 }
 
-function ActivityCard({ activity }: { activity: Activity }) {
+function ActivityCard({ activity }: { activity: CardActivity }) {
   return (
     <div className="group w-[168px] cursor-pointer md:w-[221px] lg:w-[283px]">
       <div className="mb-3 h-[168px] w-[168px] overflow-hidden rounded-2xl md:h-[221px] md:w-[221px] lg:h-[283px] lg:w-[283px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={activity.imageUrl}
+          src={activity.bannerImageUrl}
           alt={activity.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
