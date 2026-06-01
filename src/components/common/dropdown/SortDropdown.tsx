@@ -70,7 +70,7 @@ export default function SortDropdown({
       </button>
 
       {isOpen && (
-        <div className="shadow-dropdown border-beige-8B7 bg-white-FFF absolute left-0 z-50 mt-2 w-full min-w-30 overflow-hidden rounded-[16px] border">
+        <div className="shadow-dropdown border-beige-8B7 bg-white-FFF absolute right-0 z-50 mt-2 w-full min-w-30 overflow-hidden rounded-[16px] border">
           <ul className="flex flex-col">
             {SORT_OPTIONS.map((option, index) => {
               const isActive = currentSort === option.value;
