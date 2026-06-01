@@ -1,7 +1,7 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
@@ -55,7 +55,6 @@ const POPULAR_ACTIVITIES: Activity[] = [
       'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&q=80',
     category: '스포츠',
   },
-
   {
     id: 4,
     title: '피오르 체험',
@@ -194,8 +193,6 @@ const ALL_ACTIVITIES: Activity[] = [
 
 const CATEGORIES = ['문화·예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
-
 function StarRating({ rating }: { rating: number }) {
   return (
     <span className="text-yellow-FFC flex items-center gap-0.5 text-xs font-semibold">
@@ -264,34 +261,16 @@ function ActivityCard({ activity }: { activity: Activity }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
-
-export default function MainPage() {
+function MainPageContent() {
   const [searchValue, setSearchValue] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams?.get('page')) || 1;
 
-  // 화면 폭에 따른 페이지당 표시 개수: PC(lg) 4열×2행=8, 태블릿(md) 3열×3행=9, 모바일 2열×2행=4
   const [pageSize, setPageSize] = useState(8);
-
-  useEffect(() => {
-    const updatePageSize = () => {
-      const width = window.innerWidth;
-      if (width >= 1024) {
-        setPageSize(8);
-      } else if (width >= 768) {
-        setPageSize(9);
-      } else {
-        setPageSize(4);
-      }
-    };
-
-    updatePageSize();
-    window.addEventListener('resize', updatePageSize);
-    return () => window.removeEventListener('resize', updatePageSize);
-  }, []);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -299,26 +278,33 @@ export default function MainPage() {
   const [maxOffset, setMaxOffset] = useState(0);
   const [isPc, setIsPc] = useState(false);
 
-  const updateMaxOffset = () => {
-    const track = trackRef.current;
-    const viewport = viewportRef.current;
-    if (!track || !viewport) return;
-    const max = Math.max(0, track.scrollWidth - viewport.clientWidth);
-    setMaxOffset(max);
-    setOffset((prev) => Math.min(prev, max));
-  };
-
   useEffect(() => {
     const handleResize = () => {
-      setIsPc(window.innerWidth >= 1024);
-      updateMaxOffset();
+      const width = window.innerWidth;
+      setIsPc(width >= 1024);
+
+      if (width >= 1024) {
+        setPageSize(8);
+      } else if (width >= 768) {
+        setPageSize(9);
+      } else {
+        setPageSize(4);
+      }
+
+      const track = trackRef.current;
+      const viewport = viewportRef.current;
+      if (track && viewport) {
+        const max = Math.max(0, track.scrollWidth - viewport.clientWidth);
+        setMaxOffset(max);
+        setOffset((prev) => Math.min(prev, max));
+      }
     };
+
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // PC가 아닐 땐 화살표 이동(offset)을 사용하지 않으므로 0으로 취급
   const effectiveOffset = isPc ? offset : 0;
   const isScrollableLeft = effectiveOffset > 0;
   const isScrollableRight = effectiveOffset < maxOffset;
@@ -342,7 +328,6 @@ export default function MainPage() {
     currentPage * pageSize,
   );
 
-  // 리사이즈로 pageSize가 커져 현재 페이지가 비면, 마지막 유효 페이지로 폴백
   const totalPages = Math.max(
     1,
     Math.ceil(filteredActivities.length / pageSize),
@@ -356,9 +341,16 @@ export default function MainPage() {
           safePage * pageSize,
         );
 
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      const params = new URLSearchParams(searchParams?.toString());
+      params.set('page', String(totalPages));
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+  }, [currentPage, totalPages, pathname, router, searchParams]);
+
   return (
     <>
-      {/* ── Hero Banner (full-bleed) ── */}
       <section className="relative right-1/2 left-1/2 -mx-[50vw] h-60 w-screen overflow-hidden md:h-[550px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -379,12 +371,10 @@ export default function MainPage() {
         </div>
       </section>
 
-      {/* ── Search Bar ── */}
       <div className="relative z-10 -mt-6">
         <Searchbar value={searchValue} setValue={setSearchValue} />
       </div>
 
-      {/* ── Popular Activities ── */}
       <section className="mt-6 mb-8 md:mt-8 md:mb-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-black-1B1 text-[21px] font-bold md:text-[43px]">
@@ -441,7 +431,6 @@ export default function MainPage() {
         </div>
       </section>
 
-      {/* ── Category Filter & Sort ── */}
       <div className="mb-5 flex items-center justify-between gap-2">
         <div className="scrollbar-hide flex min-w-0 flex-1 gap-2 overflow-x-auto">
           {CATEGORIES.map((cat) => (
@@ -463,7 +452,6 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* ── All Activities Grid ── */}
       <section className="mb-8 md:mb-10">
         <h2 className="text-black-1B1 mb-4 text-[21px] font-bold md:text-[43px]">
           🛼 모든 체험
@@ -475,7 +463,6 @@ export default function MainPage() {
         </div>
       </section>
 
-      {/* ── Pagination ── */}
       <div className="flex items-center justify-center">
         <Pagination
           totalCount={filteredActivities.length}
@@ -483,5 +470,13 @@ export default function MainPage() {
         />
       </div>
     </>
+  );
+}
+
+export default function MainPage() {
+  return (
+    <Suspense fallback={null}>
+      <MainPageContent />
+    </Suspense>
   );
 }
