@@ -15,7 +15,7 @@ export default async function ReservationsContent() {
   const activities = res.map(({ id, title }) => ({ id, title }));
 
   return (
-    <div className="mt-10">
+    <div className="mt-7.5">
       {res.length === 0 ? (
         <EmptySpace />
       ) : (

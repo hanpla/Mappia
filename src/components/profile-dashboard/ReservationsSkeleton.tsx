@@ -1,6 +1,6 @@
 export default function ReservationsSkeleton() {
   return (
-    <div className="mt-10 space-y-6 select-none">
+    <div className="mt-7.5 space-y-6 select-none">
       {/* Dropdown Skeleton */}
       <div className="border-gray-DDD flex h-14 w-full animate-pulse items-center justify-between rounded-lg border bg-gray-50 px-5">
         <div className="h-5 w-48 rounded bg-gray-200" />
@@ -8,7 +8,7 @@ export default function ReservationsSkeleton() {
       </div>
 
       {/* Calendar Skeleton */}
-      <div className="border-gray-EEE mx-auto flex h-[564px] w-[375px] animate-pulse flex-col rounded-[24px] border bg-white p-4 shadow-sm md:h-[544px] md:w-[476px] md:p-5 lg:h-[779px] lg:w-[640px] lg:p-6">
+      <div className="border-gray-EEE font-pretendard flex w-full animate-pulse flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:p-5 lg:p-6">
         {/* Calendar Header (Month Navigation) */}
         <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
           <div className="h-6 w-6 rounded bg-gray-200" />

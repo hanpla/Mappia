@@ -79,6 +79,18 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
       date: '2026-05-12',
       reservations: { completed: 0, confirmed: 10, pending: 0 },
     },
+    {
+      date: '2026-06-02',
+      reservations: { completed: 0, confirmed: 3, pending: 1 },
+    },
+    {
+      date: '2026-06-15',
+      reservations: { completed: 4, confirmed: 2, pending: 0 },
+    },
+    {
+      date: '2026-06-25',
+      reservations: { completed: 0, confirmed: 0, pending: 5 },
+    },
   ],
   2: [
     {
@@ -93,6 +105,14 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
       date: '2026-05-20',
       reservations: { completed: 0, confirmed: 8, pending: 0 },
     },
+    {
+      date: '2026-06-10',
+      reservations: { completed: 1, confirmed: 2, pending: 3 },
+    },
+    {
+      date: '2026-06-20',
+      reservations: { completed: 0, confirmed: 5, pending: 0 },
+    },
   ],
   3: [
     {
@@ -106,6 +126,14 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
     {
       date: '2026-05-25',
       reservations: { completed: 7, confirmed: 0, pending: 0 },
+    },
+    {
+      date: '2026-06-05',
+      reservations: { completed: 3, confirmed: 6, pending: 1 },
+    },
+    {
+      date: '2026-06-18',
+      reservations: { completed: 0, confirmed: 4, pending: 2 },
     },
   ],
 };

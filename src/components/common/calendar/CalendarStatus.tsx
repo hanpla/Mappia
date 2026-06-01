@@ -48,7 +48,7 @@ export default function CalendarStatus({
   }, [currentYear, currentMonth]);
 
   return (
-    <aside className="border-gray-EEE font-pretendard mx-auto flex h-[564px] w-[375px] flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[544px] md:w-[476px] md:p-5 lg:h-[779px] lg:w-[640px] lg:p-6">
+    <aside className="border-gray-EEE font-pretendard flex w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:p-5 lg:p-6">
       <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
         <button
           onClick={onPrevMonth}

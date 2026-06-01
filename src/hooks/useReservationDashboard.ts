@@ -19,12 +19,12 @@ const fetchMonthlyReservations = (
   return new Promise((resolve) => {
     setTimeout(() => {
       const mockData: ReservationDashboardItem[] = [];
-
-      if (year === 2026 && month === 5) {
-        const dashboardData = MOCK_RESERVATION_DASHBOARD[activityId] || [];
-        mockData.push(...dashboardData);
-      }
-
+      const dashboardData = MOCK_RESERVATION_DASHBOARD[activityId] || [];
+      const prefix = `${year}-${String(month).padStart(2, '0')}`;
+      const filtered = dashboardData.filter((item) =>
+        item.date.startsWith(prefix),
+      );
+      mockData.push(...filtered);
       resolve(mockData);
     }, 500);
   });
