@@ -1,10 +1,28 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { useAuthStore } from '@/stores/authStore';
+import useToastStore from '@/stores/toastStore';
 
 interface UserDropdownProps {
   onClose: () => void;
 }
 
 export default function UserDropdown({ onClose }: UserDropdownProps) {
+  const router = useRouter();
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const showToast = useToastStore((state) => state.showToast);
+
+  const handleLogout = () => {
+    clearAuth();
+    onClose();
+    showToast('error', '로그아웃 되었습니다.');
+    router.refresh();
+    router.push('/');
+  };
+
   return (
     <div className="absolute top-full right-0 z-50 mt-2 w-32 rounded-lg border border-gray-200 bg-white shadow-sm">
       <Link
@@ -16,7 +34,7 @@ export default function UserDropdown({ onClose }: UserDropdownProps) {
       </Link>
       <hr className="border-gray-200" />
       <button
-        onClick={onClose}
+        onClick={handleLogout}
         className="text-red-FF4 w-full px-4 py-3 text-center text-sm hover:bg-gray-50"
       >
         로그아웃

@@ -1,9 +1,15 @@
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { ReactNode } from 'react';
+
+import { getMe } from '@/lib/api/me';
 
 import '@/styles/globals.css';
 
 import ToastContainer from '@/components/common/toast/ToastContainer';
+
+import AuthStoreProvider from '@/providers/AuthStoreProvider';
+import QueryProvider from '@/providers/QueryProvider';
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -33,15 +39,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('accessToken')?.value;
+
+  const user = accessToken ? await getMe(accessToken) : null;
+
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-ivory-F2E">
-        {children}
+        <QueryProvider>
+          <AuthStoreProvider user={user}>{children}</AuthStoreProvider>
+        </QueryProvider>
         <ToastContainer />
       </body>
     </html>
