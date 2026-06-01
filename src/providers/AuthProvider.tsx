@@ -15,6 +15,6 @@ export function useIsLogin() {
   return useContext(AuthContext);
 }
 
-export default function AuthStoreProvider({ children, user }: Props) {
+export default function AuthProvider({ children, user }: Props) {
   return <AuthContext.Provider value={!!user}>{children}</AuthContext.Provider>;
 }
