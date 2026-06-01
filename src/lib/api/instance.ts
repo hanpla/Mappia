@@ -17,15 +17,38 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (err: unknown) => void;
-}> = [];
+// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
+let refreshPromise: Promise<string> | null = null;
 
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token!)));
-  failedQueue = [];
+const refreshAccessToken = () => {
+  const { accessToken, refreshToken, setTokens, clearAuth } =
+    useAuthStore.getState();
+
+  if (!refreshToken) {
+    clearAuth();
+    return Promise.reject(new Error('No refresh token'));
+  }
+
+  if (!refreshPromise) {
+    refreshPromise = axios
+      .post<TokensResponse>(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
+        { accessToken, refreshToken },
+      )
+      .then(({ data }) => {
+        setTokens(data.accessToken, data.refreshToken);
+        return data.accessToken;
+      })
+      .catch((err) => {
+        clearAuth();
+        throw err;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
 };
 
 instance.interceptors.response.use(
@@ -36,50 +59,17 @@ instance.interceptors.response.use(
     if (!original || error.response?.status !== 401 || original._retry) {
       return Promise.reject(error);
     }
-
-    if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          original.headers.Authorization = `Bearer ${token}`;
-          return instance(original);
-        })
-        .catch((err) => Promise.reject(err));
-    }
-
     original._retry = true;
-    isRefreshing = true;
 
-    const { accessToken, refreshToken, setTokens, clearAuth } =
-      useAuthStore.getState();
-
-    if (!refreshToken) {
-      clearAuth();
+    try {
+      const accessToken = await refreshAccessToken();
+      original.headers.Authorization = `Bearer ${accessToken}`;
+      return instance(original);
+    } catch {
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
       return Promise.reject(error);
-    }
-
-    try {
-      const { data } = await axios.post<TokensResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
-        { accessToken, refreshToken },
-      );
-      setTokens(data.accessToken, data.refreshToken);
-      processQueue(null, data.accessToken);
-      original.headers.Authorization = `Bearer ${data.accessToken}`;
-      return instance(original);
-    } catch (err) {
-      processQueue(err, null);
-      clearAuth();
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
-      return Promise.reject(err);
-    } finally {
-      isRefreshing = false;
     }
   },
 );

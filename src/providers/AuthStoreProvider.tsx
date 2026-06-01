@@ -1,8 +1,6 @@
 'use client';
 
-import { ReactNode, createContext, useContext, useEffect } from 'react';
-
-import { useAuthStore } from '@/stores/authStore';
+import { ReactNode, createContext, useContext } from 'react';
 
 import type { User } from '@/types/auth';
 
@@ -18,11 +16,5 @@ export function useIsLogin() {
 }
 
 export default function AuthStoreProvider({ children, user }: Props) {
-  const setUser = useAuthStore((state) => state.setUser);
-
-  useEffect(() => {
-    setUser(user);
-  }, [setUser, user]);
-
   return <AuthContext.Provider value={!!user}>{children}</AuthContext.Provider>;
 }

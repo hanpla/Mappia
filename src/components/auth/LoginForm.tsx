@@ -76,7 +76,6 @@ export default function LoginForm() {
               placeholder="이메일을 입력해 주세요"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => setEmailError(validateEmail(email))}
               hasError={!!emailError}
               className="rounded-2xl"
               autoComplete="username"
@@ -93,7 +92,6 @@ export default function LoginForm() {
               placeholder="비밀번호를 입력해주세요"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => setPasswordError(validatePassword(password))}
               hasError={!!passwordError}
               autoComplete="current-password"
             />
