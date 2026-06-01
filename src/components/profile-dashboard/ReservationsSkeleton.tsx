@@ -46,7 +46,7 @@ export default function ReservationsSkeleton() {
                       <div className="h-5 w-full rounded bg-gray-100" />
                     )}
                     {(weekIdx * 7 + dayIdx) % 13 === 0 && (
-                      <div className="bg-gray-150 h-5 w-full rounded" />
+                      <div className="h-5 w-full rounded bg-gray-200" />
                     )}
                   </div>
                 </div>
