@@ -1,11 +1,11 @@
-import { Activity } from '@/types/activity';
+import { BaseActivity } from '@/types/activities';
 
 import CardFooter from './CardFooter';
 import CardInfo from './CardInfo';
 import CardTitle from './CardTitle';
 
 interface CardProps {
-  activity: Activity;
+  activity: BaseActivity;
   onEdit?: (id: number) => void;
   onDelete?: (id: number) => void;
 }

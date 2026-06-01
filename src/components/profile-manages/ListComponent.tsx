@@ -1,9 +1,15 @@
-import { Activity } from '@/types/activity';
+import { BaseActivity } from '@/types/activities';
 
 import EmptySpace from './EmptySpace';
 import ManageList from './ManageList';
 
-const MOCK_DATA = {
+interface MockData {
+  cursorId: number;
+  totalCount: number;
+  activities: BaseActivity[];
+}
+
+const MOCK_DATA: MockData = {
   cursorId: 0,
   totalCount: 3,
   activities: [
@@ -52,7 +58,7 @@ const MOCK_DATA = {
   ],
 };
 
-const fetchActivities = async (): Promise<Activity[]> => {
+const fetchActivities = async (): Promise<BaseActivity[]> => {
   await new Promise((resolve) => setTimeout(resolve, 1500));
   return MOCK_DATA.activities;
 };
