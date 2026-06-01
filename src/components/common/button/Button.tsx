@@ -33,7 +33,7 @@ export default function Button({
     <button
       disabled={disabled}
       className={twMerge(
-        'disabled:bg-beige-8B7 inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:border-transparent disabled:text-white-FFF',
+        'disabled:bg-beige-8B7 disabled:text-white-FFF inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:border-transparent',
         variant === 'solid'
           ? [
               'bg-brown-2A2 border-brown-2A2 text-white-FFF',

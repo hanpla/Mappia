@@ -5,6 +5,7 @@ import Link from 'next/link';
 export interface EditDropdownProps {
   editUrl: string;
   onDelete: () => void;
+  onEdit?: () => void;
   onClose?: () => void;
   className?: string;
 }
@@ -15,11 +16,17 @@ const ITEM_CLASS =
 export default function EditDropdown({
   editUrl,
   onDelete,
+  onEdit,
   onClose,
   className = '',
 }: EditDropdownProps) {
   const handleDelete = () => {
     onDelete();
+    if (onClose) onClose();
+  };
+
+  const handleEdit = () => {
+    onEdit?.();
     if (onClose) onClose();
   };
 
@@ -29,7 +36,7 @@ export default function EditDropdown({
     >
       <ul className="flex flex-col">
         <li className="border-gray-EEE border-b">
-          <Link href={editUrl} onClick={onClose} className={ITEM_CLASS}>
+          <Link href={editUrl} onClick={handleEdit} className={ITEM_CLASS}>
             수정하기
           </Link>
         </li>
