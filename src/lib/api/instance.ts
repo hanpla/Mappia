@@ -40,7 +40,14 @@ const refreshAccessToken = () => {
         return data.accessToken;
       })
       .catch((err) => {
-        clearAuth();
+        if (
+          axios.isAxiosError(err) &&
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status < 500
+        ) {
+          clearAuth();
+        }
         throw err;
       })
       .finally(() => {
@@ -61,6 +68,13 @@ instance.interceptors.response.use(
     }
     original._retry = true;
 
+    const { accessToken } = useAuthStore.getState();
+    const currentToken = accessToken ? `Bearer ${accessToken}` : null;
+
+    if (currentToken && original.headers.Authorization !== currentToken) {
+      original.headers.Authorization = currentToken;
+      return instance(original);
+    }
     try {
       const accessToken = await refreshAccessToken();
       original.headers.Authorization = `Bearer ${accessToken}`;
