@@ -8,7 +8,7 @@ import '@/styles/globals.css';
 
 import ToastContainer from '@/components/common/toast/ToastContainer';
 
-import AuthStoreProvider from '@/providers/AuthStoreProvider';
+import AuthProvider from '@/providers/AuthProvider';
 import QueryProvider from '@/providers/QueryProvider';
 
 export const metadata: Metadata = {
@@ -53,7 +53,7 @@ export default async function RootLayout({
     <html lang="ko" className="antialiased">
       <body className="bg-ivory-F2E">
         <QueryProvider>
-          <AuthStoreProvider user={user}>{children}</AuthStoreProvider>
+          <AuthProvider user={user}>{children}</AuthProvider>
         </QueryProvider>
         <ToastContainer />
       </body>

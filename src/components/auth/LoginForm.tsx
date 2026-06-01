@@ -75,8 +75,10 @@ export default function LoginForm() {
               type="email"
               placeholder="이메일을 입력해 주세요"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => setEmailError(validateEmail(email))}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailError) setEmailError('');
+              }}
               hasError={!!emailError}
               className="rounded-2xl"
               autoComplete="username"
@@ -92,8 +94,10 @@ export default function LoginForm() {
               id="password"
               placeholder="비밀번호를 입력해주세요"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => setPasswordError(validatePassword(password))}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (passwordError) setPasswordError('');
+              }}
               hasError={!!passwordError}
               autoComplete="current-password"
             />
