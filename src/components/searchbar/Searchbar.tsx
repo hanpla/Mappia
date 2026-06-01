@@ -37,6 +37,7 @@ export default function Searchbar({
         />
         <Button
           type="submit"
+          disabled={value.trim() === ''}
           className="h-14! w-[96px] shrink-0 px-2 whitespace-nowrap md:w-auto md:px-8"
         >
           검색하기
