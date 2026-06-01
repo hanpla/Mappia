@@ -2,10 +2,9 @@
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import useDropdown from '@/hooks/useDropdown';
+import { twMerge } from 'tailwind-merge';
 
-import IconChevronDown from '@/components/common/icon/IconChevronDown';
-import IconChevronUp from '@/components/common/icon/IconChevronUp';
+import useDropdown from '@/hooks/useDropdown';
 
 const SORT_OPTIONS = [
   { label: '최신순', value: 'latest' },
@@ -15,9 +14,13 @@ const SORT_OPTIONS = [
 
 export interface SortDropdownProps {
   sortKey?: string;
+  className?: string;
 }
 
-export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
+export default function SortDropdown({
+  sortKey = 'sort',
+  className = '',
+}: SortDropdownProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -47,20 +50,27 @@ export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
       <button
         type="button"
         onClick={toggle}
-        className={`bg-white-FFF text-black-1B1 textlg-medium rounded-3.75 flex h-12 min-w-30 cursor-pointer items-center justify-between gap-2 border px-5 transition-all duration-200 outline-none ${
-          isOpen ? 'border-khaki-6B5' : 'border-gray-DDD'
-        }`}
+        className={twMerge(
+          'bg-white-FFF text-khaki-6B5 textlg-medium border-beige-8B7 flex h-[41px] min-w-30 cursor-pointer items-center justify-between gap-2 rounded-[16px] border px-5 transition-all duration-200 outline-none',
+          className,
+        )}
       >
         <span>정렬</span>
-        {isOpen ? (
-          <IconChevronUp size={24} color="#1b1b1b" />
-        ) : (
-          <IconChevronDown size={24} color="#1b1b1b" />
-        )}
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 14 14"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`text-khaki-6B5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          aria-hidden="true"
+        >
+          <path d="M2 4.5L7 9.5L12 4.5H2Z" fill="currentColor" />
+        </svg>
       </button>
 
       {isOpen && (
-        <div className="shadow-dropdown border-gray-DDD bg-white-FFF rounded-2 absolute left-0 z-50 mt-2 w-40 overflow-hidden border">
+        <div className="shadow-dropdown border-beige-8B7 bg-white-FFF absolute left-0 z-50 mt-2 w-full min-w-30 overflow-hidden rounded-[16px] border">
           <ul className="flex flex-col">
             {SORT_OPTIONS.map((option, index) => {
               const isActive = currentSort === option.value;
@@ -68,13 +78,15 @@ export default function SortDropdown({ sortKey = 'sort' }: SortDropdownProps) {
               return (
                 <li
                   key={option.value}
-                  className={isLast ? '' : 'border-gray-EEE border-b'}
+                  className={isLast ? '' : 'border-beige-8B7 border-b'}
                 >
                   <button
                     type="button"
                     onClick={() => handleSelect(option.value)}
-                    className={`text-black-1B1 hover:bg-gray-FAF textlg-medium block w-full cursor-pointer py-3.5 text-center transition-all duration-150 outline-none ${
-                      isActive ? 'text-khaki-6B5 bg-gray-FAF font-semibold' : ''
+                    className={`textlg-medium block w-full cursor-pointer py-3.5 text-center transition-all duration-150 outline-none ${
+                      isActive
+                        ? 'bg-khaki-6B5 text-white-FFF font-semibold'
+                        : 'text-khaki-6B5 hover:bg-khaki-6B5/20'
                     }`}
                   >
                     {option.label}
