@@ -1,4 +1,4 @@
-import { BaseActivity, ReservationStatus } from './activities';
+import { BaseActivity, ReservationContent } from './activities';
 import { ApiResponse } from './api';
 
 export type MyReservationActivity = Pick<
@@ -6,26 +6,11 @@ export type MyReservationActivity = Pick<
   'id' | 'title' | 'bannerImageUrl'
 >;
 
-export interface MyReservationItem {
-  id: number;
-  teamId: string;
-  userId: number;
+export interface MyReservationItem extends Omit<
+  ReservationContent,
+  'activityId'
+> {
   activity: MyReservationActivity;
-  scheduleId: number;
-  status: ReservationStatus;
-  reviewSubmitted: boolean;
-  totalPrice: number;
-  headCount: number;
-  /** "YYYY-MM-DD" 형식 (예: "2026-06-01") */
-  date: string;
-  /** "HH:mm" 형식 (예: "14:00") */
-  startTime: string;
-  /** "HH:mm" 형식 (예: "16:00") */
-  endTime: string;
-  /** ISO 8601 형식의 날짜 문자열 (예: "2026-05-29T06:57:23.882Z") */
-  createdAt: string;
-  /** ISO 8601 형식의 날짜 문자열 (예: "2026-05-29T06:57:23.882Z") */
-  updatedAt: string;
 }
 
 export interface MyReservationsContent {
