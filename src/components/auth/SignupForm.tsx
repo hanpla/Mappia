@@ -115,8 +115,9 @@ export default function SignupForm() {
 
   const handleBlur = (name: FieldName) => () =>
     setErrors((prev) => {
-      // 비밀번호 확인은 값이 입력된 경우에만 비밀번호와 비교
-      const confirmError = values.passwordConfirm
+      const shouldValidateConfirm =
+        values.passwordConfirm || prev.passwordConfirm;
+      const confirmError = shouldValidateConfirm
         ? validatePasswordConfirm(values.password, values.passwordConfirm)
         : '';
       return {
@@ -125,13 +126,13 @@ export default function SignupForm() {
           name === 'passwordConfirm'
             ? confirmError
             : validateField(name, values),
-        // 비밀번호가 바뀌면 "비밀번호 확인"도 다시 검사
         ...(name === 'password' && { passwordConfirm: confirmError }),
       };
     });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isPending) return;
     const nextErrors: Record<FieldName, string> = {
       email: validateField('email', values),
       nickname: validateField('nickname', values),
