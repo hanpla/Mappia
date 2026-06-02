@@ -152,22 +152,12 @@ export type CreateReservationResponse = ApiResponse<ReservationContent>;
 // ==========================================
 
 // 2. 체험 등록 요청 바디
-export interface CreateActivityRequest {
-  title: string;
-  category: ActivityCategory;
-  description: string;
-  price: number;
-  address: string;
-  bannerImageUrl: string;
+export interface CreateActivityRequest extends Pick<
+  BaseActivity,
+  'title' | 'category' | 'description' | 'price' | 'address' | 'bannerImageUrl'
+> {
   subImageUrls: string[];
-  schedules: {
-    /** "YYYY-MM-DD" 형식 (예: "2026-06-01") */
-    date: string;
-    /** "HH:mm" 형식 (예: "14:00") */
-    startTime: string;
-    /** "HH:mm" 형식 (예: "16:00") */
-    endTime: string;
-  }[];
+  schedules: Omit<DetailSchedule, 'id'>[];
 }
 
 // 6. 체험 예약 신청 요청 바디
