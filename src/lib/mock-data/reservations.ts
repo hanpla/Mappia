@@ -1,6 +1,7 @@
 // src/lib/mock-data/reservations.ts
+import { MyActivitiesContent } from '@/types/my-activities';
 
-export const MOCK_ACTIVITIES = {
+export const MOCK_ACTIVITIES: MyActivitiesContent = {
   cursorId: 0,
   totalCount: 3,
   activities: [
