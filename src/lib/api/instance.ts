@@ -1,15 +1,23 @@
-import axios from 'axios';
+import axios, { type InternalAxiosRequestConfig } from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
 
 import type { TokensResponse } from '@/types/auth';
 
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-instance.interceptors.request.use((config) => {
+const baseConfig = {
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+};
+
+// 인증이 필요 없는 요청 (로그인 / 회원가입 / 토큰 갱신 등)
+export const publicInstance = axios.create(baseConfig);
+
+// 인증이 필요한 요청 (액세스 토큰 첨부 + 401 시 토큰 갱신)
+export const privateInstance = axios.create(baseConfig);
+
+privateInstance.interceptors.request.use((config) => {
   const { accessToken } = useAuthStore.getState();
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -28,10 +36,12 @@ const processQueue = (error: unknown, token: string | null = null) => {
   failedQueue = [];
 };
 
-instance.interceptors.response.use(
+privateInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config;
+    const original = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
 
     if (!original || error.response?.status !== 401 || original._retry) {
       return Promise.reject(error);
@@ -43,7 +53,7 @@ instance.interceptors.response.use(
       })
         .then((token) => {
           original.headers.Authorization = `Bearer ${token}`;
-          return instance(original);
+          return privateInstance(original);
         })
         .catch((err) => Promise.reject(err));
     }
@@ -63,14 +73,14 @@ instance.interceptors.response.use(
     }
 
     try {
-      const { data } = await axios.post<TokensResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
+      const { data } = await publicInstance.post<TokensResponse>(
+        '/auth/tokens',
         { accessToken, refreshToken },
       );
       setTokens(data.accessToken, data.refreshToken);
       processQueue(null, data.accessToken);
       original.headers.Authorization = `Bearer ${data.accessToken}`;
-      return instance(original);
+      return privateInstance(original);
     } catch (err) {
       processQueue(err, null);
       clearAuth();
@@ -83,5 +93,3 @@ instance.interceptors.response.use(
     }
   },
 );
-
-export default instance;
