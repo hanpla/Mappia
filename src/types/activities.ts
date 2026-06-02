@@ -1,5 +1,12 @@
 import { ApiResponse } from './api';
 
+export type ReservationStatus =
+  | 'pending'
+  | 'confirmed'
+  | 'declined'
+  | 'canceled'
+  | 'completed';
+
 export type ActivityCategory =
   | '문화 · 예술'
   | '식음료'
@@ -102,7 +109,7 @@ export interface ReservationContent {
   userId: number;
   activityId: number;
   scheduleId: number;
-  status: 'pending';
+  status: ReservationStatus;
   reviewSubmitted: boolean;
   totalPrice: number;
   headCount: number;
@@ -140,36 +147,31 @@ export type GetActivityReviewsResponse = ApiResponse<ActivityReviewsContent>;
 // 6. 체험 예약 신청
 export type CreateReservationResponse = ApiResponse<ReservationContent>;
 
-// 7. 내 체험 수정
-export type UpdateMyActivityResponse = ApiResponse<CreateActivityContent>;
-
 // ==========================================
 // API 요청 타입 정의
 // ==========================================
 
 // 2. 체험 등록 요청 바디
-export type CreateActivityRequest = Omit<
-  CreateActivityContent,
-  'id' | 'userId' | 'createdAt' | 'updatedAt' | 'rating' | 'reviewCount'
->;
+export interface CreateActivityRequest {
+  title: string;
+  category: ActivityCategory;
+  description: string;
+  price: number;
+  address: string;
+  bannerImageUrl: string;
+  subImageUrls: string[];
+  schedules: {
+    /** "YYYY-MM-DD" 형식 (예: "2026-06-01") */
+    date: string;
+    /** "HH:mm" 형식 (예: "14:00") */
+    startTime: string;
+    /** "HH:mm" 형식 (예: "16:00") */
+    endTime: string;
+  }[];
+}
 
 // 6. 체험 예약 신청 요청 바디
 export type CreateReservationRequest = Pick<
   ReservationContent,
   'scheduleId' | 'headCount'
 >;
-
-// 7. 내 체험 수정 요청 바디
-export interface UpdateMyActivityRequest {
-  title?: string;
-  category?: ActivityCategory;
-  description?: string;
-  price?: number;
-  address?: string;
-  bannerImageUrl?: string;
-  subImageIdsToRemove?: number[];
-  subImageUrlsToAdd?: string[];
-  scheduleIdsToRemove?: number[];
-  /** 추가할 예약 일정 배열 (예: ["2026-06-01 14:00"]) */
-  schedulesToAdd?: string[];
-}
