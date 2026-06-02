@@ -1,7 +1,7 @@
 import {
-  ActivityCategory,
   BaseActivity,
   CreateActivityContent,
+  DetailSchedule,
   ReservationContent,
 } from './activities';
 import { ApiResponse } from './api';
@@ -29,13 +29,10 @@ export type UpdateReservationStatusContent = ReservationContent;
 // API 응답 타입 정의
 // ==========================================
 
-// 1. 내 체험 리스트 조회
-export type GetMyActivitiesResponse = ApiResponse<MyActivitiesContent>;
-
-// 2. 내 체험 수정
+// 1. 내 체험 수정
 export type UpdateMyActivityResponse = ApiResponse<CreateActivityContent>;
 
-// 3. 내 체험 예약 상태 업데이트
+// 2. 내 체험 예약 상태 업데이트
 export type UpdateReservationStatusResponse =
   ApiResponse<UpdateReservationStatusContent>;
 
@@ -44,25 +41,22 @@ export type UpdateReservationStatusResponse =
 // ==========================================
 
 // 1. 내 체험 수정 요청 바디
-export interface UpdateMyActivityRequest {
-  title?: string;
-  category?: ActivityCategory;
-  description?: string;
-  price?: number;
-  address?: string;
-  bannerImageUrl?: string;
+export interface UpdateMyActivityRequest extends Partial<
+  Pick<
+    BaseActivity,
+    | 'title'
+    | 'category'
+    | 'description'
+    | 'price'
+    | 'address'
+    | 'bannerImageUrl'
+  >
+> {
   subImageIdsToRemove?: number[];
   subImageUrlsToAdd?: string[];
   scheduleIdsToRemove?: number[];
   /** 추가할 예약 일정 배열 */
-  schedulesToAdd?: {
-    /** "YYYY-MM-DD" 형식 (예: "2026-06-01") */
-    date: string;
-    /** "HH:mm" 형식 (예: "14:00") */
-    startTime: string;
-    /** "HH:mm" 형식 (예: "16:00") */
-    endTime: string;
-  }[];
+  schedulesToAdd?: Omit<DetailSchedule, 'id'>[];
 }
 
 // 2. 내 체험 예약 상태 업데이트 요청 바디
