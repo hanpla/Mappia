@@ -3,7 +3,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
-import type { Activity } from '@/types/activity';
+import { BaseActivity } from '@/types/activities';
 
 import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
@@ -14,7 +14,7 @@ import Searchbar from '@/components/searchbar/Searchbar';
 
 // 목업용이라 카드 표시에 필요한 필드만 추출했습니다.
 type CardActivity = Pick<
-  Activity,
+  BaseActivity,
   | 'id'
   | 'title'
   | 'rating'
@@ -33,7 +33,7 @@ const POPULAR_ACTIVITIES: CardActivity[] = [
     price: 38000,
     bannerImageUrl:
       'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
-    category: '문화·예술',
+    category: '문화 · 예술',
   },
   {
     id: 2,
@@ -86,7 +86,7 @@ const ALL_ACTIVITIES: CardActivity[] = [
     price: 6000,
     bannerImageUrl:
       'https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=400&q=80',
-    category: '문화·예술',
+    category: '문화 · 예술',
   },
   {
     id: 7,
@@ -156,7 +156,7 @@ const ALL_ACTIVITIES: CardActivity[] = [
     price: 38000,
     bannerImageUrl:
       'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
-    category: '문화·예술',
+    category: '문화 · 예술',
   },
   {
     id: 14,
@@ -202,7 +202,7 @@ function StarRating({ rating }: { rating: number }) {
 
 function PopularActivityCard({ activity }: { activity: CardActivity }) {
   return (
-    <div className="group relative w-56 flex-shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
+    <div className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
       <div className="relative h-40 overflow-hidden md:h-96">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -210,7 +210,7 @@ function PopularActivityCard({ activity }: { activity: CardActivity }) {
           alt={activity.title}
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
         <div className="text-white-FFF absolute bottom-0 left-0 p-3 md:p-4">
           <div className="mb-1 flex items-center gap-1">
             <StarRating rating={activity.rating} />
@@ -350,14 +350,14 @@ function MainPageContent() {
 
   return (
     <>
-      <section className="relative right-1/2 left-1/2 -mx-[50vw] h-60 w-screen overflow-hidden md:h-[550px]">
+      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=1200&q=80"
           alt="hero"
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
         <div className="inner absolute inset-0 flex flex-col justify-center">
           <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
             함께 배우면 즐거운
