@@ -25,8 +25,18 @@ const CATEGORY_OPTIONS = [
   { label: '웰빙', value: '웰빙' },
 ];
 
-export default function ActivityRegisterForm() {
+interface ActivityRegisterFormProps {
+  mode?: 'register' | 'edit';
+}
+
+export default function ActivityRegisterForm({
+  mode = 'register',
+}: ActivityRegisterFormProps) {
   const router = useRouter();
+
+  const isEdit = mode === 'edit';
+  const headingText = isEdit ? '내 체험 수정' : '내 체험 등록';
+  const submitText = isEdit ? '수정하기' : '등록하기';
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
@@ -95,7 +105,7 @@ export default function ActivityRegisterForm() {
           >
             <IconChevronLeft size={24} color="currentColor" />
           </button>
-          <h1 className="text2xl-bold text-black-1B1">내 체험 등록</h1>
+          <h1 className="text2xl-bold text-black-1B1">{headingText}</h1>
         </div>
         <button
           type="button"
@@ -214,7 +224,7 @@ export default function ActivityRegisterForm() {
 
       <div className="mt-2 flex justify-center">
         <Button size="lg" className="w-30" onClick={handleSubmit}>
-          등록하기
+          {submitText}
         </Button>
       </div>
     </div>
