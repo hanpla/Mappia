@@ -124,34 +124,37 @@ export default function ReservationCard({
           </p>
         </div>
 
-        <div className="flex items-end justify-between">
-          <span className="text-black-1B1 text-xl font-bold">
+        <div className="flex items-end justify-between gap-4">
+          <span className="text-black-1B1 flex-shrink-0 text-xl font-bold">
             ₩{item.price.toLocaleString()}
           </span>
 
-          {item.status === 'approved' && (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={handleCancelClick}
-              disabled={isSubmitting}
-              className="hover:bg-gray-FAF hover:text-brown-2A2"
-            >
-              예약 취소
-            </Button>
-          )}
+          <div className="flex flex-grow justify-end">
+            {item.status === 'approved' && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancelClick}
+                disabled={isSubmitting}
+                hasHover={false}
+                className="hover:bg-gray-FAF hover:text-brown-2A2"
+              >
+                예약 취소
+              </Button>
+            )}
 
-          {item.status === 'completed' && (
-            <Button
-              type="button"
-              variant="solid"
-              onClick={handleReviewClick}
-              disabled={isSubmitting}
-              hasHover={false}
-            >
-              후기 작성
-            </Button>
-          )}
+            {item.status === 'completed' && (
+              <Button
+                type="button"
+                variant="solid"
+                onClick={handleReviewClick}
+                disabled={isSubmitting}
+                hasHover={false}
+              >
+                후기 작성
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
