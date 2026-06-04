@@ -137,3 +137,121 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
     },
   ],
 };
+
+export interface MockActivity {
+  bannerImageUrl: string;
+  title: string;
+  id: number;
+}
+
+export interface MockReservationItem {
+  id: number;
+  activity: MockActivity;
+  scheduleId: number;
+  status: 'pending' | 'canceled' | 'approved' | 'declined' | 'completed';
+  totalPrice: number;
+  headCount: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MockReservationsResponse {
+  cursorId: number;
+  reservations: MockReservationItem[];
+  totalCount: number;
+}
+
+export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
+  cursorId: 0,
+  totalCount: 5,
+  reservations: [
+    {
+      id: 1,
+      activity: {
+        bannerImageUrl: '',
+        title: '함께 배우면 즐거운 스트릿 댄스',
+        id: 101,
+      },
+      scheduleId: 1001,
+      status: 'pending',
+      totalPrice: 35000,
+      headCount: 1,
+      date: '2026-06-15',
+      startTime: '14:00',
+      endTime: '16:00',
+      createdAt: '2026-06-02T06:29:10.250Z',
+      updatedAt: '2026-06-02T06:29:10.250Z',
+    },
+    {
+      id: 2,
+      activity: {
+        bannerImageUrl: '',
+        title: '나만의 수제 향수 만들기 원데이 클래스',
+        id: 102,
+      },
+      scheduleId: 1002,
+      status: 'approved',
+      totalPrice: 100000,
+      headCount: 2,
+      date: '2026-06-20',
+      startTime: '11:00',
+      endTime: '12:30',
+      createdAt: '2026-06-02T06:29:10.250Z',
+      updatedAt: '2026-06-02T06:29:10.250Z',
+    },
+    {
+      id: 3,
+      activity: {
+        bannerImageUrl: '',
+        title: 'B-boy 댄스 배우기 기초반',
+        id: 103,
+      },
+      scheduleId: 1003,
+      status: 'completed',
+      totalPrice: 40000,
+      headCount: 4,
+      date: '2026-05-25',
+      startTime: '18:00',
+      endTime: '20:00',
+      createdAt: '2026-06-02T06:29:10.250Z',
+      updatedAt: '2026-06-02T06:29:10.250Z',
+    },
+    {
+      id: 4,
+      activity: {
+        bannerImageUrl: '',
+        title: '발레 배우기 자세 교정 클래스',
+        id: 104,
+      },
+      scheduleId: 1004,
+      status: 'canceled',
+      totalPrice: 15000,
+      headCount: 1,
+      date: '2026-05-10',
+      startTime: '10:00',
+      endTime: '11:30',
+      createdAt: '2026-06-02T06:29:10.250Z',
+      updatedAt: '2026-06-02T06:29:10.250Z',
+    },
+    {
+      id: 5,
+      activity: {
+        bannerImageUrl: '',
+        title: '한강 한 바퀴 로드 바이크 투어',
+        id: 105,
+      },
+      scheduleId: 1005,
+      status: 'declined',
+      totalPrice: 60000,
+      headCount: 2,
+      date: '2026-05-08',
+      startTime: '09:00',
+      endTime: '12:00',
+      createdAt: '2026-06-02T06:29:10.250Z',
+      updatedAt: '2026-06-02T06:29:10.250Z',
+    },
+  ],
+};

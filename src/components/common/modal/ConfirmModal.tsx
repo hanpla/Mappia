@@ -45,11 +45,21 @@ export default function ConfirmModal({
         </div>
         <div className="flex w-full gap-2 md:gap-3">
           {cancelText && (
-            <Button onClick={onClose} className="flex-1">
+            <Button
+              onClick={onClose}
+              hasHover={false}
+              variant="outline"
+              className="flex-1"
+            >
               {cancelText}
             </Button>
           )}
-          <Button onClick={onConfirm} className="flex-1">
+          <Button
+            onClick={onConfirm}
+            hasHover={false}
+            variant="solid"
+            className="flex-1"
+          >
             {confirmText}
           </Button>
         </div>
