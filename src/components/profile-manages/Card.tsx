@@ -12,7 +12,7 @@ interface CardProps {
 
 export default function Card({ activity, onEdit, onDelete }: CardProps) {
   const { rating = 0, reviewCount = 0, title = '', price = 0 } = activity;
-  const bannerImageUrl = activity.bannerImageUrl || '/img/Card_curation.png';
+  const bannerImageUrl = activity.bannerImageUrl;
 
   return (
     <div className="flex w-full rounded-2xl bg-white shadow-sm">
