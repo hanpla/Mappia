@@ -100,8 +100,8 @@ export default function ReservationCard({
   };
 
   return (
-    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex h-[200px] w-full overflow-hidden rounded-2xl border transition-all">
-      <div className="bg-gray-FAF relative h-full w-[200px] flex-shrink-0">
+    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex min-h-[200px] w-full rounded-2xl border transition-all">
+      <div className="bg-gray-FAF relative w-[200px] flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl">
         <Image
           src={item.imageUrl || '/default-thumbnail.png'}
           alt={item.activityName}
@@ -111,25 +111,25 @@ export default function ReservationCard({
         />
       </div>
 
-      <div className="flex flex-grow flex-col justify-between p-6">
+      <div className="flex flex-grow flex-col px-4 pt-4 pb-3">
         <div>
-          <span className={`text-sm font-semibold ${currentStatus.className}`}>
+          <span className={`textsm-semibold ${currentStatus.className}`}>
             {currentStatus.label}
           </span>
-          <h3 className="text-black-1B1 mt-1.5 truncate text-lg font-bold">
+          <h3 className="text-black-1B1 textlg-bold mt-1.5 mb-2">
             {item.activityName}
           </h3>
-          <p className="textlg-medium mt-1 text-sm text-gray-500">
+          <p className="textlg-medium text-sm text-gray-500">
             {item.date} • {item.time} • {item.headcount}명
           </p>
         </div>
 
-        <div className="flex items-end justify-between gap-4">
-          <span className="text-black-1B1 flex-shrink-0 text-xl font-bold">
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-1">
+          <span className="text-black-1B1 textxl-bold flex-shrink-0">
             ₩{item.price.toLocaleString()}
           </span>
 
-          <div className="flex flex-grow justify-end">
+          <div className="flex items-center justify-end">
             {item.status === 'approved' && (
               <Button
                 type="button"
@@ -137,7 +137,7 @@ export default function ReservationCard({
                 onClick={handleCancelClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2"
+                className="hover:bg-gray-FAF hover:text-brown-2A2 flex-shrink-0"
               >
                 예약 취소
               </Button>
@@ -150,6 +150,7 @@ export default function ReservationCard({
                 onClick={handleReviewClick}
                 disabled={isSubmitting}
                 hasHover={false}
+                className="flex-shrink-0"
               >
                 후기 작성
               </Button>
