@@ -12,17 +12,17 @@ export function signup(email: string, nickname: string, password: string) {
   return publicInstance.post<User>('/users', { email, nickname, password });
 }
 
-export function signInKakao(token: string) {
+export function signInKakao(code: string) {
   return publicInstance.post<LoginResponse>('/oauth/sign-in/kakao', {
     redirectUri: KAKAO_REDIRECT_URI,
-    token,
+    token: code, // 백엔드가 인가 코드를 token 키로 받음
   });
 }
 
-export function signUpKakao(token: string, nickname: string) {
+export function signUpKakao(code: string, nickname: string) {
   return publicInstance.post<LoginResponse>('/oauth/sign-up/kakao', {
     nickname,
     redirectUri: KAKAO_REDIRECT_URI,
-    token,
+    token: code, // 백엔드가 인가 코드를 token 키로 받음
   });
 }
