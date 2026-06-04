@@ -130,7 +130,7 @@ export default function ReservationCard({
           </span>
 
           <div className="flex items-center justify-end">
-            {item.status === 'approved' && (
+            {item.status === 'pending' && (
               <Button
                 type="button"
                 variant="outline"
