@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
-export default function PhotoGallery() {
-  const SUB_IMAGES = [
-    { src: '/img/activity-sub-image-01.png', alt: '체험 서브 이미지 1' },
-    { src: '/img/activity-sub-image-02.png', alt: '체험 서브 이미지 2' },
-  ];
+const SUB_IMAGES = [
+  { src: '/img/activity-sub-image-01.png', alt: '체험 서브 이미지 1' },
+  { src: '/img/activity-sub-image-02.png', alt: '체험 서브 이미지 2' },
+];
 
+export default function PhotoGallery() {
   return (
     <section className="flex h-[245px] gap-2 overflow-hidden rounded-3xl md:h-[400px] md:gap-3">
       <div className="relative h-full w-[50%]">
