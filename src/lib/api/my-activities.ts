@@ -18,3 +18,7 @@ export const getMyActivities = async (
   );
   return response.data;
 };
+
+export const deleteMyActivity = async (activityId: number): Promise<void> => {
+  await privateInstance.delete(`/my-activities/${activityId}`);
+};
