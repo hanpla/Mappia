@@ -13,14 +13,14 @@ export function signup(email: string, nickname: string, password: string) {
 }
 
 export function signInKakao(token: string) {
-  return instance.post<LoginResponse>('/oauth/sign-in/kakao', {
+  return publicInstance.post<LoginResponse>('/oauth/sign-in/kakao', {
     redirectUri: KAKAO_REDIRECT_URI,
     token,
   });
 }
 
 export function signUpKakao(token: string, nickname: string) {
-  return instance.post<LoginResponse>('/oauth/sign-up/kakao', {
+  return publicInstance.post<LoginResponse>('/oauth/sign-up/kakao', {
     nickname,
     redirectUri: KAKAO_REDIRECT_URI,
     token,
