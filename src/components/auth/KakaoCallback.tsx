@@ -5,9 +5,9 @@ import { useEffect } from 'react';
 
 import { isAxiosError } from 'axios';
 
-import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
+import { setAuthCookies } from '@/lib/actions/auth';
 import { signInKakao, signUpKakao } from '@/lib/api/auth';
 import { getApiErrorMessage } from '@/lib/utils/error';
 import { getKakaoAuthUrl, getKakaoOauthGuardKey } from '@/lib/utils/kakao';
@@ -30,7 +30,6 @@ const generateNickname = () =>
 
 export default function KakaoCallback({ code, state }: Props) {
   const router = useRouter();
-  const setAuth = useAuthStore((s) => s.setAuth);
   const showToast = useToastStore((s) => s.showToast);
 
   useEffect(() => {
@@ -47,8 +46,8 @@ export default function KakaoCallback({ code, state }: Props) {
     if (sessionStorage.getItem(guardKey)) return;
     sessionStorage.setItem(guardKey, '1');
 
-    const succeed = (data: LoginResponse) => {
-      setAuth(data);
+    const succeed = async (data: LoginResponse) => {
+      await setAuthCookies(data.accessToken, data.refreshToken);
       showToast('success', '로그인에 성공했습니다.');
       router.refresh();
       router.replace('/');
@@ -71,7 +70,7 @@ export default function KakaoCallback({ code, state }: Props) {
           fail(err);
           return;
         }
-        succeed(result);
+        await succeed(result);
         return;
       }
 
@@ -91,11 +90,11 @@ export default function KakaoCallback({ code, state }: Props) {
         }
         return;
       }
-      succeed(result);
+      await succeed(result);
     };
 
     run();
-  }, [code, state, setAuth, showToast, router]);
+  }, [code, state, showToast, router]);
 
   return (
     <main className="flex min-h-screen items-center justify-center">

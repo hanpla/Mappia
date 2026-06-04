@@ -1,34 +1,15 @@
-import Cookies from 'js-cookie';
+// 토큰 쿠키 키 상수와, 클라이언트(axios 인터셉터)에서 토큰을 읽는 헬퍼.
+// 쿠키 쓰기/삭제는 서버(next/headers)에서 처리한다 → @/lib/actions/auth
+export const ACCESS_TOKEN_KEY = 'accessToken';
+export const REFRESH_TOKEN_KEY = 'refreshToken';
 
-// 토큰 쿠키 입출력을 한곳에 모은다. authStore와 axios instance가 공유한다.
-const ACCESS_TOKEN_KEY = 'accessToken';
-const REFRESH_TOKEN_KEY = 'refreshToken';
-const ACCESS_TOKEN_EXPIRES_DAYS = 7;
-const REFRESH_TOKEN_EXPIRES_DAYS = 30;
-
-const cookieOptions = (expires: number) => ({
-  expires,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
-});
-
-export const getAccessToken = () => Cookies.get(ACCESS_TOKEN_KEY) ?? null;
-export const getRefreshToken = () => Cookies.get(REFRESH_TOKEN_KEY) ?? null;
-
-export const setTokenCookies = (accessToken: string, refreshToken: string) => {
-  Cookies.set(
-    ACCESS_TOKEN_KEY,
-    accessToken,
-    cookieOptions(ACCESS_TOKEN_EXPIRES_DAYS),
-  );
-  Cookies.set(
-    REFRESH_TOKEN_KEY,
-    refreshToken,
-    cookieOptions(REFRESH_TOKEN_EXPIRES_DAYS),
-  );
+// 브라우저의 document.cookie에서 값을 읽는다. 서버(SSR)에서는 document가 없으므로
+// null을 반환한다. (서버는 next/headers cookies()로 직접 읽는다.)
+const readCookie = (name: string): string | null => {
+  if (typeof document === 'undefined') return null;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
 };
 
-export const clearTokenCookies = () => {
-  Cookies.remove(ACCESS_TOKEN_KEY);
-  Cookies.remove(REFRESH_TOKEN_KEY);
-};
+export const getAccessToken = () => readCookie(ACCESS_TOKEN_KEY);
+export const getRefreshToken = () => readCookie(REFRESH_TOKEN_KEY);
