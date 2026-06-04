@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import useToastStore from '@/stores/toastStore';
 
 import { clearAuthCookies } from '@/lib/actions/auth';
-import { clearKakaoOauthGuards } from '@/lib/utils/kakao';
 
 interface UserDropdownProps {
   onClose: () => void;
@@ -17,7 +16,6 @@ export default function UserDropdown({ onClose }: UserDropdownProps) {
   const showToast = useToastStore((state) => state.showToast);
 
   const handleLogout = async () => {
-    clearKakaoOauthGuards();
     await clearAuthCookies();
     onClose();
     showToast('error', '로그아웃 되었습니다.');

@@ -1,7 +1,6 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
 import { clearAuthCookies, setAuthCookies } from '@/lib/actions/auth';
-import { clearKakaoOauthGuards } from '@/lib/utils/kakao';
 import { getAccessToken, getRefreshToken } from '@/lib/utils/token';
 
 import type { TokensResponse } from '@/types/auth';
@@ -19,12 +18,6 @@ export const publicInstance = axios.create(baseConfig);
 // 인증이 필요한 요청 (액세스 토큰 첨부 + 401 시 토큰 갱신)
 export const privateInstance = axios.create(baseConfig);
 
-// 강제 로그아웃: 토큰 쿠키(서버 액션) + 카카오 OAuth 가드(클라이언트) 정리.
-const clearSession = async () => {
-  await clearAuthCookies();
-  clearKakaoOauthGuards();
-};
-
 privateInstance.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
   if (accessToken) {
@@ -41,7 +34,7 @@ const refreshAccessToken = () => {
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
-    return clearSession().then(() => {
+    return clearAuthCookies().then(() => {
       throw new Error('No refresh token');
     });
   }
@@ -63,7 +56,7 @@ const refreshAccessToken = () => {
           err.response.status >= 400 &&
           err.response.status < 500
         ) {
-          await clearSession();
+          await clearAuthCookies();
         }
         throw err;
       })
