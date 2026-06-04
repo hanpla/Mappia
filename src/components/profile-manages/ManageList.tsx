@@ -10,25 +10,35 @@ import useToastStore from '@/stores/toastStore';
 
 import { deleteMyActivity } from '@/lib/api/my-activities';
 
-import { MyActivity } from '@/types/my-activities';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useMyActivitiesInfinite } from '@/hooks/useMyActivitiesInfinite';
 
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 
 import Card from './Card';
+import CardSkeleton from './CardSkeleton';
+import EmptySpace from './EmptySpace';
+import ListSkeleton from './ListSkeleton';
 
-interface ManageListProps {
-  activities: MyActivity[];
-}
-
-export default function ManageList({
-  activities: initialActivities,
-}: ManageListProps) {
+export default function ManageList() {
   const [deletedIds, setDeletedIds] = useState<number[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const router = useRouter();
   const queryClient = useQueryClient();
   const showToast = useToastStore((state) => state.showToast);
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useMyActivitiesInfinite();
+
+  const observerRef = useIntersectionObserver({
+    onIntersect: () => {
+      if (hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
+    enabled: hasNextPage,
+  });
 
   const handleEdit = (id: number) => {
     router.push(`/profile/${id}/edit`);
@@ -51,9 +61,22 @@ export default function ManageList({
     }
   };
 
-  const visibleActivities = initialActivities.filter(
+  const allActivities = data?.pages.flatMap((page) => page.activities) ?? [];
+  const visibleActivities = allActivities.filter(
     (activity) => !deletedIds.includes(activity.id),
   );
+
+  if (isLoading) {
+    return <ListSkeleton />;
+  }
+
+  if (visibleActivities.length === 0) {
+    return (
+      <div className="mt-10">
+        <EmptySpace />
+      </div>
+    );
+  }
 
   return (
     <div className="mt-6 flex flex-col gap-3">
@@ -65,6 +88,17 @@ export default function ManageList({
           onDelete={setDeleteTargetId}
         />
       ))}
+
+      {/* 추가 페이지 로딩 중 스켈레톤 노출 */}
+      {isFetchingNextPage && (
+        <div className="mt-3 flex flex-col gap-3">
+          <CardSkeleton />
+          <CardSkeleton />
+        </div>
+      )}
+
+      {/* 무한스크롤 감지용 센티넬 요소 */}
+      {hasNextPage && <div ref={observerRef} className="h-10" />}
 
       <ConfirmModal
         isOpen={deleteTargetId !== null}

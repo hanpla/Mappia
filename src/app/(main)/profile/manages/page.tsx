@@ -1,8 +1,6 @@
 import Link from 'next/link';
-import { Suspense } from 'react';
 
-import ListComponent from '@/components/profile-manages/ListComponent';
-import ListSkeleton from '@/components/profile-manages/ListSkeleton';
+import ManageList from '@/components/profile-manages/ManageList';
 import Title from '@/components/profile-title/Title';
 
 export default function ManagesPage() {
@@ -19,9 +17,7 @@ export default function ManagesPage() {
           </Link>
         }
       />
-      <Suspense fallback={<ListSkeleton />}>
-        <ListComponent />
-      </Suspense>
+      <ManageList />
     </div>
   );
 }
