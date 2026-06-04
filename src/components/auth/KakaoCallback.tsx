@@ -10,7 +10,7 @@ import useToastStore from '@/stores/toastStore';
 
 import { signInKakao, signUpKakao } from '@/lib/api/auth';
 import { getApiErrorMessage } from '@/lib/utils/error';
-import { getKakaoAuthUrl } from '@/lib/utils/kakao';
+import { getKakaoAuthUrl, getKakaoOauthGuardKey } from '@/lib/utils/kakao';
 
 import type { LoginResponse } from '@/types/auth';
 
@@ -43,7 +43,7 @@ export default function KakaoCallback({ code, state }: Props) {
     // 인가코드는 1회용. StrictMode 이중 실행/리마운트로 같은 코드가 두 번
     // 소비되면 두 번째 호출이 "잘못된 인가 코드"로 실패하므로, 코드 값 기준으로
     // 한 번만 처리되도록 잠근다. (sessionStorage는 동기적이고 탭 내내 유지됨)
-    const guardKey = `kakao_oauth_${code}`;
+    const guardKey = getKakaoOauthGuardKey(code);
     if (sessionStorage.getItem(guardKey)) return;
     sessionStorage.setItem(guardKey, '1');
 
@@ -85,7 +85,7 @@ export default function KakaoCallback({ code, state }: Props) {
         const status = isAxiosError(err) ? err.response?.status : undefined;
         if (status === 404) {
           // replace로 죽은 콜백(code=A)을 history에 남기지 않는다.
-          window.location.replace(getKakaoAuthUrl('signup'));
+          window.location.replace(getKakaoAuthUrl({ state: 'signup' }));
         } else {
           fail(err);
         }

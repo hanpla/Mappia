@@ -203,9 +203,12 @@ export default function SignupForm() {
           <div className="bg-gray-CBC h-px flex-1" />
         </div>
 
-        <a href={getKakaoAuthUrl('signup')} aria-label="카카오 회원가입">
+        <Link
+          href={getKakaoAuthUrl({ state: 'signup', prompt: 'login' })}
+          aria-label="카카오 회원가입"
+        >
           <IconKakao size={72} />
-        </a>
+        </Link>
       </div>
     </form>
   );

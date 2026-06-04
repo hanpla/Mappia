@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie';
 import { create } from 'zustand';
 
+import { clearKakaoOauthGuards } from '@/lib/utils/kakao';
+
 import type { LoginResponse } from '@/types/auth';
 
 const ACCESS_TOKEN_EXPIRES_DAYS = 7;
@@ -50,6 +52,7 @@ export const useAuthStore = create<AuthState>()((set) => ({
   clearAuth: () => {
     Cookies.remove('accessToken');
     Cookies.remove('refreshToken');
+    clearKakaoOauthGuards();
     set({ accessToken: null, refreshToken: null });
   },
 }));
