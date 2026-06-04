@@ -15,6 +15,7 @@ import { useMyActivitiesInfinite } from '@/hooks/useMyActivitiesInfinite';
 
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 
+import LogoSurprise from '../common/logo/LogoSurprise';
 import Card from './Card';
 import CardSkeleton from './CardSkeleton';
 import EmptySpace from './EmptySpace';
@@ -102,6 +103,7 @@ export default function ManageList() {
 
       <ConfirmModal
         isOpen={deleteTargetId !== null}
+        icon={<LogoSurprise size={80} />}
         message="정말로 삭제하시겠습니까?"
         cancelText="취소"
         confirmText="삭제"
