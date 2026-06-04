@@ -91,7 +91,7 @@ export default function ActivityRegisterForm() {
             type="button"
             onClick={() => router.back()}
             aria-label="뒤로가기"
-            className="group flex h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:bg-[#8b7355] hover:text-white"
+            className="group hidden h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:bg-[#8b7355] hover:text-white md:flex"
           >
             <IconChevronLeft size={24} color="currentColor" />
           </button>
@@ -174,7 +174,7 @@ export default function ActivityRegisterForm() {
       <div className="flex flex-col gap-3">
         <span className="textlg-bold text-black-1B1">예약 가능한 시간대</span>
 
-        <div className="text-gray-4B4 flex items-center gap-2 text-sm">
+        <div className="text-gray-4B4 mobile:flex hidden items-center gap-2 text-sm">
           <span className="flex-1">날짜</span>
           <span className="w-[120px]">시작 시간</span>
           <span className="w-[12px]" />

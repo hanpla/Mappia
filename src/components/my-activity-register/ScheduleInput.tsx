@@ -40,8 +40,8 @@ export default function ScheduleInput({
   onChange,
 }: ScheduleInputProps) {
   return (
-    <div className="flex items-end gap-2">
-      <div className="flex-1">
+    <div className="mobile:flex-row mobile:items-end flex flex-col gap-2">
+      <div className="mobile:flex-1">
         <input
           id={`schedule-date-${schedule.id}`}
           type="date"
@@ -51,47 +51,49 @@ export default function ScheduleInput({
         />
       </div>
 
-      <div className="w-[120px]">
-        <SelectDropdown
-          value={schedule.startTime}
-          onChange={(value) => onChange(schedule.id, 'startTime', value)}
-          options={TIME_OPTIONS}
-          placeholder="0:00"
-        />
+      <div className="flex items-center gap-2">
+        <div className="mobile:w-[120px] mobile:flex-none flex-1">
+          <SelectDropdown
+            value={schedule.startTime}
+            onChange={(value) => onChange(schedule.id, 'startTime', value)}
+            options={TIME_OPTIONS}
+            placeholder="0:00"
+          />
+        </div>
+
+        <span className="text-black-1B1 flex h-14 items-center font-medium">
+          -
+        </span>
+
+        <div className="mobile:w-[120px] mobile:flex-none flex-1">
+          <SelectDropdown
+            value={schedule.endTime}
+            onChange={(value) => onChange(schedule.id, 'endTime', value)}
+            options={TIME_OPTIONS}
+            placeholder="0:00"
+          />
+        </div>
+
+        {isFirst ? (
+          <button
+            type="button"
+            onClick={onAdd}
+            aria-label="시간대 추가"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
+          >
+            <IconPlus size={24} color="#ffffff" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={onRemove}
+            aria-label="시간대 삭제"
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
+          >
+            <IconMinus size={24} color="#ffffff" />
+          </button>
+        )}
       </div>
-
-      <span className="text-black-1B1 flex h-14 items-center font-medium">
-        -
-      </span>
-
-      <div className="w-[120px]">
-        <SelectDropdown
-          value={schedule.endTime}
-          onChange={(value) => onChange(schedule.id, 'endTime', value)}
-          options={TIME_OPTIONS}
-          placeholder="0:00"
-        />
-      </div>
-
-      {isFirst ? (
-        <button
-          type="button"
-          onClick={onAdd}
-          aria-label="시간대 추가"
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
-        >
-          <IconPlus size={24} color="#ffffff" />
-        </button>
-      ) : (
-        <button
-          type="button"
-          onClick={onRemove}
-          aria-label="시간대 삭제"
-          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
-        >
-          <IconMinus size={24} color="#ffffff" />
-        </button>
-      )}
     </div>
   );
 }
