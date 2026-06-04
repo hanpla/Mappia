@@ -10,6 +10,7 @@ import { isAxiosError } from 'axios';
 import useToastStore from '@/stores/toastStore';
 
 import { signup } from '@/lib/api/auth';
+import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import {
   validateEmail,
   validateNickname,
@@ -202,9 +203,9 @@ export default function SignupForm() {
           <div className="bg-gray-CBC h-px flex-1" />
         </div>
 
-        <button type="button" aria-label="카카오 로그인">
+        <a href={getKakaoAuthUrl('signup')} aria-label="카카오 회원가입">
           <IconKakao size={72} />
-        </button>
+        </a>
       </div>
     </form>
   );

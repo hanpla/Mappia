@@ -122,9 +122,9 @@ export default function LoginForm() {
           <div className="bg-gray-CBC h-px flex-1" />
         </div>
 
-        <a href={getKakaoAuthUrl()} aria-label="카카오 로그인">
+        <Link href={getKakaoAuthUrl()} aria-label="카카오 로그인">
           <IconKakao size={72} />
-        </a>
+        </Link>
       </div>
     </form>
   );
