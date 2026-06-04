@@ -23,7 +23,7 @@ interface ManageListProps {
 export default function ManageList({
   activities: initialActivities,
 }: ManageListProps) {
-  const [activities, setActivities] = useState<MyActivity[]>(initialActivities);
+  const [deletedIds, setDeletedIds] = useState<number[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
   const router = useRouter();
@@ -38,9 +38,7 @@ export default function ManageList({
     if (deleteTargetId === null) return;
     try {
       await deleteMyActivity(deleteTargetId);
-      setActivities((prev) =>
-        prev.filter((activity) => activity.id !== deleteTargetId),
-      );
+      setDeletedIds((prev) => [...prev, deleteTargetId]);
       showToast('success', '체험이 삭제되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['my-activities'] });
     } catch (error) {
@@ -53,9 +51,13 @@ export default function ManageList({
     }
   };
 
+  const visibleActivities = initialActivities.filter(
+    (activity) => !deletedIds.includes(activity.id),
+  );
+
   return (
     <div className="mt-6 flex flex-col gap-3">
-      {activities.map((activity) => (
+      {visibleActivities.map((activity) => (
         <Card
           key={activity.id}
           activity={activity}
