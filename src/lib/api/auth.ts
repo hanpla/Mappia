@@ -1,11 +1,15 @@
-import type { LoginResponse } from '@/types/auth';
+import type { LoginResponse, User } from '@/types/auth';
 
-import instance from './instance';
+import { publicInstance } from './instance';
 
 const KAKAO_REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
 
 export function login(email: string, password: string) {
-  return instance.post<LoginResponse>('/auth/login', { email, password });
+  return publicInstance.post<LoginResponse>('/auth/login', { email, password });
+}
+
+export function signup(email: string, nickname: string, password: string) {
+  return publicInstance.post<User>('/users', { email, nickname, password });
 }
 
 export function signInKakao(token: string) {

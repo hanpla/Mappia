@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { generateCalendarDates } from '@/lib/utils/calendar';
 
@@ -22,17 +22,20 @@ export interface CalendarStatusData {
 interface CalendarStatusProps {
   eventsData?: CalendarStatusData;
   onDateClick?: (dateStr: string) => void;
+  currentYear: number;
+  currentMonth: number;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 export default function CalendarStatus({
   eventsData = {},
   onDateClick,
+  currentYear,
+  currentMonth,
+  onPrevMonth,
+  onNextMonth,
 }: CalendarStatusProps) {
-  const today = new Date();
-
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-
   const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
   const weeks = useMemo(() => {
@@ -43,29 +46,12 @@ export default function CalendarStatus({
     }
     return result;
   }, [currentYear, currentMonth]);
-  const handlePrevMonth = () => {
-    if (currentMonth === 0) {
-      setCurrentYear((prev) => prev - 1);
-      setCurrentMonth(11);
-    } else {
-      setCurrentMonth((prev) => prev - 1);
-    }
-  };
-
-  const handleNextMonth = () => {
-    if (currentMonth === 11) {
-      setCurrentYear((prev) => prev + 1);
-      setCurrentMonth(0);
-    } else {
-      setCurrentMonth((prev) => prev + 1);
-    }
-  };
 
   return (
-    <aside className="border-gray-EEE font-pretendard mx-auto flex h-[564px] w-[375px] flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[544px] md:w-[476px] md:p-5 lg:h-[779px] lg:w-[640px] lg:p-6">
+    <aside className="border-gray-EEE font-pretendard flex w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:p-5 lg:p-6">
       <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
         <button
-          onClick={handlePrevMonth}
+          onClick={onPrevMonth}
           className="textsm-bold text-black-1B1 md:textmd-bold lg:textlg-bold cursor-pointer p-1 transition-opacity hover:opacity-40"
         >
           ◀
@@ -74,7 +60,7 @@ export default function CalendarStatus({
           {currentYear}년 {currentMonth + 1}월
         </span>
         <button
-          onClick={handleNextMonth}
+          onClick={onNextMonth}
           className="textsm-bold text-black-1B1 md:textmd-bold lg:textlg-bold cursor-pointer p-1 transition-opacity hover:opacity-40"
         >
           ▶
@@ -120,7 +106,7 @@ export default function CalendarStatus({
                     </span>
 
                     {shouldShowRedDot && (
-                      <span className="bg-red-FF4 pointer-events-none absolute top-[1px] right-[1px] h-1 w-1 rounded-full md:top-[0px] md:right-[0px] md:h-1.5 md:w-1.5 lg:top-[-2px] lg:right-[-2px]" />
+                      <span className="bg-red-FF4 pointer-events-none absolute top-px right-px h-1 w-1 rounded-full md:top-0 md:right-0 md:h-1.5 md:w-1.5 lg:top-[-2px] lg:right-[-2px]" />
                     )}
                   </div>
 

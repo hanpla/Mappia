@@ -1,15 +1,23 @@
-import axios from 'axios';
+import axios, { type InternalAxiosRequestConfig } from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
 
 import type { TokensResponse } from '@/types/auth';
 
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-instance.interceptors.request.use((config) => {
+const baseConfig = {
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+};
+
+// 인증이 필요 없는 요청 (로그인 / 회원가입 / 토큰 갱신 등)
+export const publicInstance = axios.create(baseConfig);
+
+// 인증이 필요한 요청 (액세스 토큰 첨부 + 401 시 토큰 갱신)
+export const privateInstance = axios.create(baseConfig);
+
+privateInstance.interceptors.request.use((config) => {
   const { accessToken } = useAuthStore.getState();
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -17,71 +25,75 @@ instance.interceptors.request.use((config) => {
   return config;
 });
 
-let isRefreshing = false;
-let failedQueue: Array<{
-  resolve: (token: string) => void;
-  reject: (err: unknown) => void;
-}> = [];
+// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
+let refreshPromise: Promise<string> | null = null;
 
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((p) => (error ? p.reject(error) : p.resolve(token!)));
-  failedQueue = [];
+const refreshAccessToken = () => {
+  const { accessToken, refreshToken, setTokens, clearAuth } =
+    useAuthStore.getState();
+
+  if (!refreshToken) {
+    clearAuth();
+    return Promise.reject(new Error('No refresh token'));
+  }
+
+  if (!refreshPromise) {
+    refreshPromise = axios
+      .post<TokensResponse>(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
+        { accessToken, refreshToken },
+      )
+      .then(({ data }) => {
+        setTokens(data.accessToken, data.refreshToken);
+        return data.accessToken;
+      })
+      .catch((err) => {
+        if (
+          axios.isAxiosError(err) &&
+          err.response &&
+          err.response.status >= 400 &&
+          err.response.status < 500
+        ) {
+          clearAuth();
+        }
+        throw err;
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
 };
 
-instance.interceptors.response.use(
+privateInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config;
+    const original = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
 
     if (!original || error.response?.status !== 401 || original._retry) {
       return Promise.reject(error);
     }
-
-    if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          original.headers.Authorization = `Bearer ${token}`;
-          return instance(original);
-        })
-        .catch((err) => Promise.reject(err));
-    }
-
     original._retry = true;
-    isRefreshing = true;
 
-    const { accessToken, refreshToken, setTokens, clearAuth } =
-      useAuthStore.getState();
+    const { accessToken } = useAuthStore.getState();
+    const currentToken = accessToken ? `Bearer ${accessToken}` : null;
 
-    if (!refreshToken) {
-      clearAuth();
+    if (currentToken && original.headers.Authorization !== currentToken) {
+      original.headers.Authorization = currentToken;
+      return privateInstance(original);
+    }
+    try {
+      const accessToken = await refreshAccessToken();
+      original.headers.Authorization = `Bearer ${accessToken}`;
+      return privateInstance(original);
+    } catch {
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
       return Promise.reject(error);
     }
-
-    try {
-      const { data } = await axios.post<TokensResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
-        { accessToken, refreshToken },
-      );
-      setTokens(data.accessToken, data.refreshToken);
-      processQueue(null, data.accessToken);
-      original.headers.Authorization = `Bearer ${data.accessToken}`;
-      return instance(original);
-    } catch (err) {
-      processQueue(err, null);
-      clearAuth();
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
-      return Promise.reject(err);
-    } finally {
-      isRefreshing = false;
-    }
   },
 );
-
-export default instance;
