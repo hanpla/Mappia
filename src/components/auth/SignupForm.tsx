@@ -103,10 +103,17 @@ export default function SignupForm() {
       router.push('/login');
     },
     onError: (err) => {
-      const message = isAxiosError<{ message: string }>(err)
-        ? (err.response?.data?.message ?? SIGNUP_ERROR_MESSAGE)
-        : SIGNUP_ERROR_MESSAGE;
-      showToast('error', message);
+      const message = isAxiosError<{ message?: string }>(err)
+        ? err.response?.data?.message
+        : undefined;
+
+      // 서버가 돌려준 중복 이메일 메시지는 이메일 필드 인라인 에러로 표시한다.
+      if (message?.includes('이메일')) {
+        setErrors((prev) => ({ ...prev, email: message }));
+        return;
+      }
+
+      showToast('error', message ?? SIGNUP_ERROR_MESSAGE);
     },
   });
 
