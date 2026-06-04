@@ -1,15 +1,23 @@
-import axios from 'axios';
+import axios, { type InternalAxiosRequestConfig } from 'axios';
 
 import { useAuthStore } from '@/stores/authStore';
 
 import type { TokensResponse } from '@/types/auth';
 
-const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-instance.interceptors.request.use((config) => {
+const baseConfig = {
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+};
+
+// 인증이 필요 없는 요청 (로그인 / 회원가입 / 토큰 갱신 등)
+export const publicInstance = axios.create(baseConfig);
+
+// 인증이 필요한 요청 (액세스 토큰 첨부 + 401 시 토큰 갱신)
+export const privateInstance = axios.create(baseConfig);
+
+privateInstance.interceptors.request.use((config) => {
   const { accessToken } = useAuthStore.getState();
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -58,10 +66,12 @@ const refreshAccessToken = () => {
   return refreshPromise;
 };
 
-instance.interceptors.response.use(
+privateInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
-    const original = error.config;
+    const original = error.config as
+      | (InternalAxiosRequestConfig & { _retry?: boolean })
+      | undefined;
 
     if (!original || error.response?.status !== 401 || original._retry) {
       return Promise.reject(error);
@@ -73,12 +83,12 @@ instance.interceptors.response.use(
 
     if (currentToken && original.headers.Authorization !== currentToken) {
       original.headers.Authorization = currentToken;
-      return instance(original);
+      return privateInstance(original);
     }
     try {
       const accessToken = await refreshAccessToken();
       original.headers.Authorization = `Bearer ${accessToken}`;
-      return instance(original);
+      return privateInstance(original);
     } catch {
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
@@ -87,5 +97,3 @@ instance.interceptors.response.use(
     }
   },
 );
-
-export default instance;
