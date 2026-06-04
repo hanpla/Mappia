@@ -45,7 +45,7 @@ export default function Input({
           {...props}
         />
         {isFloating && (
-          <span className="text-gray-A1A pointer-events-none absolute top-0 left-2 -translate-y-1/2 bg-white px-1 text-xs transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:bg-transparent peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:bg-white peer-focus:text-xs peer-focus:text-[#8B7355]">
+          <span className="text-gray-A1A pointer-events-none absolute top-0 left-2 max-w-[calc(100%-1rem)] -translate-y-1/2 truncate bg-white px-1 text-xs whitespace-nowrap transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:bg-transparent peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:bg-white peer-focus:text-xs peer-focus:text-[#8B7355]">
             {placeholder}
           </span>
         )}

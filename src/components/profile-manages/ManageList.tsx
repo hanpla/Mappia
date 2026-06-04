@@ -3,18 +3,18 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { Activity } from '@/types/activity';
+import { MyActivity } from '@/types/my-activities';
 
 import Card from './Card';
 
 interface ManageListProps {
-  activities: Activity[];
+  activities: MyActivity[];
 }
 
 export default function ManageList({
   activities: initialActivities,
 }: ManageListProps) {
-  const [activities, setActivities] = useState<Activity[]>(initialActivities);
+  const [activities, setActivities] = useState<MyActivity[]>(initialActivities);
   const router = useRouter();
 
   const handleEdit = (id: number) => {

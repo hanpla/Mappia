@@ -2,11 +2,13 @@
 
 import useReservationDashboard from '@/hooks/useReservationDashboard';
 
+import { MyActivity } from '@/types/my-activities';
+
 import CalendarStatus from '../common/calendar/CalendarStatus';
 import Dropdown from '../common/dropdown/Dropdown';
 
 interface CalendarContentProps {
-  activities: { id: number; title: string }[];
+  activities: Pick<MyActivity, 'id' | 'title'>[];
 }
 
 export default function CalendarContent({ activities }: CalendarContentProps) {

@@ -1,11 +1,11 @@
 import { MOCK_ACTIVITIES } from '@/lib/mock-data/reservations';
 
-import { Activity } from '@/types/activitiy';
+import { MyActivity } from '@/types/my-activities';
 
 import CalendarContent from './CalendarContent';
 import EmptySpace from './EmptySpace';
 
-const fetchActivities = async (): Promise<Activity[]> => {
+const fetchActivities = async (): Promise<MyActivity[]> => {
   await new Promise((resolve) => setTimeout(resolve, 600));
   return MOCK_ACTIVITIES.activities;
 };
