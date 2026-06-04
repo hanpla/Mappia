@@ -26,7 +26,7 @@ interface ScheduleInputProps {
 }
 
 const TIME_OPTIONS: SelectOption[] = Array.from({ length: 48 }, (_, i) => {
-  const hour = Math.floor(i / 2);
+  const hour = String(Math.floor(i / 2)).padStart(2, '0');
   const minute = i % 2 === 0 ? '00' : '30';
   const time = `${hour}:${minute}`;
   return { label: time, value: time };
@@ -47,7 +47,7 @@ export default function ScheduleInput({
           type="date"
           value={schedule.date}
           onChange={(e) => onChange(schedule.id, 'date', e.target.value)}
-          className="textlg-regular focus:border-khaki-6B5 h-14 w-full rounded-2xl border border-[#8b7355] bg-white px-4 transition-colors duration-200 outline-none"
+          className="textlg-regular border-beige-8B7 focus:border-khaki-6B5 h-14 w-full rounded-2xl border bg-white px-4 transition-colors duration-200 outline-none"
         />
       </div>
 
@@ -57,7 +57,7 @@ export default function ScheduleInput({
             value={schedule.startTime}
             onChange={(value) => onChange(schedule.id, 'startTime', value)}
             options={TIME_OPTIONS}
-            placeholder="0:00"
+            placeholder="00:00"
           />
         </div>
 
@@ -70,7 +70,7 @@ export default function ScheduleInput({
             value={schedule.endTime}
             onChange={(value) => onChange(schedule.id, 'endTime', value)}
             options={TIME_OPTIONS}
-            placeholder="0:00"
+            placeholder="00:00"
           />
         </div>
 
@@ -79,7 +79,7 @@ export default function ScheduleInput({
             type="button"
             onClick={onAdd}
             aria-label="시간대 추가"
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
+            className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
           >
             <IconPlus size={24} color="#ffffff" />
           </button>
@@ -88,7 +88,7 @@ export default function ScheduleInput({
             type="button"
             onClick={onRemove}
             aria-label="시간대 삭제"
-            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#8b7355] transition-colors hover:opacity-90"
+            className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
           >
             <IconMinus size={24} color="#ffffff" />
           </button>

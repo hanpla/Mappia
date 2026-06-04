@@ -7,14 +7,16 @@ import Button from '@/components/common/button/Button';
 import SelectDropdown from '@/components/common/dropdown/SelectDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
 import IconX from '@/components/common/icon/IconX';
-import ImageUploadField from '@/components/common/image-upload/ImageUploadField';
+import ImageUploadField, {
+  UploadImage,
+} from '@/components/common/image-upload/ImageUploadField';
 import Input from '@/components/common/input/Input';
 import Textarea from '@/components/common/input/Textarea';
 
 import ScheduleInput, { Schedule } from './ScheduleInput';
 
 const INPUT_BORDER =
-  'border-[#8b7355] focus:border-khaki-6B5 focus-within:border-khaki-6B5';
+  'border-beige-8B7 focus:border-khaki-6B5 focus-within:border-khaki-6B5';
 
 const CATEGORY_OPTIONS = [
   { label: '문화·예술', value: '문화·예술' },
@@ -47,11 +49,11 @@ export default function ActivityRegisterForm({
   const scheduleIdRef = useRef(1);
 
   const [schedules, setSchedules] = useState<Schedule[]>([
-    { id: 'schedule-0', date: '', startTime: '0:00', endTime: '0:00' },
+    { id: 'schedule-0', date: '', startTime: '00:00', endTime: '00:00' },
   ]);
 
-  const [bannerImages, setBannerImages] = useState<File[]>([]);
-  const [introImages, setIntroImages] = useState<File[]>([]);
+  const [bannerImages, setBannerImages] = useState<UploadImage[]>([]);
+  const [introImages, setIntroImages] = useState<UploadImage[]>([]);
 
   const handleAddSchedule = () => {
     setSchedules((prev) => [
@@ -59,8 +61,8 @@ export default function ActivityRegisterForm({
       {
         id: `schedule-${scheduleIdRef.current++}`,
         date: '',
-        startTime: '0:00',
-        endTime: '0:00',
+        startTime: '00:00',
+        endTime: '00:00',
       },
     ]);
   };
@@ -101,7 +103,7 @@ export default function ActivityRegisterForm({
             type="button"
             onClick={() => router.back()}
             aria-label="뒤로가기"
-            className="group hidden h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:bg-[#8b7355] hover:text-white md:flex"
+            className="group hover:bg-beige-8B7 hidden h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:text-white md:flex"
           >
             <IconChevronLeft size={24} color="currentColor" />
           </button>
@@ -111,7 +113,7 @@ export default function ActivityRegisterForm({
           type="button"
           onClick={() => router.back()}
           aria-label="닫기"
-          className="group flex h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:bg-[#8b7355] hover:text-white"
+          className="group hover:bg-beige-8B7 flex h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:text-white"
         >
           <IconX size={24} color="currentColor" />
         </button>

@@ -52,9 +52,15 @@ export default function ImageUploadBox({
       tabIndex={0}
       aria-label="이미지 추가"
       onClick={trigger}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          trigger();
+        }
+      }}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      className="focus:border-khaki-6B5 flex h-32 w-32 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-[#8b7355] bg-white transition-colors hover:bg-gray-100 focus:outline-none"
+      className="border-beige-8B7 focus:border-khaki-6B5 flex h-32 w-32 shrink-0 cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border bg-white transition-colors hover:bg-gray-100 focus:outline-none"
     >
       <input {...inputProps} />
       <IconPlus size={32} color="#4b4b4b" />
