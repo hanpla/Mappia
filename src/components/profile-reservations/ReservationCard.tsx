@@ -169,11 +169,10 @@ export default function ReservationCard({
           </p>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-1 pt-2">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-1 md:mt-5 lg:mt-7">
           <span className="text-black-1B1 textxl-bold flex-shrink-0 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
-
           <div className="flex items-center justify-end">
             {status === 'pending' && (
               <Button
