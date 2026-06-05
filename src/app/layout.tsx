@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import { getMe } from '@/lib/api/me';
 
 import '@/styles/globals.css';
 
+import AuthToastWatcher from '@/components/auth/AuthToastWatcher';
 import ToastContainer from '@/components/common/toast/ToastContainer';
 
 import AuthProvider from '@/providers/AuthProvider';
@@ -56,6 +57,9 @@ export default async function RootLayout({
           <AuthProvider user={user}>{children}</AuthProvider>
         </QueryProvider>
         <ToastContainer />
+        <Suspense fallback={null}>
+          <AuthToastWatcher />
+        </Suspense>
       </body>
     </html>
   );

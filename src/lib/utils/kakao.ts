@@ -19,21 +19,3 @@ export function getKakaoAuthUrl({ state, prompt }: KakaoAuthUrlOptions = {}) {
 
   return `https://kauth.kakao.com/oauth/authorize?${params.toString()}`;
 }
-
-// 인가코드 1회용 처리 가드 키 (sessionStorage). 코드별로 한 번만 처리되도록 잠근다.
-const KAKAO_OAUTH_GUARD_PREFIX = 'kakao_oauth_';
-
-export const getKakaoOauthGuardKey = (code: string) =>
-  `${KAKAO_OAUTH_GUARD_PREFIX}${code}`;
-
-// 로그아웃 등 세션 정리 시 남아있는 카카오 인가코드 가드를 모두 제거한다.
-// (제거 중 인덱스가 밀리므로 뒤에서부터 순회한다.)
-export const clearKakaoOauthGuards = () => {
-  if (typeof window === 'undefined') return;
-  for (let i = sessionStorage.length - 1; i >= 0; i--) {
-    const key = sessionStorage.key(i);
-    if (key?.startsWith(KAKAO_OAUTH_GUARD_PREFIX)) {
-      sessionStorage.removeItem(key);
-    }
-  }
-};
