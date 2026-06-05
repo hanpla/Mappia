@@ -245,6 +245,7 @@ export default function ReservationCard({
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => setRating(star)}
+                aria-label={`${star}점 부여`}
                 className="transition-transform outline-none active:scale-95 disabled:opacity-50"
               >
                 <svg
