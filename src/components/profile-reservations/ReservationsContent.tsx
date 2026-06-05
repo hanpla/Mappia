@@ -5,15 +5,18 @@ import { useEffect, useState } from 'react';
 
 import { MOCK_RESERVATIONS_DATA } from '@/lib/mock-data/reservations';
 
+import { MyReservationItem } from '@/types/my-reservations';
+
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
 import ReservationsEmpty from '@/components/profile-reservations/EmptySpace';
+import Title from '@/components/profile-title/Title';
 
-import ReservationCard, { ReservationItem } from './ReservationCard';
+import ReservationCard from './ReservationCard';
 import ReservationsSkeleton from './ReservationSkeleton';
 
 export default function ReservationsContent() {
   const searchParams = useSearchParams();
-  const [reservations, setReservations] = useState<ReservationItem[]>([]);
+  const [reservations, setReservations] = useState<MyReservationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const currentFilter = searchParams ? searchParams.get('filter') : '';
@@ -22,31 +25,14 @@ export default function ReservationsContent() {
     const loadReservations = () => {
       setIsLoading(true);
 
-      const rawReservations = MOCK_RESERVATIONS_DATA?.reservations || [];
-
-      const mappedReservations: ReservationItem[] = rawReservations
-        .map((item) => {
-          if (!item) return null;
-
-          return {
-            id: item.id,
-            status: item.status || 'pending',
-            activityName: item.activity?.title || '정보 없음',
-            date: item.date ? item.date.replace(/-/g, '. ') : '',
-            time:
-              item.startTime && item.endTime
-                ? `${item.startTime} - ${item.endTime}`
-                : '',
-            headcount: item.headCount || 0,
-            price: item.totalPrice || 0,
-            imageUrl: item.activity?.bannerImageUrl || '/default-thumbnail.png',
-          };
-        })
-        .filter((item): item is ReservationItem => item !== null);
+      const rawReservations: MyReservationItem[] =
+        MOCK_RESERVATIONS_DATA?.reservations || [];
 
       const filteredData = currentFilter
-        ? mappedReservations.filter((item) => item.status === currentFilter)
-        : mappedReservations;
+        ? rawReservations.filter(
+            (item) => item && item.status === currentFilter,
+          )
+        : rawReservations.filter((item) => item !== null);
 
       setReservations(filteredData);
       setIsLoading(false);
@@ -61,11 +47,9 @@ export default function ReservationsContent() {
 
   return (
     <div className="flex w-full flex-col">
-      <div className="mb-6 flex justify-end">
-        <FilterDropdown filterKey="filter" />
-      </div>
+      <Title title="예약 내역" action={<FilterDropdown filterKey="filter" />} />
 
-      <div className="flex flex-col gap-6">
+      <div className="mt-6 flex flex-col gap-4 md:gap-6">
         {reservations.length === 0 ? (
           <ReservationsEmpty />
         ) : (

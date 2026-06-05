@@ -1,31 +1,27 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useToastStore from '@/stores/toastStore';
+
+import { ReservationStatus } from '@/types/activities';
+import { MyReservationItem } from '@/types/my-reservations';
 
 import Button from '@/components/common/button/Button';
 import Textarea from '@/components/common/input/Textarea';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 import StandardModal from '@/components/common/modal/StandardModal';
 
+import Logo from '@/assets/logo/logo.svg';
 import LogoHead from '@/assets/logo/logo_head-1.svg';
 
-export interface ReservationItem {
-  id: number;
-  status: 'pending' | 'canceled' | 'approved' | 'declined' | 'completed';
-  activityName: string;
-  date: string;
-  time: string;
-  headcount: number;
-  price: number;
-  imageUrl: string;
-}
-
-const STATUS_MAPPER = {
-  pending: { label: '예약 완료', className: 'text-blue-500' },
-  approved: { label: '예약 승인', className: 'text-yellow-FFC' },
+const STATUS_MAPPER: Record<
+  ReservationStatus,
+  { label: string; className: string }
+> = {
+  pending: { label: '예약 대기', className: 'text-blue-500' },
+  confirmed: { label: '예약 승인', className: 'text-yellow-FFC' },
   canceled: { label: '예약 취소', className: 'text-gray-797' },
   declined: { label: '예약 거절', className: 'text-red-FF4' },
   completed: {
@@ -35,7 +31,7 @@ const STATUS_MAPPER = {
 };
 
 interface ReservationCardProps {
-  item: ReservationItem;
+  item: MyReservationItem;
   onRefresh?: () => void;
 }
 
@@ -48,16 +44,41 @@ export default function ReservationCard({
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buttonSize, setButtonSize] = useState<'sm' | 'md' | 'lg'>('lg');
 
   const showToast = useToastStore((state) => state.showToast);
 
-  if (!item) {
-    console.warn('ReservationCard: 유효하지 않은 데이터가 넘어왔습니다.');
+  useEffect(() => {
+    const update = () => {
+      if (window.innerWidth < 768) setButtonSize('sm');
+      else if (window.innerWidth < 1024) setButtonSize('md');
+      else setButtonSize('lg');
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  if (!item || !item.activity) {
+    console.warn(
+      'ReservationCard: 유효하지 않거나 activity 데이터가 없는 아이템입니다.',
+    );
     return null;
   }
 
-  const currentStatus = STATUS_MAPPER[item.status] || {
-    label: item.status,
+  const {
+    status,
+    activity,
+    date,
+    startTime,
+    endTime,
+    headCount,
+    totalPrice,
+    reviewSubmitted: isReviewSubmitted,
+  } = item;
+
+  const currentStatus = STATUS_MAPPER[status] || {
+    label: status,
     className: 'text-black-1B1',
   };
 
@@ -99,10 +120,7 @@ export default function ReservationCard({
   const handleCancelConfirm = async () => {
     try {
       setIsSubmitting(true);
-      showToast(
-        'success',
-        `[${item.activityName}] 예약 취소가 완료되었습니다.`,
-      );
+      showToast('success', `[${activity.title}] 예약 취소가 완료되었습니다.`);
       setIsCancelModalOpen(false);
       if (onRefresh) onRefresh();
     } catch (error) {
@@ -114,57 +132,72 @@ export default function ReservationCard({
   };
 
   return (
-    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex min-h-[200px] w-full rounded-2xl border transition-all">
-      <div className="bg-gray-FAF relative w-[200px] flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl">
-        <Image
-          src={item.imageUrl || '/default-thumbnail.png'}
-          alt={item.activityName}
-          fill
-          sizes="200px"
-          className="object-cover"
-        />
+    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex h-32 w-full rounded-2xl border transition-all md:h-[156px] lg:h-auto lg:min-h-[200px]">
+      <div className="bg-gray-FAF relative w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-[156px] lg:w-[200px]">
+        {activity.bannerImageUrl ? (
+          <Image
+            src={activity.bannerImageUrl}
+            alt={activity.title}
+            fill
+            sizes="(max-width: 768px) 96px, (max-width: 1024px) 156px, 200px"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-20 lg:w-20">
+              <Image
+                src={Logo.src ?? Logo}
+                alt="Mappia Logo"
+                fill
+                className="object-contain opacity-40"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="flex flex-grow flex-col px-4 pt-4 pb-3">
+      <div className="flex flex-grow flex-col px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3">
         <div>
           <span className={`textsm-semibold ${currentStatus.className}`}>
             {currentStatus.label}
           </span>
-          <h3 className="text-black-1B1 textlg-bold mt-1.5 mb-2">
-            {item.activityName}
+          <h3 className="text-black-1B1 textlg-bold mt-1 mb-1 line-clamp-1 text-sm md:mt-1.5 md:mb-2 md:text-base">
+            {activity.title}
           </h3>
-          <p className="textlg-medium text-sm text-gray-500">
-            {item.date} • {item.time} • {item.headcount}명
+          <p className="md:textlg-medium text-xs text-gray-500 md:text-sm">
+            {date} • {startTime}~{endTime} • {headCount}명
           </p>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-1">
-          <span className="text-black-1B1 textxl-bold flex-shrink-0">
-            ₩{item.price.toLocaleString()}
+        <div className="mt-auto flex flex-wrap items-center justify-between gap-1 pt-2">
+          <span className="text-black-1B1 textxl-bold flex-shrink-0 text-sm md:text-base">
+            ₩{totalPrice.toLocaleString()}
           </span>
 
           <div className="flex items-center justify-end">
-            {item.status === 'pending' && (
+            {status === 'pending' && (
               <Button
                 type="button"
                 variant="outline"
+                size={buttonSize}
                 onClick={handleCancelClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2 flex-shrink-0"
+                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
               >
                 예약 취소
               </Button>
             )}
 
-            {item.status === 'completed' && (
+            {status === 'completed' && !isReviewSubmitted && (
               <Button
                 type="button"
                 variant="solid"
+                size={buttonSize}
                 onClick={handleReviewClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="flex-shrink-0"
+                className="h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
               >
                 후기 작성
               </Button>
@@ -199,10 +232,10 @@ export default function ReservationCard({
         <div className="w-full max-w-[480px] p-2 text-center">
           <div className="mb-6">
             <h2 className="text-black-1B1 text-lg font-bold sm:text-xl">
-              {item.activityName}
+              {activity.title}
             </h2>
             <p className="mt-1 text-xs text-gray-500 sm:text-sm">
-              {item.date} / {item.time} ({item.headcount}명)
+              {date} / {startTime}~{endTime} ({headCount}명)
             </p>
           </div>
 

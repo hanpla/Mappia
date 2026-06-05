@@ -1,5 +1,6 @@
 // src/lib/mock-data/reservations.ts
 import { MyActivitiesContent } from '@/types/my-activities';
+import { MyReservationItem } from '@/types/my-reservations';
 
 export const MOCK_ACTIVITIES: MyActivitiesContent = {
   cursorId: 0,
@@ -139,29 +140,9 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
   ],
 };
 
-export interface MockActivity {
-  bannerImageUrl: string;
-  title: string;
-  id: number;
-}
-
-export interface MockReservationItem {
-  id: number;
-  activity: MockActivity;
-  scheduleId: number;
-  status: 'pending' | 'canceled' | 'approved' | 'declined' | 'completed';
-  totalPrice: number;
-  headCount: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface MockReservationsResponse {
   cursorId: number;
-  reservations: MockReservationItem[];
+  reservations: MyReservationItem[];
   totalCount: number;
 }
 
@@ -171,13 +152,11 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
   reservations: [
     {
       id: 1,
-      activity: {
-        bannerImageUrl: '',
-        title: '함께 배우면 즐거운 스트릿 댄스',
-        id: 101,
-      },
+      teamId: 'team-1',
+      userId: 101,
       scheduleId: 1001,
       status: 'pending',
+      reviewSubmitted: false,
       totalPrice: 35000,
       headCount: 1,
       date: '2026-06-15',
@@ -185,16 +164,19 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
       endTime: '16:00',
       createdAt: '2026-06-02T06:29:10.250Z',
       updatedAt: '2026-06-02T06:29:10.250Z',
+      activity: {
+        id: 101,
+        title: '함께 배우면 즐거운 스트릿 댄스',
+        bannerImageUrl: '',
+      },
     },
     {
       id: 2,
-      activity: {
-        bannerImageUrl: '',
-        title: '나만의 수제 향수 만들기 원데이 클래스',
-        id: 102,
-      },
+      teamId: 'team-1',
+      userId: 101,
       scheduleId: 1002,
-      status: 'approved',
+      status: 'confirmed',
+      reviewSubmitted: false,
       totalPrice: 100000,
       headCount: 2,
       date: '2026-06-20',
@@ -202,16 +184,19 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
       endTime: '12:30',
       createdAt: '2026-06-02T06:29:10.250Z',
       updatedAt: '2026-06-02T06:29:10.250Z',
+      activity: {
+        id: 102,
+        title: '나만의 수제 향수 만들기 원데이 클래스',
+        bannerImageUrl: '',
+      },
     },
     {
       id: 3,
-      activity: {
-        bannerImageUrl: '',
-        title: 'B-boy 댄스 배우기 기초반',
-        id: 103,
-      },
+      teamId: 'team-1',
+      userId: 101,
       scheduleId: 1003,
       status: 'completed',
+      reviewSubmitted: false,
       totalPrice: 40000,
       headCount: 4,
       date: '2026-05-25',
@@ -219,16 +204,19 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
       endTime: '20:00',
       createdAt: '2026-06-02T06:29:10.250Z',
       updatedAt: '2026-06-02T06:29:10.250Z',
+      activity: {
+        id: 103,
+        title: 'B-boy 댄스 배우기 기초반',
+        bannerImageUrl: '',
+      },
     },
     {
       id: 4,
-      activity: {
-        bannerImageUrl: '',
-        title: '발레 배우기 자세 교정 클래스',
-        id: 104,
-      },
+      teamId: 'team-1',
+      userId: 101,
       scheduleId: 1004,
       status: 'canceled',
+      reviewSubmitted: false,
       totalPrice: 15000,
       headCount: 1,
       date: '2026-05-10',
@@ -236,16 +224,19 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
       endTime: '11:30',
       createdAt: '2026-06-02T06:29:10.250Z',
       updatedAt: '2026-06-02T06:29:10.250Z',
+      activity: {
+        id: 104,
+        title: '발레 배우기 자세 교정 클래스',
+        bannerImageUrl: '',
+      },
     },
     {
       id: 5,
-      activity: {
-        bannerImageUrl: '',
-        title: '한강 한 바퀴 로드 바이크 투어',
-        id: 105,
-      },
+      teamId: 'team-1',
+      userId: 101,
       scheduleId: 1005,
       status: 'declined',
+      reviewSubmitted: false,
       totalPrice: 60000,
       headCount: 2,
       date: '2026-05-08',
@@ -253,6 +244,11 @@ export const MOCK_RESERVATIONS_DATA: MockReservationsResponse = {
       endTime: '12:00',
       createdAt: '2026-06-02T06:29:10.250Z',
       updatedAt: '2026-06-02T06:29:10.250Z',
+      activity: {
+        id: 105,
+        title: '한강 한 바퀴 로드 바이크 투어',
+        bannerImageUrl: '',
+      },
     },
   ],
 };
