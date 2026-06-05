@@ -2,6 +2,10 @@
 
 import { useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
+
+import { getMe } from '@/lib/api/users';
+
 import useClickOutside from '@/hooks/useClickOutside';
 
 import IconNotification from '../icon/IconNotification';
@@ -12,6 +16,7 @@ import NotificationDropdown, {
 import UserProfile from './UserProfile';
 
 export default function UserSection() {
+  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const notificationRef = useClickOutside<HTMLDivElement>(() =>
@@ -45,7 +50,10 @@ export default function UserSection() {
       </div>
       <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
         <div className="h-5.5 w-px bg-[#DDDDDD]" />
-        <UserProfile />
+        <UserProfile
+          nickname={user?.nickname}
+          profileImageUrl={user?.profileImageUrl}
+        />
       </div>
     </div>
   );
