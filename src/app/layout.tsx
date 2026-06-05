@@ -2,8 +2,6 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { ReactNode, Suspense } from 'react';
 
-import { getMe } from '@/lib/api/me';
-
 import '@/styles/globals.css';
 
 import AuthToastWatcher from '@/components/auth/AuthToastWatcher';
@@ -48,13 +46,11 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
 
-  const user = accessToken ? await getMe(accessToken) : null;
-
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-ivory-F2E overflow-x-hidden">
         <QueryProvider>
-          <AuthProvider user={user}>{children}</AuthProvider>
+          <AuthProvider isLogin={!!accessToken}>{children}</AuthProvider>
         </QueryProvider>
         <ToastContainer />
         <Suspense fallback={null}>
