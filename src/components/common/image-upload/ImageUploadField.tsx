@@ -3,12 +3,14 @@
 import ImagePreview from './ImagePreview';
 import ImageUploadBox from './ImageUploadBox';
 
+export type UploadImage = File | string;
+
 interface ImageUploadFieldProps {
   name: string;
   label: string;
   maxCount: number;
-  images: File[];
-  onChange: (images: File[]) => void;
+  images: UploadImage[];
+  onChange: (images: UploadImage[]) => void;
 }
 
 export default function ImageUploadField({
@@ -22,10 +24,13 @@ export default function ImageUploadField({
     const remainingCount = maxCount - images.length;
     if (remainingCount <= 0) return;
 
+    const existingFiles = images.filter(
+      (img): img is File => img instanceof File,
+    );
     const filesToUpload = newFiles
       .filter(
         (f) =>
-          !images.some(
+          !existingFiles.some(
             (img) =>
               img.name === f.name &&
               img.size === f.size &&
@@ -41,10 +46,15 @@ export default function ImageUploadField({
     onChange(newImages);
   };
 
+  const getKey = (image: UploadImage, index: number) =>
+    typeof image === 'string'
+      ? `${image}-${index}`
+      : `${image.name}-${image.size}-${image.lastModified}`;
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-1">
-        <h3 className="text2xl-bold text-black-1B1">{label}</h3>
+        <h3 className="textlg-bold text-black-1B1">{label}</h3>
       </div>
       <div className="flex flex-wrap gap-3.5">
         {images.length < maxCount && (
@@ -55,10 +65,10 @@ export default function ImageUploadField({
             onUpload={handleUpload}
           />
         )}
-        {images.map((file, index) => (
+        {images.map((image, index) => (
           <ImagePreview
-            key={file.name + '-' + file.size + '-' + file.lastModified}
-            file={file}
+            key={getKey(image, index)}
+            image={image}
             onRemove={() => handleRemove(index)}
           />
         ))}

@@ -40,8 +40,8 @@ export default function SelectDropdown({
       <button
         type="button"
         onClick={toggle}
-        className={`bg-white-FFF text-black-1B1 textlg-regular flex h-14 w-full cursor-pointer items-center justify-between rounded-lg border px-5 text-left transition-all duration-200 outline-none ${
-          isOpen ? 'border-khaki-6B5' : 'border-gray-DDD'
+        className={`bg-white-FFF text-black-1B1 textlg-regular flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border px-5 text-left transition-all duration-200 outline-none ${
+          isOpen ? 'border-khaki-6B5' : 'border-[#8b7355]'
         }`}
       >
         <span className={selectedOption ? 'text-black-1B1' : 'text-gray-A1A'}>
@@ -55,7 +55,7 @@ export default function SelectDropdown({
       </button>
 
       {isOpen && (
-        <ul className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-2 max-h-75 w-full overflow-y-auto rounded-lg border p-2 outline-none">
+        <ul className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-2 max-h-75 w-full overflow-y-auto rounded-2xl border p-2 outline-none">
           {options.map((option) => {
             const isSelected = option.value === value;
             return (

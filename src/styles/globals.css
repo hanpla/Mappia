@@ -74,6 +74,9 @@
 
   /* Shadows */
   --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  /* Breakpoints */
+  --breakpoint-mobile: 376px;
 }
 
 /* ==========================================================================

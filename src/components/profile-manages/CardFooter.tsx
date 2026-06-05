@@ -53,7 +53,7 @@ export default function CardFooter({
         {isDropdownOpen && (
           <Dropdown
             type="edit"
-            editUrl={activityId ? `/profile/manages/${activityId}/edit` : '#'}
+            editUrl={activityId ? `/my-activities/${activityId}/edit` : '#'}
             onEdit={() => {
               if (activityId) {
                 onEdit?.(activityId);

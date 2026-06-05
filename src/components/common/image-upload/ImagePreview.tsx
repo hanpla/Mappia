@@ -6,28 +6,34 @@ import { useEffect, useState } from 'react';
 import IconX from '@/components/common/icon/IconX';
 
 interface ImagePreviewProps {
-  file: File;
+  image: File | string;
   onRemove: () => void;
 }
 
-export default function ImagePreview({ file, onRemove }: ImagePreviewProps) {
-  const [url, setUrl] = useState<string | null>(null);
+export default function ImagePreview({ image, onRemove }: ImagePreviewProps) {
+  const [url, setUrl] = useState<string | null>(
+    typeof image === 'string' ? image : null,
+  );
 
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(file);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setUrl(objectUrl);
-    return () => {
-      URL.revokeObjectURL(objectUrl);
-    };
-  }, [file]);
+    if (typeof image !== 'string') {
+      const objectUrl = URL.createObjectURL(image);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUrl(objectUrl);
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    }
+  }, [image]);
+
+  const src = typeof image === 'string' ? image : url;
 
   return (
     <div className="relative h-32 w-32 shrink-0">
       <div className="absolute inset-0 overflow-hidden rounded-xl">
-        {url && (
+        {src && (
           <Image
-            src={url}
+            src={src}
             alt="미리보기 이미지"
             fill
             className="object-cover"
