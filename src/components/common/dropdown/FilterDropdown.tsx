@@ -8,7 +8,8 @@ import IconChevronDown from '@/components/common/icon/IconChevronDown';
 import IconChevronUp from '@/components/common/icon/IconChevronUp';
 
 const FILTER_OPTIONS = [
-  { label: '예약 신청', value: 'pending' },
+  { label: '전체', value: null },
+  { label: '예약 완료', value: 'pending' },
   { label: '예약 취소', value: 'canceled' },
   { label: '예약 승인', value: 'approved' },
   { label: '예약 거절', value: 'declined' },
@@ -29,10 +30,15 @@ export default function FilterDropdown({
 
   const currentFilter = searchParams ? searchParams.get(filterKey) : null;
 
-  const handleSelect = (value: string) => {
+  const currentOption =
+    FILTER_OPTIONS.find((opt) => opt.value === currentFilter) ||
+    FILTER_OPTIONS[0];
+
+  const handleSelect = (value: string | null) => {
     if (!searchParams) return;
     const params = new URLSearchParams(searchParams.toString());
-    if (currentFilter === value) {
+
+    if (value === null || currentFilter === value) {
       params.delete(filterKey);
     } else {
       params.set(filterKey, value);
@@ -55,7 +61,7 @@ export default function FilterDropdown({
           isOpen ? 'border-khaki-6B5' : 'border-gray-DDD'
         }`}
       >
-        <span>필터</span>
+        <span>{currentOption.label}</span>
         {isOpen ? (
           <IconChevronUp size={24} color="#1b1b1b" />
         ) : (
@@ -71,7 +77,7 @@ export default function FilterDropdown({
               const isLast = index === FILTER_OPTIONS.length - 1;
               return (
                 <li
-                  key={option.value}
+                  key={option.value ?? 'all-options'}
                   className={isLast ? '' : 'border-gray-EEE border-b'}
                 >
                   <button
