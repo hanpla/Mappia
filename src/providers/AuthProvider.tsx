@@ -2,11 +2,9 @@
 
 import { ReactNode, createContext, useContext } from 'react';
 
-import type { User } from '@/types/auth';
-
 interface Props {
   children: ReactNode;
-  user: User | null;
+  isLogin: boolean;
 }
 
 const AuthContext = createContext(false);
@@ -15,6 +13,8 @@ export function useIsLogin() {
   return useContext(AuthContext);
 }
 
-export default function AuthProvider({ children, user }: Props) {
-  return <AuthContext.Provider value={!!user}>{children}</AuthContext.Provider>;
+export default function AuthProvider({ children, isLogin }: Props) {
+  return (
+    <AuthContext.Provider value={isLogin}>{children}</AuthContext.Provider>
+  );
 }
