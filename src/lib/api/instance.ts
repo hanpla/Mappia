@@ -1,12 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
-import { clearKakaoOauthGuards } from '@/lib/utils/kakao';
-import {
-  clearTokenCookies,
-  getAccessToken,
-  getRefreshToken,
-  setTokenCookies,
-} from '@/lib/utils/token';
+import { clearAuthCookies, setAuthCookies } from '@/lib/actions/auth';
+import { getAccessToken, getRefreshToken } from '@/lib/utils/token';
 
 import type { TokensResponse } from '@/types/auth';
 
@@ -22,13 +17,6 @@ export const publicInstance = axios.create(baseConfig);
 
 // 인증이 필요한 요청 (액세스 토큰 첨부 + 401 시 토큰 갱신)
 export const privateInstance = axios.create(baseConfig);
-
-// 강제 로그아웃: 토큰 쿠키 + 카카오 OAuth 가드 정리.
-// (스토어 인메모리 상태는 이후 /login 전체 새로고침에서 쿠키 기준으로 재초기화된다.)
-const clearSession = () => {
-  clearTokenCookies();
-  clearKakaoOauthGuards();
-};
 
 privateInstance.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
@@ -46,8 +34,9 @@ const refreshAccessToken = () => {
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
-    clearSession();
-    return Promise.reject(new Error('No refresh token'));
+    return clearAuthCookies().then(() => {
+      throw new Error('No refresh token');
+    });
   }
 
   if (!refreshPromise) {
@@ -56,18 +45,18 @@ const refreshAccessToken = () => {
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
         { accessToken, refreshToken },
       )
-      .then(({ data }) => {
-        setTokenCookies(data.accessToken, data.refreshToken);
+      .then(async ({ data }) => {
+        await setAuthCookies(data.accessToken, data.refreshToken);
         return data.accessToken;
       })
-      .catch((err) => {
+      .catch(async (err) => {
         if (
           axios.isAxiosError(err) &&
           err.response &&
           err.response.status >= 400 &&
           err.response.status < 500
         ) {
-          clearSession();
+          await clearAuthCookies();
         }
         throw err;
       })

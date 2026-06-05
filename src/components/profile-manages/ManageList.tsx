@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
@@ -53,9 +53,11 @@ export default function ManageList() {
       showToast('success', '체험이 삭제되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['my-activities'] });
     } catch (error) {
-      const message = isAxiosError<{ message: string }>(error)
-        ? (error.response?.data?.message ?? '체험 삭제에 실패했습니다.')
-        : '체험 삭제에 실패했습니다.';
+      const message =
+        axios.isAxiosError<{ message?: string }>(error) &&
+        error.response?.data?.message
+          ? error.response.data.message
+          : '체험 삭제에 실패했습니다.';
       showToast('error', message);
     } finally {
       setDeleteTargetId(null);

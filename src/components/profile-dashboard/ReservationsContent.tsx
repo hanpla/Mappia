@@ -1,22 +1,24 @@
-import { MOCK_ACTIVITIES } from '@/lib/mock-data/reservations';
+'use client';
 
-import { MyActivity } from '@/types/my-activities';
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { getMyActivities } from '@/lib/api/my-activities';
 
 import CalendarContent from './CalendarContent';
 import EmptySpace from './EmptySpace';
 
-const fetchActivities = async (): Promise<MyActivity[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  return MOCK_ACTIVITIES.activities;
-};
+export default function ReservationsContent() {
+  const { data } = useSuspenseQuery({
+    queryKey: ['my-activities', { size: 100 }],
+    queryFn: () => getMyActivities({ size: 100 }),
+  });
 
-export default async function ReservationsContent() {
-  const res = await fetchActivities();
-  const activities = res.map(({ id, title }) => ({ id, title }));
+  const activities =
+    data?.activities.map(({ id, title }) => ({ id, title })) ?? [];
 
   return (
     <div className="mt-7.5">
-      {res.length === 0 ? (
+      {activities.length === 0 ? (
         <EmptySpace />
       ) : (
         <CalendarContent activities={activities} />
