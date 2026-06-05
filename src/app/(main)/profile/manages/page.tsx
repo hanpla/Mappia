@@ -1,16 +1,23 @@
-import { Suspense } from 'react';
+import Link from 'next/link';
 
-import ListComponent from '@/components/profile-manages/ListComponent';
-import ListSkeleton from '@/components/profile-manages/ListSkeleton';
-import ManagesHeader from '@/components/profile-manages/ManagesHeader';
+import ManageList from '@/components/profile-manages/ManageList';
+import Title from '@/components/profile-title/Title';
 
 export default function ManagesPage() {
   return (
     <div>
-      <ManagesHeader />
-      <Suspense fallback={<ListSkeleton />}>
-        <ListComponent />
-      </Suspense>
+      <Title
+        title="내 체험 관리"
+        action={
+          <Link
+            href="/my-activities/register"
+            className="bg-brown-2A2 textlg-bold inline-flex h-12 w-30 items-center justify-center rounded-sm text-center text-white"
+          >
+            체험 등록하기
+          </Link>
+        }
+      />
+      <ManageList />
     </div>
   );
 }
