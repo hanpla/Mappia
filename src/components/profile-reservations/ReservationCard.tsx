@@ -20,7 +20,7 @@ const STATUS_MAPPER: Record<
   ReservationStatus,
   { label: string; className: string }
 > = {
-  pending: { label: '예약 대기', className: 'text-blue-500' },
+  pending: { label: '예약 완료', className: 'text-blue-500' },
   confirmed: { label: '예약 승인', className: 'text-yellow-FFC' },
   canceled: { label: '예약 취소', className: 'text-gray-797' },
   declined: { label: '예약 거절', className: 'text-red-FF4' },
