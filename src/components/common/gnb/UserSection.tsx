@@ -2,25 +2,42 @@
 
 import { useState } from 'react';
 
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
+import {
+  deleteNotification,
+  getMyNotifications,
+} from '@/lib/api/my-notifications';
+import { getMe } from '@/lib/api/users';
+
 import useClickOutside from '@/hooks/useClickOutside';
 
 import IconNotification from '../icon/IconNotification';
 import IconNotificationDot from '../icon/IconNotificationDot';
-import NotificationDropdown, {
-  INITIAL_NOTIFICATIONS,
-} from './NotificationDropdown';
+import NotificationDropdown from './NotificationDropdown';
 import UserProfile from './UserProfile';
 
 export default function UserSection() {
+  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
+
+  const queryClient = useQueryClient();
+  const { data: notificationsData } = useQuery({
+    queryKey: ['my-notifications'],
+    queryFn: getMyNotifications,
+  });
+  const notifications = notificationsData?.notifications ?? [];
+
+  const { mutate: dismiss } = useMutation({
+    mutationFn: deleteNotification,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-notifications'] });
+    },
+  });
+
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const notificationRef = useClickOutside<HTMLDivElement>(() =>
     setIsNotificationOpen(false),
   );
-
-  const handleDismiss = (id: number) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
 
   return (
     <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
@@ -38,14 +55,17 @@ export default function UserSection() {
         {isNotificationOpen && (
           <NotificationDropdown
             notifications={notifications}
-            onDismiss={handleDismiss}
+            onDismiss={dismiss}
             onClose={() => setIsNotificationOpen(false)}
           />
         )}
       </div>
       <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
         <div className="h-5.5 w-px bg-[#DDDDDD]" />
-        <UserProfile />
+        <UserProfile
+          nickname={user?.nickname}
+          profileImageUrl={user?.profileImageUrl}
+        />
       </div>
     </div>
   );
