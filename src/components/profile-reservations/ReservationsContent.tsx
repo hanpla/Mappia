@@ -3,8 +3,9 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { MOCK_RESERVATIONS_DATA } from '@/lib/mock-data/reservations';
+import { getMyReservations } from '@/lib/api/my-reservations';
 
+import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
 
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
@@ -19,31 +20,24 @@ export default function ReservationsContent() {
   const [reservations, setReservations] = useState<MyReservationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentFilter = searchParams ? searchParams.get('filter') : '';
+  const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
 
-  useEffect(() => {
-    const loadReservations = () => {
-      setIsLoading(true);
+  const loadReservations = async () => {
+    setIsLoading(true);
+    const data = await getMyReservations({
+      status: currentFilter ?? undefined,
+    });
+    setReservations(data.reservations);
+    setIsLoading(false);
+  };
 
-      const rawReservations: MyReservationItem[] =
-        MOCK_RESERVATIONS_DATA?.reservations || [];
+  // useEffect(() => {
+  //   loadReservations();
+  // }, [currentFilter]);
 
-      const filteredData = currentFilter
-        ? rawReservations.filter(
-            (item) => item && item.status === currentFilter,
-          )
-        : rawReservations.filter((item) => item !== null);
-
-      setReservations(filteredData);
-      setIsLoading(false);
-    };
-
-    loadReservations();
-  }, [currentFilter]);
-
-  if (isLoading) {
-    return <ReservationsSkeleton />;
-  }
+  // if (isLoading) {
+  //   return <ReservationsSkeleton />;
+  // }
 
   return (
     <div className="flex w-full flex-col">
@@ -54,7 +48,11 @@ export default function ReservationsContent() {
           <ReservationsEmpty />
         ) : (
           reservations.map((item) => (
-            <ReservationCard key={item.id} item={item} />
+            <ReservationCard
+              key={item.id}
+              item={item}
+              onRefresh={loadReservations}
+            />
           ))
         )}
       </div>
