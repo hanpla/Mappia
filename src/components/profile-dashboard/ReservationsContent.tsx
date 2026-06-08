@@ -1,13 +1,16 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
+
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getMyActivities } from '@/lib/api/my-activities';
 
 import CalendarContent from './CalendarContent';
 import EmptySpace from './EmptySpace';
+import ReservationsSkeleton from './ReservationsSkeleton';
 
-export default function ReservationsContent() {
+function ReservationsQueryContent() {
   const { data } = useSuspenseQuery({
     queryKey: ['my-activities', { size: 100 }],
     queryFn: () => getMyActivities({ size: 100 }),
@@ -25,4 +28,20 @@ export default function ReservationsContent() {
       )}
     </div>
   );
+}
+
+const emptySubscribe = () => () => {};
+
+export default function ReservationsContent() {
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
+  if (!isMounted) {
+    return <ReservationsSkeleton />;
+  }
+
+  return <ReservationsQueryContent />;
 }
