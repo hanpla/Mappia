@@ -45,7 +45,7 @@ export default function ReservationsContent() {
 
       <div className="mt-6 flex flex-col gap-4 md:gap-6">
         {reservations.length === 0 ? (
-          <ReservationsEmpty />
+          <ReservationsEmpty message="아직 예약한 체험이 없어요" />
         ) : (
           reservations.map((item) => (
             <ReservationCard
