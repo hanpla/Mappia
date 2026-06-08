@@ -6,6 +6,9 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
+// 폼이 페이지의 '저장하기' 버튼(form 바깥)과 form 어트리뷰트로 연결되는 식별자.
+export const INFO_FORM_ID = 'info-form';
+
 type FieldName = 'nickname' | 'email' | 'password' | 'passwordConfirm';
 
 interface FieldConfig {
@@ -63,6 +66,7 @@ export default function InfoForm() {
 
   return (
     <form
+      id={INFO_FORM_ID}
       noValidate
       onSubmit={(e) => e.preventDefault()}
       className="mt-6 flex flex-col gap-7"
