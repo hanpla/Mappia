@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
-import { ReactNode } from 'react';
-
-import { getMe } from '@/lib/api/me';
+import { ReactNode, Suspense } from 'react';
 
 import '@/styles/globals.css';
 
+import AuthToastWatcher from '@/components/auth/AuthToastWatcher';
 import ToastContainer from '@/components/common/toast/ToastContainer';
 
 import AuthProvider from '@/providers/AuthProvider';
@@ -46,16 +45,20 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
-
-  const user = accessToken ? await getMe(accessToken) : null;
+  const refreshToken = cookieStore.get('refreshToken')?.value;
 
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-ivory-F2E overflow-x-hidden">
         <QueryProvider>
-          <AuthProvider user={user}>{children}</AuthProvider>
+          <AuthProvider isLogin={!!accessToken || !!refreshToken}>
+            {children}
+          </AuthProvider>
         </QueryProvider>
         <ToastContainer />
+        <Suspense fallback={null}>
+          <AuthToastWatcher />
+        </Suspense>
       </body>
     </html>
   );

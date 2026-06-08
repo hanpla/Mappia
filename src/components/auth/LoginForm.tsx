@@ -6,9 +6,9 @@ import { useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
-import { useAuthStore } from '@/stores/authStore';
 import useToastStore from '@/stores/toastStore';
 
+import { setAuthCookies } from '@/lib/actions/auth';
 import { login } from '@/lib/api/auth';
 import { getApiErrorMessage } from '@/lib/utils/error';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
@@ -24,7 +24,6 @@ const LOGIN_ERROR_MESSAGE = '로그인에 실패했습니다. 정보를 확인�
 
 export default function LoginForm() {
   const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
   const showToast = useToastStore((state) => state.showToast);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,11 +32,11 @@ export default function LoginForm() {
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: () => login(email, password),
-    onSuccess: ({ data }) => {
-      setAuth(data);
+    onSuccess: async ({ data }) => {
+      await setAuthCookies(data.accessToken, data.refreshToken);
       showToast('success', '로그인에 성공했습니다.');
       router.refresh();
-      router.push('/');
+      router.push('/activities');
     },
     onError: (err) => {
       showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));
