@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import useToastStore from '@/stores/toastStore';
 
 import { clearAuthCookies } from '@/lib/actions/auth';
@@ -13,10 +15,12 @@ interface UserDropdownProps {
 
 export default function UserDropdown({ onClose }: UserDropdownProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const showToast = useToastStore((state) => state.showToast);
 
   const handleLogout = async () => {
     await clearAuthCookies();
+    queryClient.clear();
     onClose();
     showToast('error', '로그아웃 되었습니다.');
     router.refresh();
