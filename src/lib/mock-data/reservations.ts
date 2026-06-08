@@ -113,7 +113,7 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
     },
     {
       date: '2026-06-20',
-      reservations: { completed: 0, confirmed: 5, pending: 0 },
+      reservations: { completed: 5, confirmed: 5, pending: 5 },
     },
   ],
   3: [
