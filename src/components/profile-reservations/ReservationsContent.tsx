@@ -9,7 +9,7 @@ import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
 
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
-import ReservationsEmpty from '@/components/profile-reservations/EmptySpace';
+import ReservationsEmpty from '@/components/common/empty-space/EmptySpace';
 import Title from '@/components/profile-title/Title';
 
 import ReservationCard from './ReservationCard';
