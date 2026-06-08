@@ -48,7 +48,7 @@ export default function CalendarStatus({
   }, [currentYear, currentMonth]);
 
   return (
-    <aside className="border-gray-EEE font-pretendard flex h-[520px] w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[560px] md:p-5 lg:h-[700px] lg:p-6">
+    <aside className="border-gray-EEE font-pretendard flex h-[800px] w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[760px] md:p-5 lg:h-[860px] lg:p-6">
       <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
         <button
           onClick={onPrevMonth}
@@ -66,7 +66,6 @@ export default function CalendarStatus({
           ▶
         </button>
       </div>
-
       <div className="textxs-bold text-black-333 md:textsm-bold lg:textmd-bold grid grid-cols-7 pb-2 text-center lg:pb-3">
         {days.map((day, idx) => (
           <div
@@ -77,7 +76,6 @@ export default function CalendarStatus({
           </div>
         ))}
       </div>
-
       <div
         className="border-gray-EEE divide-gray-EEE grid flex-1 divide-y border-t"
         style={{ gridTemplateRows: `repeat(${weeks.length}, 1fr)` }}
