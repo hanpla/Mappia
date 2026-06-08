@@ -45,12 +45,15 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get('accessToken')?.value;
+  const refreshToken = cookieStore.get('refreshToken')?.value;
 
   return (
     <html lang="ko" className="antialiased">
       <body className="bg-ivory-F2E overflow-x-hidden">
         <QueryProvider>
-          <AuthProvider isLogin={!!accessToken}>{children}</AuthProvider>
+          <AuthProvider isLogin={!!accessToken || !!refreshToken}>
+            {children}
+          </AuthProvider>
         </QueryProvider>
         <ToastContainer />
         <Suspense fallback={null}>

@@ -7,8 +7,12 @@ import useClickOutside from '@/hooks/useClickOutside';
 
 import UserDropdown from './UserDropdown';
 
-export default function UserProfile() {
-  const profileSrc = null;
+interface Props {
+  nickname?: string;
+  profileImageUrl?: string;
+}
+
+export default function UserProfile({ nickname, profileImageUrl }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
 
@@ -19,16 +23,16 @@ export default function UserProfile() {
         className="flex cursor-pointer items-center justify-center gap-2.5"
       >
         <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-gray-100">
-          {profileSrc ? (
+          {profileImageUrl ? (
             <Image
-              src={profileSrc}
+              src={profileImageUrl}
               alt="프로필 이미지"
               fill
               className="object-cover"
             />
           ) : null}
         </div>
-        <span>Nickname</span>
+        <span>{nickname}</span>
       </button>
       {isOpen && <UserDropdown onClose={() => setIsOpen(false)} />}
     </div>

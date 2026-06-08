@@ -15,11 +15,15 @@ export default function AuthToastWatcher() {
   const handled = useRef(false);
 
   useEffect(() => {
-    if (handled.current) return;
-
     const isSuccess = searchParams.get('login') === 'kakao';
     const isError = searchParams.get('error') === 'kakao';
-    if (!isSuccess && !isError) return;
+
+    if (!isSuccess && !isError) {
+      handled.current = false;
+      return;
+    }
+
+    if (handled.current) return;
 
     handled.current = true;
     if (isSuccess) showToast('success', '로그인에 성공했습니다.');
@@ -30,7 +34,7 @@ export default function AuthToastWatcher() {
     params.delete('login');
     params.delete('error');
     const query = params.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
+    router.replace(query ? pathname + '?' + query : pathname);
   }, [searchParams, router, pathname, showToast]);
 
   return null;
