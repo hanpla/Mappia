@@ -24,7 +24,7 @@ export default function UserDropdown({ onClose }: UserDropdownProps) {
     onClose();
     showToast('error', '로그아웃 되었습니다.');
     router.refresh();
-    router.push('/');
+    router.push('/activities');
   };
 
   return (
