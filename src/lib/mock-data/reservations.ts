@@ -87,7 +87,7 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
     },
     {
       date: '2026-06-15',
-      reservations: { completed: 4, confirmed: 2, pending: 0 },
+      reservations: { completed: 4, confirmed: 2, pending: 5 },
     },
     {
       date: '2026-06-25',
@@ -113,7 +113,7 @@ export const MOCK_RESERVATION_DASHBOARD: Record<
     },
     {
       date: '2026-06-20',
-      reservations: { completed: 0, confirmed: 5, pending: 0 },
+      reservations: { completed: 5, confirmed: 5, pending: 5 },
     },
   ],
   3: [

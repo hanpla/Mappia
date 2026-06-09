@@ -66,7 +66,7 @@ export default function ProfileImageUpload({
       <button
         type="button"
         onClick={trigger}
-        className="absolute right-0 bottom-0 flex h-7.5 w-7.5 items-center justify-center rounded-full bg-[#8B7355] transition-colors hover:bg-[#7a6449]"
+        className="absolute right-0 bottom-0 flex h-7.5 w-7.5 cursor-pointer items-center justify-center rounded-full bg-[#8B7355] transition-colors hover:bg-[#7a6449]"
         aria-label="프로필 이미지 변경"
       >
         <IconEdit size={16} color="white" />

@@ -44,7 +44,7 @@ export default function CalendarReverse({
   };
 
   const handleDateClick = (dateItem: CalendarDate, isPast: boolean) => {
-    if (isPast) return;
+    if (isPast || !dateItem.currentMonth) return;
 
     if (selectedDateStr === dateItem.dateStr) {
       onDateClick?.(null);
@@ -112,23 +112,19 @@ export default function CalendarReverse({
             const isSelected = selectedDateStr === dateItem.dateStr;
 
             let dayStyles =
-              'text-black-333 hover:bg-gray-FAF textsm-regular md:textmd-regular';
+              'text-black-333 hover:bg-gray-FAF textsm-regular md:textmd-regular transition-all';
 
-            if (!dateItem.currentMonth) {
-              dayStyles =
-                'text-gray-CBC hover:bg-gray-FAF textsm-regular md:textmd-regular';
-            }
             if (isToday) {
               dayStyles =
-                'bg-ivory-F2E text-black-1B1 textsm-bold md:textmd-bold';
+                'bg-ivory-F2E text-black-1B1 textsm-bold md:textmd-bold transition-all';
             }
             if (isSelected) {
               dayStyles =
-                'bg-beige-8B7 text-white textsm-semibold md:textmd-semibold hover:bg-beige-8B7';
+                'bg-beige-8B7 text-white textsm-semibold md:textmd-semibold hover:bg-beige-8B7 transition-all';
             }
             if (isPast) {
               dayStyles =
-                'text-gray-CBC opacity-40 cursor-not-allowed pointer-events-none textsm-regular md:textmd-regular';
+                'text-gray-CBC opacity-40 cursor-not-allowed pointer-events-none textsm-regular md:textmd-regular transition-all';
             }
 
             return (
@@ -136,13 +132,15 @@ export default function CalendarReverse({
                 key={idx}
                 className="flex items-center justify-center p-[4%]"
               >
-                <button
-                  onClick={() => handleDateClick(dateItem, isPast)}
-                  disabled={isPast}
-                  className={`flex aspect-square w-full cursor-pointer items-center justify-center rounded-full transition-all ${dayStyles}`}
-                >
-                  {dateItem.day}
-                </button>
+                {dateItem.currentMonth && (
+                  <button
+                    onClick={() => handleDateClick(dateItem, isPast)}
+                    disabled={isPast}
+                    className={`flex aspect-square w-full cursor-pointer items-center justify-center rounded-full ${dayStyles}`}
+                  >
+                    {dateItem.day}
+                  </button>
+                )}
               </div>
             );
           })}

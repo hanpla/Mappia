@@ -36,7 +36,7 @@ export default function LoginForm() {
       await setAuthCookies(data.accessToken, data.refreshToken);
       showToast('success', '로그인에 성공했습니다.');
       router.refresh();
-      router.push('/');
+      router.push('/activities');
     },
     onError: (err) => {
       showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));

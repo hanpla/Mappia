@@ -48,7 +48,7 @@ export default function CalendarStatus({
   }, [currentYear, currentMonth]);
 
   return (
-    <aside className="border-gray-EEE font-pretendard flex w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:p-5 lg:p-6">
+    <aside className="border-gray-EEE font-pretendard flex h-[800px] w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[760px] md:p-5 lg:h-[860px] lg:p-6">
       <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
         <button
           onClick={onPrevMonth}
@@ -66,7 +66,6 @@ export default function CalendarStatus({
           ▶
         </button>
       </div>
-
       <div className="textxs-bold text-black-333 md:textsm-bold lg:textmd-bold grid grid-cols-7 pb-2 text-center lg:pb-3">
         {days.map((day, idx) => (
           <div
@@ -77,13 +76,12 @@ export default function CalendarStatus({
           </div>
         ))}
       </div>
-
-      <div className="flex flex-1 flex-col justify-between">
+      <div
+        className="border-gray-EEE divide-gray-EEE grid flex-1 divide-y border-t"
+        style={{ gridTemplateRows: `repeat(${weeks.length}, 1fr)` }}
+      >
         {weeks.map((week, weekIdx) => (
-          <div
-            key={weekIdx}
-            className="border-gray-EEE grid grid-cols-7 border-t pt-1"
-          >
+          <div key={weekIdx} className="grid grid-cols-7">
             {week.map((dateItem, idx) => {
               const dayData = eventsData[dateItem.dateStr];
               const shouldShowRedDot =
@@ -92,7 +90,7 @@ export default function CalendarStatus({
                 <div
                   key={idx}
                   onClick={() => onDateClick?.(dateItem.dateStr)}
-                  className="hover:bg-gray-FAF flex min-h-[68px] cursor-pointer flex-col items-center justify-start rounded-xl bg-white p-0.5 transition-colors md:min-h-[64px] lg:min-h-[96px] lg:p-1"
+                  className="hover:bg-gray-FAF flex h-full cursor-pointer flex-col items-center justify-start rounded-xl bg-white p-0.5 transition-colors lg:p-1"
                 >
                   <div className="relative mt-1 flex items-center justify-center px-2 select-none">
                     <span

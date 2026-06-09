@@ -13,12 +13,12 @@ import { deleteMyActivity } from '@/lib/api/my-activities';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { useMyActivitiesInfinite } from '@/hooks/useMyActivitiesInfinite';
 
+import EmptySpace from '@/components/common/empty-space/EmptySpace';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 
 import LogoSurprise from '../common/logo/LogoSurprise';
 import Card from './Card';
 import CardSkeleton from './CardSkeleton';
-import EmptySpace from './EmptySpace';
 import ListSkeleton from './ListSkeleton';
 
 export default function ManageList() {
