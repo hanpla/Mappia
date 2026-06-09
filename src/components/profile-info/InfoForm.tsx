@@ -7,7 +7,10 @@ import { useQuery } from '@tanstack/react-query';
 import useToastStore from '@/stores/toastStore';
 
 import { getMe } from '@/lib/api/users';
-import { validatePasswordConfirm } from '@/lib/utils/validation';
+import {
+  validateNickname,
+  validatePasswordConfirm,
+} from '@/lib/utils/validation';
 
 import useUpdateMyInfo from '@/hooks/useUpdateMyInfo';
 
@@ -92,21 +95,32 @@ export default function InfoForm() {
   const handleChange =
     (name: FieldName) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setValues((prev) => ({ ...prev, [name]: e.target.value }));
-      if (name === 'password' || name === 'passwordConfirm') {
-        setErrors((prev) => ({ ...prev, passwordConfirm: '' }));
-      }
+      setErrors((prev) => ({
+        ...prev,
+        // 입력 중인 필드의 에러는 초기화
+        [name]: '',
+        // 비밀번호 쌍은 둘 중 하나만 바뀌어도 재입력 에러를 초기화
+        ...(name === 'password' || name === 'passwordConfirm'
+          ? { passwordConfirm: '' }
+          : {}),
+      }));
     };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isPending) return;
 
+    const nicknameError = validateNickname(values.nickname);
     const passwordConfirmError = validatePasswordConfirm(
       values.password,
       values.passwordConfirm,
     );
-    setErrors((prev) => ({ ...prev, passwordConfirm: passwordConfirmError }));
-    if (passwordConfirmError) return;
+    setErrors((prev) => ({
+      ...prev,
+      nickname: nicknameError,
+      passwordConfirm: passwordConfirmError,
+    }));
+    if (nicknameError || passwordConfirmError) return;
 
     const payload: UpdateMyInfoRequest = {};
     if (user && values.nickname !== user.nickname) {
@@ -129,13 +143,9 @@ export default function InfoForm() {
   };
 
   return (
-    <form
-      id={INFO_FORM_ID}
-      noValidate
-      onSubmit={handleSubmit}
-      className="mt-6 flex flex-col gap-5"
-    >
-      <div className="flex flex-col items-center gap-1 md:hidden">
+    <>
+      {/* 모바일 프로필 요약 — 폼 데이터 아님, 이미지는 선택 즉시 업로드된다 */}
+      <div className="mt-6 flex flex-col items-center gap-1 md:hidden">
         <ProfileImageUpload
           name="profileImage"
           defaultSrc={user?.profileImageUrl}
@@ -147,54 +157,61 @@ export default function InfoForm() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-7">
-        {FIELDS.map(
-          ({
-            name,
-            label,
-            placeholder,
-            autoComplete,
-            type,
-            secure,
-            disabled,
-          }) => {
-            const fieldProps = {
-              id: name,
+      <form
+        id={INFO_FORM_ID}
+        noValidate
+        onSubmit={handleSubmit}
+        className="mt-6 flex flex-col gap-5"
+      >
+        <div className="flex flex-col gap-7">
+          {FIELDS.map(
+            ({
+              name,
+              label,
               placeholder,
-              value: values[name],
-              onChange: handleChange(name),
               autoComplete,
+              type,
+              secure,
               disabled,
-              hasError: !!errors[name],
-            };
-            const labelClassName =
-              name === 'email'
-                ? 'textlg-regular text-gray-797'
-                : 'textlg-bold text-[#1F1F22]';
-            return (
-              <div key={name} className="flex w-full flex-col gap-2">
-                <label
-                  htmlFor={name}
-                  className={`flex items-center ${labelClassName}`}
-                >
-                  {label}
-                </label>
-                <InputField error={errors[name]}>
-                  {secure ? (
-                    <PasswordInput {...fieldProps} />
-                  ) : (
-                    <Input
-                      {...fieldProps}
-                      type={type}
-                      className={disabled ? 'bg-gray-FAF text-gray-797' : ''}
-                    />
-                  )}
-                </InputField>
-              </div>
-            );
-          },
-        )}
-      </div>
-    </form>
+            }) => {
+              const fieldProps = {
+                id: name,
+                placeholder,
+                value: values[name],
+                onChange: handleChange(name),
+                autoComplete,
+                disabled,
+                hasError: !!errors[name],
+              };
+              const labelClassName =
+                name === 'email'
+                  ? 'textlg-regular text-gray-797'
+                  : 'textlg-bold text-[#1F1F22]';
+              return (
+                <div key={name} className="flex w-full flex-col gap-2">
+                  <label
+                    htmlFor={name}
+                    className={`flex items-center ${labelClassName}`}
+                  >
+                    {label}
+                  </label>
+                  <InputField error={errors[name]}>
+                    {secure ? (
+                      <PasswordInput {...fieldProps} />
+                    ) : (
+                      <Input
+                        {...fieldProps}
+                        type={type}
+                        className={disabled ? 'bg-gray-FAF text-gray-797' : ''}
+                      />
+                    )}
+                  </InputField>
+                </div>
+              );
+            },
+          )}
+        </div>
+      </form>
+    </>
   );
 }
