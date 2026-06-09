@@ -3,7 +3,11 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
 import useToastStore from '@/stores/toastStore';
+
+import { cancelReservation, createReview } from '@/lib/api/my-reservations';
 
 import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
@@ -32,19 +36,17 @@ const STATUS_MAPPER: Record<
 
 interface ReservationCardProps {
   item: MyReservationItem;
-  onRefresh?: () => void;
 }
 
-export default function ReservationCard({
-  item,
-  onRefresh,
-}: ReservationCardProps) {
+export default function ReservationCard({ item }: ReservationCardProps) {
+  const queryClient = useQueryClient();
+
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [buttonSize, setButtonSize] = useState<'sm' | 'md' | 'lg'>('lg');
+  const [isImageError, setIsImageError] = useState(false);
 
   const showToast = useToastStore((state) => state.showToast);
 
@@ -59,6 +61,40 @@ export default function ReservationCard({
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  const reviewMutation = useMutation({
+    mutationFn: () =>
+      createReview(item?.id, { rating, content: reviewContent }),
+    onSuccess: () => {
+      showToast('success', '후기가 성공적으로 저장되었습니다!');
+      setIsReviewModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : '후기 등록에 실패했습니다.',
+      );
+    },
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: () => cancelReservation(item?.id),
+    onSuccess: () => {
+      showToast(
+        'success',
+        `[${item?.activity?.title}] 예약 취소가 완료되었습니다.`,
+      );
+      setIsCancelModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : '예약 취소에 실패했습니다.',
+      );
+    },
+  });
+
   if (!item || !item.activity) {
     console.warn(
       'ReservationCard: 유효하지 않거나 activity 데이터가 없는 아이템입니다.',
@@ -67,6 +103,7 @@ export default function ReservationCard({
   }
 
   const {
+    id: reservationId,
     status,
     activity,
     date,
@@ -82,13 +119,15 @@ export default function ReservationCard({
     className: 'text-black-1B1',
   };
 
+  const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
+
   const handleReviewClick = () => {
     setRating(0);
     setReviewContent('');
     setIsReviewModalOpen(true);
   };
 
-  const handleReviewSubmit = async (e: React.FormEvent) => {
+  const handleReviewSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (rating === 0) {
@@ -100,53 +139,31 @@ export default function ReservationCard({
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      showToast('success', '후기가 성공적으로 저장되었습니다!');
-      setIsReviewModalOpen(false);
-      if (onRefresh) onRefresh();
-    } catch (error) {
-      console.error(error);
-      showToast('error', '후기 등록에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    reviewMutation.mutate();
   };
 
   const handleCancelClick = () => {
     setIsCancelModalOpen(true);
   };
 
-  const handleCancelConfirm = async () => {
-    try {
-      setIsSubmitting(true);
-      showToast('success', `[${activity.title}] 예약 취소가 완료되었습니다.`);
-      setIsCancelModalOpen(false);
-      if (onRefresh) onRefresh();
-    } catch (error) {
-      console.error(error);
-      showToast('error', '예약 취소에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex h-32 w-full rounded-2xl border transition-all md:h-[156px] lg:h-auto lg:min-h-[200px]">
       <div className="bg-gray-FAF relative w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-[156px] lg:w-[200px]">
-        {activity.bannerImageUrl ? (
+        {activity.bannerImageUrl && !isImageError ? (
           <Image
             src={activity.bannerImageUrl}
             alt={activity.title}
             fill
             sizes="(max-width: 768px) 96px, (max-width: 1024px) 156px, 200px"
             className="object-cover"
+            priority
+            onError={() => setIsImageError(true)}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
             <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-20 lg:w-20">
               <Image
-                src={Logo.src ?? Logo}
+                src={Logo}
                 alt="Mappia Logo"
                 fill
                 className="object-contain opacity-40"
@@ -208,11 +225,11 @@ export default function ReservationCard({
       <ConfirmModal
         isOpen={isCancelModalOpen}
         onClose={() => !isSubmitting && setIsCancelModalOpen(false)}
-        onConfirm={handleCancelConfirm}
+        onConfirm={() => cancelMutation.mutate()}
         icon={
           <div className="relative h-[88px] w-[88px]">
             <Image
-              src={LogoHead.src || LogoHead}
+              src={LogoHead}
               alt="Mappia Logo"
               fill
               className="object-contain"

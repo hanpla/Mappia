@@ -1,8 +1,6 @@
-'use server';
-
-import { cookies } from 'next/headers';
-
 import axios from 'axios';
+
+import { privateInstance } from '@/lib/api/instance';
 
 import type { ReservationStatus } from '@/types/activities';
 import type {
@@ -17,64 +15,65 @@ export interface GetMyReservationsParams {
   status?: ReservationStatus;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-const getAccessToken = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
-
-  if (!token) {
-    throw new Error('로그인이 필요합니다.');
-  }
-
-  return token;
-};
-
-// 1. 내 예약 리스트 조회
 export const getMyReservations = async (
   params?: GetMyReservationsParams,
 ): Promise<MyReservationsContent> => {
   try {
-    const accessToken = await getAccessToken();
-
-    const res = await axios.get(`${BASE_URL}/my-reservations`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params,
-    });
+    const res = await privateInstance.get('/my-reservations', { params });
     return res.data;
   } catch (error) {
     console.error(error);
+    return {
+      cursorId: null,
+      totalCount: 0,
+      reservations: [],
+    };
   }
-  return {
-    cursorId: null,
-    totalCount: 0,
-    reservations: [],
-  };
 };
 
-// 2. 내 예약 리뷰 작성
 export const createReview = async (
   reservationId: number,
   body: CreateReviewRequest,
-): Promise<CreateReviewContent | undefined> => {
+): Promise<CreateReviewContent> => {
   try {
-    const accessToken = await getAccessToken();
-
-    const res = await axios.post(
-      `${BASE_URL}/my-reservations/${reservationId}/reviews`,
+    const res = await privateInstance.post(
+      `/my-reservations/${reservationId}/reviews`,
       body,
+    );
+    return res.data;
+  } catch (error: unknown) {
+    let errorMessage = '리뷰 등록에 실패했습니다.';
+
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.message || errorMessage;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    throw new Error(errorMessage);
+  }
+};
+
+export const cancelReservation = async (
+  reservationId: number,
+): Promise<unknown> => {
+  try {
+    const res = await privateInstance.patch(
+      `/my-reservations/${reservationId}`,
       {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
+        status: 'canceled',
       },
     );
     return res.data;
-  } catch (error) {
-    console.error(error);
+  } catch (error: unknown) {
+    let errorMessage = '예약 취소에 실패했습니다.';
+
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.message || errorMessage;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    throw new Error(errorMessage);
   }
 };
