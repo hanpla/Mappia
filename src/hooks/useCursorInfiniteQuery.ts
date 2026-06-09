@@ -12,11 +12,11 @@ interface UseCursorInfiniteQueryProps<T extends PaginatedResponse> {
   staleTime?: number;
 }
 
-export function useCursorInfiniteQuery<T extends PaginatedResponse>({
+export const useCursorInfiniteQuery = <T extends PaginatedResponse>({
   queryKey,
   queryFn,
   staleTime = 1000 * 60, // 기본값 1분
-}: UseCursorInfiniteQueryProps<T>) {
+}: UseCursorInfiniteQueryProps<T>) => {
   return useInfiniteQuery({
     queryKey,
     queryFn: ({ pageParam }) => queryFn(pageParam),
@@ -24,4 +24,4 @@ export function useCursorInfiniteQuery<T extends PaginatedResponse>({
     getNextPageParam: (lastPage) => lastPage.cursorId ?? undefined,
     staleTime,
   });
-}
+};
