@@ -204,7 +204,7 @@ function MainPageContent() {
     <>
       <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
         <Image
-          src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=1200&q=80"
+          src="https://images.unsplash.com/photo-1545959570-a94084071b5d"
           alt="hero"
           fill
           priority
