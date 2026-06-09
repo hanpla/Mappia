@@ -1,9 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import { MOCK_RECENT_ACTIVITIES } from '@/lib/mock-data/recent-activities';
+import useRecentActivitiesStore from '@/stores/recentActivitiesStore';
 
 import useClickOutside from '@/hooks/useClickOutside';
 
@@ -13,11 +13,16 @@ import RecentActivitiesPopup from './RecentActivitiesPopup';
 export default function RecentActivitiesButton() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const { activities, loadActivities } = useRecentActivitiesStore();
+
+  useEffect(() => {
+    loadActivities();
+  }, [loadActivities]);
 
   // 버튼 바깥 영역 클릭 시 닫히도록 설정
   const containerRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
 
-  if (pathname === '/') return null;
+  if (pathname !== '/activities') return null;
 
   return (
     <div
@@ -25,7 +30,7 @@ export default function RecentActivitiesButton() {
       className="pointer-events-none fixed right-6 bottom-6 z-50 flex flex-col items-end gap-3 md:right-8 md:bottom-8"
     >
       {/* 플로팅 팝업 UI */}
-      {isOpen && <RecentActivitiesPopup activities={MOCK_RECENT_ACTIVITIES} />}
+      {isOpen && <RecentActivitiesPopup activities={activities} />}
 
       {/* 플로팅 버튼 */}
       <button

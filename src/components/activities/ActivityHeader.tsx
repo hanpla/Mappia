@@ -1,6 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import useRecentActivitiesStore from '@/stores/recentActivitiesStore';
 
 import EditDropdown from '../common/dropdown/EditDropdown';
 import IconMap from '../common/icon/IconMap';
@@ -9,6 +12,19 @@ import IconStarOn from '../common/icon/IconStarOn';
 
 export default function ActivityHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { addActivity } = useRecentActivitiesStore();
+  const params = useParams();
+  const id = params?.id ? Number(params.id) : null;
+
+  useEffect(() => {
+    if (id && !isNaN(id)) {
+      addActivity({
+        id,
+        title: '함께 배우면 즐거운 스트릿 댄스',
+        bannerImageUrl: '/img/activity-banner-image.png',
+      });
+    }
+  }, [id, addActivity]);
 
   const handleDelete = () => {};
 
