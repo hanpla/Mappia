@@ -1,17 +1,31 @@
 import Image from 'next/image';
 
-const SUB_IMAGES = [
-  { src: '/img/activity-sub-image-01.png', alt: '체험 서브 이미지 1' },
-  { src: '/img/activity-sub-image-02.png', alt: '체험 서브 이미지 2' },
-];
+import { ActivityDetailContent } from '@/types/activities';
 
-export default function PhotoGallery() {
+import Logo from '../common/logo/Logo';
+
+interface PhotoGalleryProps {
+  activity: ActivityDetailContent;
+}
+
+const MAX_SUB_IMAGES = 2;
+
+export default function PhotoGallery({ activity }: PhotoGalleryProps) {
+  const { title, bannerImageUrl, subImages } = activity;
+
+  const displaySubImages = Array.from(
+    { length: MAX_SUB_IMAGES },
+    (_, index) => {
+      return subImages[index]?.imageUrl || null;
+    },
+  );
+
   return (
-    <section className="flex h-[245px] gap-2 overflow-hidden rounded-3xl md:h-[400px] md:gap-3">
-      <div className="relative h-full w-[50%]">
+    <section className="flex h-61.25 gap-2 overflow-hidden rounded-3xl md:h-100 md:gap-3">
+      <div className="bg-gray-FAF relative h-full w-[50%]">
         <Image
-          src="/img/activity-banner-image.png"
-          alt="체험 배너 이미지"
+          src={bannerImageUrl}
+          alt={`${title} 배너 이미지`}
           fill
           sizes="(max-width: 768px) 50vw, 66vw"
           priority
@@ -19,15 +33,21 @@ export default function PhotoGallery() {
         />
       </div>
       <div className="flex h-full flex-1 flex-col gap-2 md:gap-3">
-        {SUB_IMAGES.map((img, index) => (
-          <div key={index} className="relative flex-1">
-            <Image
-              src={img.src}
-              alt={img.alt}
-              fill
-              sizes="(max-width: 768px) 50vw, 33vw"
-              className="object-cover"
-            />
+        {displaySubImages.map((src, index) => (
+          <div key={index} className="bg-gray-FAF relative flex-1">
+            {src ? (
+              <Image
+                src={src}
+                alt={`${title} 서브 이미지 ${index + 1}`}
+                fill
+                sizes="(max-width: 768px) 50vw, 33vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center">
+                <Logo className="h-15 w-15 opacity-40 md:h-30 md:w-30" />
+              </div>
+            )}
           </div>
         ))}
       </div>
