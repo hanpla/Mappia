@@ -3,10 +3,11 @@
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { getMyReservations } from '@/lib/api/my-reservations';
 
+import { useCursorInfiniteQuery } from '@/hooks/useCursorInfiniteQuery';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 import { ReservationStatus } from '@/types/activities';
@@ -36,16 +37,15 @@ export default function ReservationsContent() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery({
+  } = useCursorInfiniteQuery({
     queryKey: ['myReservations', currentFilter],
-    queryFn: ({ pageParam }) =>
+    queryFn: (pageParam) =>
       getMyReservations({
         status: currentFilter ?? undefined,
         cursorId: pageParam ?? undefined,
         size: 2,
       }),
-    initialPageParam: null as number | null,
-    getNextPageParam: (lastPage) => lastPage.cursorId ?? undefined,
+    staleTime: 0,
   });
 
   const fetchNextPageRef = useRef(fetchNextPage);
