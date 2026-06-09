@@ -14,7 +14,7 @@ export interface GetMyReservationsParams {
   size?: number;
   status?: ReservationStatus;
 }
-
+// 내 예약 조회
 export const getMyReservations = async (
   params?: GetMyReservationsParams,
 ): Promise<MyReservationsContent> => {
@@ -30,7 +30,7 @@ export const getMyReservations = async (
     };
   }
 };
-
+// 리뷰 등록
 export const createReview = async (
   reservationId: number,
   body: CreateReviewRequest,
@@ -53,7 +53,7 @@ export const createReview = async (
     throw new Error(errorMessage);
   }
 };
-
+// 예약 취소
 export const cancelReservation = async (
   reservationId: number,
 ): Promise<unknown> => {
