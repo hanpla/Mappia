@@ -105,7 +105,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   }
 
   const {
-    id: reservationId,
     status,
     activity,
     date,
