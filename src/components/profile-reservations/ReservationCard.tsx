@@ -68,7 +68,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       setIsReviewModalOpen(false);
       queryClient.invalidateQueries({
         queryKey: ['myReservations'],
-        refetchType: 'none',
       });
     },
     onError: (error) => {
@@ -89,7 +88,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       setIsCancelModalOpen(false);
       queryClient.invalidateQueries({
         queryKey: ['myReservations'],
-        refetchType: 'none',
       });
     },
     onError: (error) => {
