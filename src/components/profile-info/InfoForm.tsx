@@ -167,24 +167,30 @@ export default function InfoForm() {
               disabled,
               hasError: !!errors[name],
             };
+            const labelClassName =
+              name === 'email'
+                ? 'textlg-regular text-gray-797'
+                : 'textlg-bold text-[#1F1F22]';
             return (
-              <InputField
-                key={name}
-                label={label}
-                htmlFor={name}
-                error={errors[name]}
-                className="textlg-regular"
-              >
-                {secure ? (
-                  <PasswordInput {...fieldProps} />
-                ) : (
-                  <Input
-                    {...fieldProps}
-                    type={type}
-                    className={disabled ? 'bg-gray-FAF text-gray-797' : ''}
-                  />
-                )}
-              </InputField>
+              <div key={name} className="flex w-full flex-col gap-2">
+                <label
+                  htmlFor={name}
+                  className={`flex items-center ${labelClassName}`}
+                >
+                  {label}
+                </label>
+                <InputField error={errors[name]}>
+                  {secure ? (
+                    <PasswordInput {...fieldProps} />
+                  ) : (
+                    <Input
+                      {...fieldProps}
+                      type={type}
+                      className={disabled ? 'bg-gray-FAF text-gray-797' : ''}
+                    />
+                  )}
+                </InputField>
+              </div>
             );
           },
         )}
