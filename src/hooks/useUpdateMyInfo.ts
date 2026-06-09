@@ -15,7 +15,6 @@ export default function useUpdateMyInfo() {
   return useMutation({
     mutationFn: (payload: UpdateMyInfoRequest) => updateMe(payload),
     onSuccess: (user: User) => {
-      // 수정된 유저로 ['me'] 캐시를 갱신 → GNB/사이드메뉴/프로필 즉시 반영.
       queryClient.setQueryData(['me'], user);
       showToast('success', '내 정보가 변경되었습니다.');
     },

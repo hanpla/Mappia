@@ -18,7 +18,6 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
-// 폼이 페이지의 '저장하기' 버튼(form 바깥)과 form 어트리뷰트로 연결되는 식별자.
 export const INFO_FORM_ID = 'info-form';
 
 type FieldName = 'nickname' | 'email' | 'password' | 'passwordConfirm';
@@ -41,7 +40,6 @@ const FIELDS: FieldConfig[] = [
     autoComplete: 'nickname',
   },
   {
-    // 이메일은 내 정보 수정 대상이 아니므로 보여주기만 하고 비활성화한다.
     name: 'email',
     label: '이메일',
     placeholder: '이메일을 입력해 주세요',
@@ -80,7 +78,6 @@ export default function InfoForm() {
   const [values, setValues] = useState(EMPTY_FIELDS);
   const [errors, setErrors] = useState(EMPTY_FIELDS);
 
-  // 불러온 내 정보로 닉네임·이메일 인풋 초기값을 한 번만 채운다(이후 사용자 입력을 덮어쓰지 않도록).
   const initializedRef = useRef(false);
   useEffect(() => {
     if (!user || initializedRef.current) return;
@@ -95,7 +92,6 @@ export default function InfoForm() {
   const handleChange =
     (name: FieldName) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setValues((prev) => ({ ...prev, [name]: e.target.value }));
-      // 비밀번호 관련 입력을 고치면 재입력 에러를 즉시 지운다.
       if (name === 'password' || name === 'passwordConfirm') {
         setErrors((prev) => ({ ...prev, passwordConfirm: '' }));
       }
@@ -112,7 +108,6 @@ export default function InfoForm() {
     setErrors((prev) => ({ ...prev, passwordConfirm: passwordConfirmError }));
     if (passwordConfirmError) return;
 
-    // 원래 값과 달라진 항목만 추려서 보낸다(이메일은 수정 대상이 아니다).
     const payload: UpdateMyInfoRequest = {};
     if (user && values.nickname !== user.nickname) {
       payload.nickname = values.nickname;
@@ -128,7 +123,6 @@ export default function InfoForm() {
 
     updateInfo(payload, {
       onSuccess: () => {
-        // 저장 후 비밀번호 입력값은 비운다.
         setValues((prev) => ({ ...prev, password: '', passwordConfirm: '' }));
       },
     });
@@ -139,15 +133,15 @@ export default function InfoForm() {
       id={INFO_FORM_ID}
       noValidate
       onSubmit={handleSubmit}
-      className="mt-6 flex flex-col"
+      className="mt-6 flex flex-col gap-5"
     >
-      {/* 모바일: 폼 위에 프로필 이미지 + 현재 닉네임/이메일 (md 이상에서는 사이드 메뉴가 대신 보여준다) */}
-      <div className="mb-5 flex flex-col items-center md:hidden">
+      <div className="flex flex-col items-center gap-1 md:hidden">
         <ProfileImageUpload
           name="profileImage"
           defaultSrc={user?.profileImageUrl}
+          className="bg-white shadow-[0_6px_13px_rgba(0,0,0,0.06)]"
         />
-        <div className="mt-4 flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1">
           <p className="textxl-semibold text-black-1B1">{user?.nickname}</p>
           <p className="textxs-regular text-[#A3A3A3]">{user?.email}</p>
         </div>

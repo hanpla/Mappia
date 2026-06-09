@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 import useFileInput from '@/hooks/useFileInput';
 import useUpdateProfileImage from '@/hooks/useUpdateProfileImage';
 
@@ -12,11 +14,13 @@ import Logo404 from '@/components/common/logo/Logo404';
 interface ProfileImageUploadProps {
   name: string;
   defaultSrc?: string;
+  className?: string;
 }
 
 export default function ProfileImageUpload({
   name,
   defaultSrc,
+  className,
 }: ProfileImageUploadProps) {
   const blobUrlRef = useRef<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
@@ -43,13 +47,11 @@ export default function ProfileImageUpload({
       const file = files[0];
       if (!file) return;
 
-      // 선택 즉시 로컬 미리보기로 교체(낙관적 업데이트).
       if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
       const url = URL.createObjectURL(file);
       blobUrlRef.current = url;
       setPreviewSrc(url);
 
-      // 업로드 → 받은 url로 내 정보 수정. 실패 시 미리보기 롤백.
       mutate(file, { onError: clearPreview });
     },
   });
@@ -58,7 +60,12 @@ export default function ProfileImageUpload({
 
   return (
     <div className="relative h-30 w-30">
-      <div className="absolute inset-0 overflow-hidden rounded-full bg-[#F2EBDC]">
+      <div
+        className={twMerge(
+          'absolute inset-0 overflow-hidden rounded-full bg-[#F2EBDC]',
+          className,
+        )}
+      >
         {imageSrc ? (
           <Image
             src={imageSrc}
