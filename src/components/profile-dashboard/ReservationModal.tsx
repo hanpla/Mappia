@@ -15,7 +15,10 @@ interface ReservationModalProps {
 }
 
 const formatModalTitle = (dateStr: string): string => {
-  const [year, month, day] = dateStr.split('-');
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length < 3) return dateStr;
+  const [year, month, day] = parts;
   const shortYear = year.slice(-2);
   return `${shortYear}년 ${parseInt(month, 10)}월 ${parseInt(day, 10)}일`;
 };
