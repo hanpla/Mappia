@@ -109,8 +109,6 @@ export default function ReservationsContent() {
               <ReservationCard key={item.id} item={item} />
             ))}
 
-            {isFetchingNextPage && <ReservationsSkeleton />}
-
             {hasNextPage && !isFetchingNextPage && (
               <div ref={observerRef} className="h-1 w-full" />
             )}
