@@ -3,12 +3,13 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { MOCK_RESERVATIONS_DATA } from '@/lib/mock-data/reservations';
+import { getMyReservations } from '@/lib/api/my-reservations';
 
+import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
 
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
-import ReservationsEmpty from '@/components/profile-reservations/EmptySpace';
+import ReservationsEmpty from '@/components/common/empty-space/EmptySpace';
 import Title from '@/components/profile-title/Title';
 
 import ReservationCard from './ReservationCard';
@@ -19,42 +20,39 @@ export default function ReservationsContent() {
   const [reservations, setReservations] = useState<MyReservationItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const currentFilter = searchParams ? searchParams.get('filter') : '';
+  const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
 
-  useEffect(() => {
-    const loadReservations = () => {
-      setIsLoading(true);
+  const loadReservations = async () => {
+    setIsLoading(true);
+    const data = await getMyReservations({
+      status: currentFilter ?? undefined,
+    });
+    setReservations(data.reservations);
+    setIsLoading(false);
+  };
 
-      const rawReservations: MyReservationItem[] =
-        MOCK_RESERVATIONS_DATA?.reservations || [];
+  // useEffect(() => {
+  //   loadReservations();
+  // }, [currentFilter]);
 
-      const filteredData = currentFilter
-        ? rawReservations.filter(
-            (item) => item && item.status === currentFilter,
-          )
-        : rawReservations.filter((item) => item !== null);
-
-      setReservations(filteredData);
-      setIsLoading(false);
-    };
-
-    loadReservations();
-  }, [currentFilter]);
-
-  if (isLoading) {
-    return <ReservationsSkeleton />;
-  }
+  // if (isLoading) {
+  //   return <ReservationsSkeleton />;
+  // }
 
   return (
     <div className="flex w-full flex-col">
       <Title title="예약 내역" action={<FilterDropdown filterKey="filter" />} />
 
-      <div className="mt-6 flex flex-col gap-4 md:gap-6">
+      <div className="mt-10 flex flex-col gap-4 md:gap-6">
         {reservations.length === 0 ? (
-          <ReservationsEmpty />
+          <ReservationsEmpty message="아직 예약한 체험이 없어요" />
         ) : (
           reservations.map((item) => (
-            <ReservationCard key={item.id} item={item} />
+            <ReservationCard
+              key={item.id}
+              item={item}
+              onRefresh={loadReservations}
+            />
           ))
         )}
       </div>

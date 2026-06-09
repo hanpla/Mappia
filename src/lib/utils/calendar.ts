@@ -44,7 +44,7 @@ export const generateCalendarDates = (year: number, month: number) => {
   }
 
   let nextMonthDay = 1;
-  while (dates.length < 42) {
+  while (dates.length % 7 !== 0) {
     dates.push({
       day: nextMonthDay,
       currentMonth: false,
