@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
@@ -37,11 +38,12 @@ function PopularActivityCard({ activity }: { activity: BaseActivity }) {
   return (
     <div className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
       <div className="relative h-40 overflow-hidden md:h-96">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src={activity.bannerImageUrl}
           alt={activity.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 224px, 384px"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
         <div className="text-white-FFF absolute bottom-0 left-0 p-3 md:p-4">
@@ -67,12 +69,13 @@ function PopularActivityCard({ activity }: { activity: BaseActivity }) {
 function ActivityCard({ activity }: { activity: BaseActivity }) {
   return (
     <div className="group w-full cursor-pointer">
-      <div className="mb-3 aspect-square w-full overflow-hidden rounded-2xl">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-2xl">
+        <Image
           src={activity.bannerImageUrl}
           alt={activity.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
       <div>
@@ -106,7 +109,7 @@ function MainPageContent() {
 
   const [searchValue, setSearchValue] = useState(keyword);
 
-  const [pageSize, setPageSize] = useState(8);
+  const pageSize = 12;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -133,7 +136,7 @@ function MainPageContent() {
   const totalCount = allData?.totalCount ?? 0;
 
   const updateQuery = (mutate: (params: URLSearchParams) => void) => {
-    const params = new URLSearchParams(searchParams?.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? '');
     mutate(params);
     params.set('page', '1');
     router.push(`${pathname}?${params.toString()}`);
@@ -169,14 +172,6 @@ function MainPageContent() {
       const width = window.innerWidth;
       setIsPc(width >= 1024);
 
-      if (width >= 1024) {
-        setPageSize(8);
-      } else if (width >= 768) {
-        setPageSize(9);
-      } else {
-        setPageSize(4);
-      }
-
       const track = trackRef.current;
       const viewport = viewportRef.current;
       if (track && viewport) {
@@ -208,11 +203,13 @@ function MainPageContent() {
   return (
     <>
       <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=1200&q=80"
           alt="hero"
-          className="h-full w-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
         <div className="inner absolute inset-0 flex flex-col justify-center">
