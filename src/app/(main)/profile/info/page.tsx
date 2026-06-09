@@ -10,7 +10,7 @@ export default function InfoPage() {
           <button
             type="submit"
             form={INFO_FORM_ID}
-            className="bg-brown-2A2 textlg-bold inline-flex h-12 w-30 items-center justify-center rounded-sm text-center text-white"
+            className="bg-brown-2A2 textlg-bold inline-flex h-12 w-30 cursor-pointer items-center justify-center rounded-sm text-center text-white"
           >
             저장하기
           </button>
