@@ -66,8 +66,8 @@ function PopularActivityCard({ activity }: { activity: BaseActivity }) {
 
 function ActivityCard({ activity }: { activity: BaseActivity }) {
   return (
-    <div className="group w-[168px] cursor-pointer md:w-[221px] lg:w-[283px]">
-      <div className="mb-3 h-[168px] w-[168px] overflow-hidden rounded-2xl md:h-[221px] md:w-[221px] lg:h-[283px] lg:w-[283px]">
+    <div className="group w-full cursor-pointer">
+      <div className="mb-3 aspect-square w-full overflow-hidden rounded-2xl">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={activity.bannerImageUrl}
@@ -147,6 +147,10 @@ function MainPageContent() {
         params.set('category', category);
       }
     });
+  };
+
+  const handleAllClick = () => {
+    updateQuery((params) => params.delete('category'));
   };
 
   const handleSearchSubmit = () => {
@@ -289,6 +293,14 @@ function MainPageContent() {
 
       <div className="mb-5 flex items-center justify-between gap-2">
         <div className="scrollbar-hide flex min-w-0 flex-1 gap-2 overflow-x-auto">
+          <CategoryButton
+            size="sm"
+            isActive={activeCategory === null}
+            className="h-[41px] w-[80px] shrink-0 px-1 whitespace-nowrap md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]"
+            onClick={handleAllClick}
+          >
+            전체
+          </CategoryButton>
           {CATEGORIES.map((category) => (
             <CategoryButton
               key={category}
@@ -301,7 +313,11 @@ function MainPageContent() {
             </CategoryButton>
           ))}
         </div>
-        <div className="shrink-0">
+        <div className="relative shrink-0">
+          <div
+            aria-hidden
+            className="via-ivory-F2E/80 to-ivory-F2E pointer-events-none absolute top-0 right-full bottom-0 w-10 bg-linear-to-r from-transparent lg:hidden"
+          />
           <SortDropdown className="h-[41px] w-[80px] min-w-0 px-3 md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]" />
         </div>
       </div>
@@ -310,7 +326,7 @@ function MainPageContent() {
         <h2 className="text-black-1B1 mb-4 text-[21px] font-bold md:text-[43px]">
           🛼 모든 체험
         </h2>
-        <div className="grid grid-cols-[repeat(2,168px)] justify-center gap-x-3 gap-y-6 md:grid-cols-[repeat(3,221px)] md:gap-x-4 lg:grid-cols-[repeat(4,283px)]">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
           {allActivities.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
           ))}
