@@ -21,6 +21,8 @@ import Card from './Card';
 import CardSkeleton from './CardSkeleton';
 import ListSkeleton from './ListSkeleton';
 
+const PAGE_SIZE = 6;
+
 export default function ManageList() {
   const [deletedIds, setDeletedIds] = useState<number[]>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
@@ -32,7 +34,8 @@ export default function ManageList() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useCursorInfiniteQuery({
       queryKey: ['my-activities'],
-      queryFn: (pageParam) => getMyActivities({ cursorId: pageParam, size: 6 }),
+      queryFn: (pageParam) =>
+        getMyActivities({ cursorId: pageParam, size: PAGE_SIZE }),
     });
 
   const observerRef = useIntersectionObserver({
