@@ -9,7 +9,7 @@ import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
 
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
-import ReservationsEmpty from '@/components/profile-reservations/EmptySpace';
+import ReservationsEmpty from '@/components/common/empty-space/EmptySpace';
 import Title from '@/components/profile-title/Title';
 
 import ReservationCard from './ReservationCard';
@@ -43,9 +43,9 @@ export default function ReservationsContent() {
     <div className="flex w-full flex-col">
       <Title title="예약 내역" action={<FilterDropdown filterKey="filter" />} />
 
-      <div className="mt-6 flex flex-col gap-4 md:gap-6">
+      <div className="mt-10 flex flex-col gap-4 md:gap-6">
         {reservations.length === 0 ? (
-          <ReservationsEmpty />
+          <ReservationsEmpty message="아직 예약한 체험이 없어요" />
         ) : (
           reservations.map((item) => (
             <ReservationCard
