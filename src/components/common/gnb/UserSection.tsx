@@ -47,9 +47,9 @@ export default function UserSection() {
       >
         <button onClick={() => setIsNotificationOpen((prev) => !prev)}>
           {notifications.length > 0 ? (
-            <IconNotificationDot size="24" />
+            <IconNotificationDot size="24" className="cursor-pointer" />
           ) : (
-            <IconNotification size="24" />
+            <IconNotification size="24" className="cursor-pointer" />
           )}
         </button>
         {isNotificationOpen && (
