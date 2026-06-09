@@ -1,10 +1,13 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { getMyReservations } from '@/lib/api/my-reservations';
+
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 import { ReservationStatus } from '@/types/activities';
 
@@ -18,10 +21,54 @@ import ReservationsSkeleton from './ReservationSkeleton';
 export default function ReservationsContent() {
   const searchParams = useSearchParams();
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
+  const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  useEffect(() => {
+    queryClient.removeQueries({ queryKey: ['myReservations', currentFilter] });
+  }, []);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ['myReservations', currentFilter],
-    queryFn: () => getMyReservations({ status: currentFilter ?? undefined }),
+    queryFn: ({ pageParam }) =>
+      getMyReservations({
+        status: currentFilter ?? undefined,
+        cursorId: pageParam ?? undefined,
+        size: 2,
+      }),
+    initialPageParam: null as number | null,
+    getNextPageParam: (lastPage) => lastPage.cursorId ?? undefined,
+  });
+
+  const fetchNextPageRef = useRef(fetchNextPage);
+  const hasNextPageRef = useRef(hasNextPage);
+  const isFetchingNextPageRef = useRef(isFetchingNextPage);
+
+  useEffect(() => {
+    fetchNextPageRef.current = fetchNextPage;
+    hasNextPageRef.current = hasNextPage;
+    isFetchingNextPageRef.current = isFetchingNextPage;
+  });
+
+  const stableOnIntersect = useCallback(() => {
+    if (hasNextPageRef.current && !isFetchingNextPageRef.current) {
+      fetchNextPageRef.current();
+    }
+  }, []);
+
+  const observerRef = useIntersectionObserver({
+    onIntersect: stableOnIntersect,
+    enabled: !!hasNextPage && !isFetchingNextPage,
+    threshold: 0,
+    rootMargin: '0px',
   });
 
   if (isLoading) {
@@ -47,7 +94,7 @@ export default function ReservationsContent() {
     );
   }
 
-  const reservations = data?.reservations ?? [];
+  const reservations = data?.pages.flatMap((page) => page.reservations) ?? [];
 
   return (
     <div className="flex w-full flex-col">
@@ -57,9 +104,17 @@ export default function ReservationsContent() {
         {reservations.length === 0 ? (
           <ReservationsEmpty message="아직 예약한 체험이 없어요" />
         ) : (
-          reservations.map((item) => (
-            <ReservationCard key={item.id} item={item} />
-          ))
+          <>
+            {reservations.map((item) => (
+              <ReservationCard key={item.id} item={item} />
+            ))}
+
+            {isFetchingNextPage && <ReservationsSkeleton />}
+
+            {hasNextPage && !isFetchingNextPage && (
+              <div ref={observerRef} className="h-1 w-full" />
+            )}
+          </>
         )}
       </div>
     </div>

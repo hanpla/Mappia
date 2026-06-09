@@ -60,14 +60,16 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
-
   const reviewMutation = useMutation({
     mutationFn: () =>
       createReview(item?.id, { rating, content: reviewContent }),
     onSuccess: () => {
       showToast('success', '후기가 성공적으로 저장되었습니다!');
       setIsReviewModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({
+        queryKey: ['myReservations'],
+        refetchType: 'none',
+      });
     },
     onError: (error) => {
       showToast(
@@ -85,7 +87,10 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         `[${item?.activity?.title}] 예약 취소가 완료되었습니다.`,
       );
       setIsCancelModalOpen(false);
-      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({
+        queryKey: ['myReservations'],
+        refetchType: 'none',
+      });
     },
     onError: (error) => {
       showToast(
@@ -94,7 +99,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       );
     },
   });
-
   if (!item || !item.activity) {
     console.warn(
       'ReservationCard: 유효하지 않거나 activity 데이터가 없는 아이템입니다.',
