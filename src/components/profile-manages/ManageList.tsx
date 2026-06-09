@@ -8,10 +8,10 @@ import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
-import { deleteMyActivity } from '@/lib/api/my-activities';
+import { deleteMyActivity, getMyActivities } from '@/lib/api/my-activities';
 
+import { useCursorInfiniteQuery } from '@/hooks/useCursorInfiniteQuery';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useMyActivitiesInfinite } from '@/hooks/useMyActivitiesInfinite';
 
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 
@@ -30,7 +30,10 @@ export default function ManageList() {
   const showToast = useToastStore((state) => state.showToast);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useMyActivitiesInfinite();
+    useCursorInfiniteQuery({
+      queryKey: ['my-activities'],
+      queryFn: (pageParam) => getMyActivities({ cursorId: pageParam, size: 6 }),
+    });
 
   const observerRef = useIntersectionObserver({
     onIntersect: () => {
