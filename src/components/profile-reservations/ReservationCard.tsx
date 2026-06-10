@@ -16,8 +16,8 @@ import Button from '@/components/common/button/Button';
 import Textarea from '@/components/common/input/Textarea';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 import StandardModal from '@/components/common/modal/StandardModal';
+import ReservationCardContainer from '@/components/profile-ui/ReservationCardContainer';
 
-import Logo from '@/assets/logo/logo.svg';
 import LogoHead from '@/assets/logo/logo_head-1.svg';
 
 const STATUS_MAPPER: Record<
@@ -45,7 +45,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
-  const [isImageError, setIsImageError] = useState(false);
 
   const showToast = useToastStore((state) => state.showToast);
 
@@ -54,9 +53,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     onSuccess: () => {
       showToast('success', '후기가 성공적으로 저장되었습니다!');
       setIsReviewModalOpen(false);
-      queryClient.invalidateQueries({
-        queryKey: ['myReservations'],
-      });
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
       showToast(
@@ -74,9 +71,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         `[${item.activity.title}] 예약 취소가 완료되었습니다.`,
       );
       setIsCancelModalOpen(false);
-      queryClient.invalidateQueries({
-        queryKey: ['myReservations'],
-      });
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
       showToast(
@@ -104,7 +99,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     reviewSubmitted: isReviewSubmitted,
   } = item;
 
-  const currentStatus = STATUS_MAPPER[status] || {
+  const currentStatus = STATUS_MAPPER[status] ?? {
     label: status,
     className: 'text-black-1B1',
   };
@@ -117,7 +112,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     setIsReviewModalOpen(true);
   };
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
+  const handleReviewSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (rating === 0) {
@@ -132,39 +127,11 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     reviewMutation.mutate();
   };
 
-  const handleCancelClick = () => {
-    setIsCancelModalOpen(true);
-  };
-
   return (
-    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex h-32 w-full rounded-2xl border transition-all md:h-[156px] lg:h-auto lg:min-h-[200px]">
-      <div className="bg-gray-FAF relative w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-[156px] lg:w-[200px]">
-        {activity.bannerImageUrl && !isImageError ? (
-          <Image
-            src={activity.bannerImageUrl}
-            alt={activity.title}
-            fill
-            sizes="(max-width: 768px) 96px, (max-width: 1024px) 156px, 200px"
-            className="object-cover"
-            onError={() => setIsImageError(true)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-20 lg:w-20">
-              <Image
-                src={Logo}
-                alt="Mappia Logo"
-                fill
-                className="object-contain opacity-40"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-grow flex-col px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3">
-        <div>
-          <span className={`textsm-semibold ${currentStatus.className}`}>
+    <>
+      <ReservationCardContainer imageUrl={activity.bannerImageUrl}>
+        <div className="pl-1 md:pl-0">
+          <span className={`text-sm font-semibold ${currentStatus.className}`}>
             {currentStatus.label}
           </span>
           <h3 className="text-black-1B1 textlg-bold mt-1 mb-1 line-clamp-1 text-sm md:mt-1.5 md:mb-2 md:text-base">
@@ -175,7 +142,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           </p>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-1 pt-2 lg:mt-6">
+        <div className="flex flex-wrap items-center justify-between gap-1 pl-1 md:pl-0">
           <span className="text-black-1B1 textxl-bold flex-shrink-0 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
@@ -184,7 +151,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
               <Button
                 type="button"
                 variant="outline"
-                onClick={handleCancelClick}
+                onClick={() => setIsCancelModalOpen(true)}
                 disabled={isSubmitting}
                 hasHover={false}
                 className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
@@ -192,7 +159,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 예약 취소
               </Button>
             )}
-
             {status === 'completed' && !isReviewSubmitted && (
               <Button
                 type="button"
@@ -207,7 +173,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
             )}
           </div>
         </div>
-      </div>
+      </ReservationCardContainer>
 
       <ConfirmModal
         isOpen={isCancelModalOpen}
@@ -303,6 +269,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           </form>
         </div>
       </StandardModal>
-    </div>
+    </>
   );
 }
