@@ -14,6 +14,7 @@ export interface GetMyReservationsParams {
   size?: number;
   status?: ReservationStatus;
 }
+
 // 내 예약 조회
 export const getMyReservations = async (
   params?: GetMyReservationsParams,
@@ -21,15 +22,19 @@ export const getMyReservations = async (
   try {
     const res = await privateInstance.get('/my-reservations', { params });
     return res.data;
-  } catch (error) {
-    console.error(error);
-    return {
-      cursorId: null,
-      totalCount: 0,
-      reservations: [],
-    };
+  } catch (error: unknown) {
+    let errorMessage = '내 예약 조회에 실패했습니다.';
+
+    if (axios.isAxiosError(error)) {
+      errorMessage = error.response?.data?.message || errorMessage;
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+
+    throw new Error(errorMessage);
   }
 };
+
 // 리뷰 등록
 export const createReview = async (
   reservationId: number,
@@ -53,6 +58,7 @@ export const createReview = async (
     throw new Error(errorMessage);
   }
 };
+
 // 예약 취소
 export const cancelReservation = async (
   reservationId: number,

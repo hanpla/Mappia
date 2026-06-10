@@ -24,10 +24,6 @@ export default function ReservationsContent() {
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    queryClient.removeQueries({ queryKey: ['myReservations', currentFilter] });
-  }, []);
-
   const {
     data,
     isLoading,
