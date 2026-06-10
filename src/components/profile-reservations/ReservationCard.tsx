@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -45,24 +45,12 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
-  const [buttonSize, setButtonSize] = useState<'sm' | 'md' | 'lg'>('lg');
   const [isImageError, setIsImageError] = useState(false);
 
   const showToast = useToastStore((state) => state.showToast);
 
-  useEffect(() => {
-    const update = () => {
-      if (window.innerWidth < 768) setButtonSize('sm');
-      else if (window.innerWidth < 1024) setButtonSize('md');
-      else setButtonSize('lg');
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
   const reviewMutation = useMutation({
-    mutationFn: () =>
-      createReview(item.id, { rating, content: reviewContent }),
+    mutationFn: () => createReview(item.id, { rating, content: reviewContent }),
     onSuccess: () => {
       showToast('success', '후기가 성공적으로 저장되었습니다!');
       setIsReviewModalOpen(false);
@@ -97,6 +85,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       );
     },
   });
+
   if (!item || !item.activity) {
     console.warn(
       'ReservationCard: 유효하지 않거나 activity 데이터가 없는 아이템입니다.',
@@ -195,11 +184,10 @@ export default function ReservationCard({ item }: ReservationCardProps) {
               <Button
                 type="button"
                 variant="outline"
-                size={buttonSize}
                 onClick={handleCancelClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
+                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 예약 취소
               </Button>
@@ -209,11 +197,10 @@ export default function ReservationCard({ item }: ReservationCardProps) {
               <Button
                 type="button"
                 variant="solid"
-                size={buttonSize}
                 onClick={handleReviewClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
+                className="h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 작성
               </Button>
