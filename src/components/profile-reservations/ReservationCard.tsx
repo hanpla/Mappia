@@ -62,7 +62,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   }, []);
   const reviewMutation = useMutation({
     mutationFn: () =>
-      createReview(item?.id, { rating, content: reviewContent }),
+      createReview(item.id, { rating, content: reviewContent }),
     onSuccess: () => {
       showToast('success', '후기가 성공적으로 저장되었습니다!');
       setIsReviewModalOpen(false);
