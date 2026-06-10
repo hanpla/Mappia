@@ -7,24 +7,9 @@ import { useQuery } from '@tanstack/react-query';
 
 import { getMe } from '@/lib/api/users';
 
-import IconSidemenuCalendar from '../icon/IconSidemenuCalendar';
-import IconSidemenuList from '../icon/IconSidemenuList';
-import IconSidemenuSetting from '../icon/IconSidemenuSetting';
-import IconSidemenuUser from '../icon/IconSidemenuUser';
+import { profileMenuItems } from '@/constants/profileMenu';
+
 import ProfileImageUpload from '../image-upload/ProfileImageUpload';
-
-interface MenuItem {
-  name: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string; color?: string }>;
-}
-
-const menuItems: MenuItem[] = [
-  { name: '내 정보', href: '/profile/info', icon: IconSidemenuUser },
-  { name: '예약내역', href: '/profile/reservations', icon: IconSidemenuList },
-  { name: '내 체험 관리', href: '/profile/manages', icon: IconSidemenuSetting },
-  { name: '예약 현황', href: '/profile/dashboard', icon: IconSidemenuCalendar },
-];
 
 export default function SideMenu() {
   const pathname = usePathname();
@@ -39,7 +24,7 @@ export default function SideMenu() {
         />
       </div>
       <ul className="w-full space-y-[14px]">
-        {menuItems.map((item) => {
+        {profileMenuItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
 
