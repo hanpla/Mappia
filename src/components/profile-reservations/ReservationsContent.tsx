@@ -1,9 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useRef } from 'react';
-
-import { useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 
 import { getMyReservations } from '@/lib/api/my-reservations';
 
@@ -22,7 +20,6 @@ import ReservationsSkeleton from './ReservationSkeleton';
 export default function ReservationsContent() {
   const searchParams = useSearchParams();
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
-  const queryClient = useQueryClient();
 
   const {
     data,
@@ -44,24 +41,12 @@ export default function ReservationsContent() {
     staleTime: 0,
   });
 
-  const fetchNextPageRef = useRef(fetchNextPage);
-  const hasNextPageRef = useRef(hasNextPage);
-  const isFetchingNextPageRef = useRef(isFetchingNextPage);
-
-  useEffect(() => {
-    fetchNextPageRef.current = fetchNextPage;
-    hasNextPageRef.current = hasNextPage;
-    isFetchingNextPageRef.current = isFetchingNextPage;
-  });
-
-  const stableOnIntersect = useCallback(() => {
-    if (hasNextPageRef.current && !isFetchingNextPageRef.current) {
-      fetchNextPageRef.current();
-    }
-  }, []);
+  const handleIntersect = useCallback(() => {
+    fetchNextPage();
+  }, [fetchNextPage]);
 
   const observerRef = useIntersectionObserver({
-    onIntersect: stableOnIntersect,
+    onIntersect: handleIntersect,
     enabled: !!hasNextPage && !isFetchingNextPage,
     threshold: 0,
     rootMargin: '0px',
