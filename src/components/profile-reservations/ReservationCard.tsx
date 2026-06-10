@@ -157,7 +157,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
             fill
             sizes="(max-width: 768px) 96px, (max-width: 1024px) 156px, 200px"
             className="object-cover"
-            priority
             onError={() => setIsImageError(true)}
           />
         ) : (
