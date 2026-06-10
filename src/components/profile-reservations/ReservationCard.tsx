@@ -79,11 +79,11 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   });
 
   const cancelMutation = useMutation({
-    mutationFn: () => cancelReservation(item?.id),
+    mutationFn: () => cancelReservation(item.id),
     onSuccess: () => {
       showToast(
         'success',
-        `[${item?.activity?.title}] 예약 취소가 완료되었습니다.`,
+        `[${item.activity.title}] 예약 취소가 완료되었습니다.`,
       );
       setIsCancelModalOpen(false);
       queryClient.invalidateQueries({
