@@ -59,6 +59,7 @@ const useReservationDashboard = (initialActivityId: string) => {
         String(currentMonth + 1).padStart(2, '0'),
       ),
     enabled: !!selectedActivityId,
+    staleTime: 1 * 60 * 1000,
   });
 
   const eventsData = useMemo(
