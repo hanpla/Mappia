@@ -41,7 +41,7 @@ export default function SortDropdown({
       params.set('page', '1');
     }
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
     close();
   };
 

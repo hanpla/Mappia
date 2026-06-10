@@ -1,8 +1,4 @@
-import type {
-  ActivityCategory,
-  ActivityListContent,
-  GetActivitiesResponse,
-} from '@/types/activities';
+import type { ActivityCategory, ActivityListContent } from '@/types/activities';
 
 import { publicInstance } from './instance';
 
@@ -26,14 +22,10 @@ export const getActivities = async (
 ): Promise<ActivityListContent> => {
   const { method = 'offset', ...rest } = params;
 
-  const { data } = await publicInstance.get<GetActivitiesResponse>(
+  const { data } = await publicInstance.get<ActivityListContent>(
     '/activities',
     { params: { method, ...rest } },
   );
 
-  if (!data.success || !data.data) {
-    throw new Error(data.message || '체험 목록을 불러오지 못했습니다.');
-  }
-
-  return data.data;
+  return data;
 };

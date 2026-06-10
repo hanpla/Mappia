@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
@@ -14,6 +14,7 @@ import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
 import IconChevronRight from '@/components/common/icon/IconChevronRight';
+import ImageWithFallback from '@/components/common/image/ImageWithFallback';
 import Pagination from '@/components/common/pagination/Pagination';
 import Searchbar from '@/components/searchbar/Searchbar';
 
@@ -36,9 +37,12 @@ function StarRating({ rating }: { rating: number }) {
 
 function PopularActivityCard({ activity }: { activity: BaseActivity }) {
   return (
-    <div className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
+    <Link
+      href={`/activities/${activity.id}`}
+      className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96"
+    >
       <div className="relative h-40 overflow-hidden md:h-96">
-        <Image
+        <ImageWithFallback
           src={activity.bannerImageUrl}
           alt={activity.title}
           fill
@@ -62,15 +66,18 @@ function PopularActivityCard({ activity }: { activity: BaseActivity }) {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function ActivityCard({ activity }: { activity: BaseActivity }) {
   return (
-    <div className="group w-full cursor-pointer">
+    <Link
+      href={`/activities/${activity.id}`}
+      className="group w-full cursor-pointer"
+    >
       <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-2xl">
-        <Image
+        <ImageWithFallback
           src={activity.bannerImageUrl}
           alt={activity.title}
           fill
@@ -92,7 +99,7 @@ function ActivityCard({ activity }: { activity: BaseActivity }) {
           ₩ {activity.price.toLocaleString()} / 인
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -109,7 +116,7 @@ function MainPageContent() {
 
   const [searchValue, setSearchValue] = useState(keyword);
 
-  const pageSize = 12;
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -120,6 +127,10 @@ function MainPageContent() {
   const { data: popularData } = usePopularActivities(10);
   const popularActivities = popularData?.activities ?? [];
 
+  const heroActivity = popularActivities[0];
+  const HERO_FALLBACK_IMAGE =
+    'https://images.unsplash.com/photo-1545959570-a94084071b5d';
+
   const {
     data: allData,
     isLoading,
@@ -127,7 +138,7 @@ function MainPageContent() {
   } = useActivities({
     method: 'offset',
     page: currentPage,
-    size: pageSize,
+    size: visibleCount,
     category: activeCategory ?? undefined,
     keyword: keyword || undefined,
     sort,
@@ -139,7 +150,7 @@ function MainPageContent() {
     const params = new URLSearchParams(searchParams?.toString() ?? '');
     mutate(params);
     params.set('page', '1');
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   const handleCategoryClick = (category: ActivityCategory) => {
@@ -172,6 +183,14 @@ function MainPageContent() {
       const width = window.innerWidth;
       setIsPc(width >= 1024);
 
+      if (width >= 1024) {
+        setVisibleCount(8);
+      } else if (width >= 768) {
+        setVisibleCount(9);
+      } else {
+        setVisibleCount(4);
+      }
+
       const track = trackRef.current;
       const viewport = viewportRef.current;
       if (track && viewport) {
@@ -203,25 +222,39 @@ function MainPageContent() {
   return (
     <>
       <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
-        <Image
-          src="https://images.unsplash.com/photo-1545959570-a94084071b5d"
-          alt="hero"
+        <ImageWithFallback
+          src={heroActivity?.bannerImageUrl ?? HERO_FALLBACK_IMAGE}
+          alt={heroActivity?.title ?? 'hero'}
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
-        <div className="inner absolute inset-0 flex flex-col justify-center">
-          <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
-            함께 배우면 즐거운
-            <br />
-            스트릿 댄스
-          </h1>
-          <p className="text-white-FFF/80 mt-2 text-[14px] md:text-[26px]">
-            1월의 인기 체험 BEST 🔥
-          </p>
-        </div>
+        {heroActivity ? (
+          <Link
+            href={`/activities/${heroActivity.id}`}
+            className="inner absolute inset-0 flex flex-col justify-center"
+          >
+            <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
+              🔥 이달의 인기 체험
+            </p>
+            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-[600px] text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+              {heroActivity.title}
+            </h1>
+          </Link>
+        ) : (
+          <div className="inner absolute inset-0 flex flex-col justify-center">
+            <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+              함께 배우면 즐거운
+              <br />
+              스트릿 댄스
+            </h1>
+            <p className="text-white-FFF/80 mt-2 text-[14px] md:text-[26px]">
+              이달의 인기 체험 BEST 🔥
+            </p>
+          </div>
+        )}
       </section>
 
       <div className="relative z-10 -mt-6">
@@ -341,7 +374,7 @@ function MainPageContent() {
       </section>
 
       <div className="flex items-center justify-center">
-        <Pagination totalCount={totalCount} pageSize={pageSize} />
+        <Pagination totalCount={totalCount} pageSize={visibleCount} />
       </div>
     </>
   );
