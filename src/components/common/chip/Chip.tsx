@@ -19,7 +19,7 @@ const CHIP_STATUS: Record<ChipStatus, { label: string; style: string }> = {
     style: 'bg-[#DDDDDD] text-[#4B4B4B]',
   },
   confirmed: {
-    label: '확정',
+    label: '승인',
     style: 'bg-[#FFF4E8] text-[#FF7C1D]',
   },
 };
