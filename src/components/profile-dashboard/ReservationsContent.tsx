@@ -14,6 +14,7 @@ function ReservationsQueryContent() {
   const { data } = useSuspenseQuery({
     queryKey: ['my-activities', { size: 100 }],
     queryFn: () => getMyActivities({ size: 100 }),
+    staleTime: 5 * 60 * 1000,
   });
 
   const activities =
