@@ -26,7 +26,7 @@ export default function PasswordInput({
         <button
           type="button"
           onClick={toggleVisible}
-          className="mr-2 flex items-center justify-center focus:outline-none"
+          className="mr-2 flex cursor-pointer items-center justify-center focus:outline-none"
           aria-label={isVisible ? '비밀번호 숨기기' : '비밀번호 표시'}
         >
           {isVisible ? (

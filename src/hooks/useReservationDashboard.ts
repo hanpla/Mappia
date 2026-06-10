@@ -1,34 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import {
-  MOCK_RESERVATION_DASHBOARD,
-  ReservationDashboardItem,
-} from '@/lib/mock-data/reservations';
+import { useQuery } from '@tanstack/react-query';
+
+import { getReservationDashboard } from '@/lib/api/my-activities';
 import { getNextMonth, getPrevMonth } from '@/lib/utils/calendar';
 
-import {
+import type { ReservationDashboardItem } from '@/types/my-activities';
+
+import type {
   CalendarStatusData,
   ReservationEvent,
 } from '@/components/common/calendar/CalendarStatus';
-
-const fetchMonthlyReservations = (
-  activityId: number,
-  year: number,
-  month: number, // 1 ~ 12
-): Promise<ReservationDashboardItem[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const mockData: ReservationDashboardItem[] = [];
-      const dashboardData = MOCK_RESERVATION_DASHBOARD[activityId] || [];
-      const prefix = `${year}-${String(month).padStart(2, '0')}`;
-      const filtered = dashboardData.filter((item) =>
-        item.date.startsWith(prefix),
-      );
-      mockData.push(...filtered);
-      resolve(mockData);
-    }, 500);
-  });
-};
 
 const mapApiDataToCalendarData = (
   apiData: ReservationDashboardItem[],
@@ -55,7 +37,7 @@ const mapApiDataToCalendarData = (
   return result;
 };
 
-export default function useReservationDashboard(initialActivityId: string) {
+const useReservationDashboard = (initialActivityId: string) => {
   const [selectedActivityId, setSelectedActivityId] =
     useState(initialActivityId);
 
@@ -63,42 +45,27 @@ export default function useReservationDashboard(initialActivityId: string) {
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
 
-  const [eventsData, setEventsData] = useState<CalendarStatusData>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const { data: apiData = [], isPending } = useQuery({
+    queryKey: [
+      'reservation-dashboard',
+      selectedActivityId,
+      currentYear,
+      currentMonth,
+    ],
+    queryFn: () =>
+      getReservationDashboard(
+        Number(selectedActivityId),
+        String(currentYear),
+        String(currentMonth + 1).padStart(2, '0'),
+      ),
+    enabled: !!selectedActivityId,
+    staleTime: 1 * 60 * 1000,
+  });
 
-  useEffect(() => {
-    let isCancelled = false;
-
-    const loadDashboardData = async () => {
-      setIsLoading(true);
-      try {
-        const activityId = Number(selectedActivityId);
-        const apiMonth = currentMonth + 1;
-        const data = await fetchMonthlyReservations(
-          activityId,
-          currentYear,
-          apiMonth,
-        );
-
-        if (!isCancelled) {
-          const calendarData = mapApiDataToCalendarData(data);
-          setEventsData(calendarData);
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        if (!isCancelled) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadDashboardData();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [selectedActivityId, currentYear, currentMonth]);
+  const eventsData = useMemo(
+    () => mapApiDataToCalendarData(apiData),
+    [apiData],
+  );
 
   const handlePrevMonth = () => {
     const { year, month } = getPrevMonth(currentYear, currentMonth);
@@ -118,8 +85,10 @@ export default function useReservationDashboard(initialActivityId: string) {
     currentYear,
     currentMonth,
     eventsData,
-    isLoading,
+    isLoading: isPending,
     handlePrevMonth,
     handleNextMonth,
   };
-}
+};
+
+export default useReservationDashboard;
