@@ -3,11 +3,13 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
 import { deleteMyActivity } from '@/lib/api/my-activities';
+import { getMe } from '@/lib/api/users';
 
 import useClickOutside from '@/hooks/useClickOutside';
 
@@ -25,7 +27,8 @@ interface ActivityHeaderProps {
 }
 
 export default function ActivityHeader({ activity }: ActivityHeaderProps) {
-  const { id, title, category, address, rating, reviewCount } = activity;
+  const { id, userId, title, category, address, rating, reviewCount } =
+    activity;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,6 +36,13 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
   const router = useRouter();
 
   const showToast = useToastStore((state) => state.showToast);
+
+  const { data: currentUser } = useQuery({
+    queryKey: ['me'],
+    queryFn: getMe,
+    retry: false,
+  });
+  const isOwner = currentUser && currentUser.id === userId;
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
     setIsDropdownOpen(false);
@@ -86,29 +96,31 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
         </div>
       </div>
 
-      <div className="relative shrink-0" ref={dropdownRef}>
-        <button
-          type="button"
-          onClick={handleDropdown}
-          className="group hover:bg-beige-8B7 flex size-8 items-center justify-center rounded-full transition-colors hover:text-white"
-          aria-label="메뉴 열기"
-        >
-          <IconMeatball
-            size={24}
-            color="currentColor"
-            className="cursor-pointer"
-          />
-        </button>
+      {isOwner && (
+        <div className="relative shrink-0" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={handleDropdown}
+            className="group hover:bg-beige-8B7 flex size-8 items-center justify-center rounded-full transition-colors hover:text-white"
+            aria-label="메뉴 열기"
+          >
+            <IconMeatball
+              size={24}
+              color="currentColor"
+              className="cursor-pointer"
+            />
+          </button>
 
-        {isDropdownOpen && (
-          <Dropdown
-            type="edit"
-            editUrl={`/my-activities/${id}/edit`}
-            onDelete={handleDeleteClick}
-            onClose={() => setIsDropdownOpen(false)}
-          />
-        )}
-      </div>
+          {isDropdownOpen && (
+            <Dropdown
+              type="edit"
+              editUrl={`/my-activities/${id}/edit`}
+              onDelete={handleDeleteClick}
+              onClose={() => setIsDropdownOpen(false)}
+            />
+          )}
+        </div>
+      )}
 
       <ConfirmModal
         isOpen={isModalOpen}
