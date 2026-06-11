@@ -209,10 +209,22 @@ function MainPageContent() {
   const isScrollableLeft = effectiveOffset > 0;
   const isScrollableRight = effectiveOffset < maxOffset;
 
+  const CARDS_PER_MOVE = 2;
+
+  const getCardStep = () => {
+    const track = trackRef.current;
+    if (!track || track.children.length < 2) {
+      return track?.children[0]?.getBoundingClientRect().width ?? 0;
+    }
+    const first = track.children[0].getBoundingClientRect();
+    const second = track.children[1].getBoundingClientRect();
+    return second.left - first.left;
+  };
+
   const moveTrack = (direction: 'left' | 'right') => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const amount = viewport.clientWidth * 0.8;
+    const step = getCardStep();
+    if (step <= 0) return;
+    const amount = step * CARDS_PER_MOVE;
     setOffset((prev) => {
       const next = direction === 'left' ? prev - amount : prev + amount;
       return Math.min(Math.max(0, next), maxOffset);
