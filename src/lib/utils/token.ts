@@ -5,8 +5,9 @@
 export const ACCESS_TOKEN_KEY = 'accessToken';
 export const REFRESH_TOKEN_KEY = 'refreshToken';
 
-export const ACCESS_TOKEN_MAX_AGE = 60 * 60 * 24 * 7; // 7일
-export const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 30; // 30일
+// 쿠키 수명은 API가 발급하는 JWT 실제 만료와 일치시킨다.
+export const ACCESS_TOKEN_MAX_AGE = 60 * 30; // 30분
+export const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 14; // 14일
 
 // 클라이언트 axios 인터셉터가 액세스 토큰을 읽어 헤더에 첨부하므로 httpOnly는 false.
 export const AUTH_COOKIE_OPTIONS = {
