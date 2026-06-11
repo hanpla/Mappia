@@ -171,7 +171,7 @@ export default function ActivityWeather({ address }: ActivityWeatherProps) {
     );
   }
 
-  // 에러 발생 및 데이터가 없을 경우 null 처리 (주문하신 요구사항: 그냥 받아올 수 없으면 null 처리)
+  // 에러 발생 및 데이터가 없을 경우 null 처리
   if (isError || !forecasts || forecasts.length === 0) {
     return null;
   }
