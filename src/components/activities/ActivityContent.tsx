@@ -36,7 +36,7 @@ export default function ActivityContent({
         </div>
       </div>
 
-      <MobileReservation activity={activity} />
+      <MobileReservation />
     </div>
   );
 }
