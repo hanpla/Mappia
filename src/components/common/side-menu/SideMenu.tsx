@@ -9,6 +9,8 @@ import { getMe } from '@/lib/api/users';
 
 import { profileMenuItems } from '@/constants/profileMenu';
 
+import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
+
 import ProfileImageUpload from '../image-upload/ProfileImageUpload';
 
 export default function SideMenu() {
@@ -21,6 +23,7 @@ export default function SideMenu() {
         <ProfileImageUpload
           name="profileImage"
           defaultSrc={user?.profileImageUrl}
+          defaultImage={DefaultProfileImage}
         />
       </div>
       <ul className="w-full space-y-[14px]">

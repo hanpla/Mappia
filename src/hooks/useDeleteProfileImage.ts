@@ -12,7 +12,6 @@ export default function useDeleteProfileImage() {
   const showToast = useToastStore((state) => state.showToast);
 
   return useMutation({
-    // 프로필 이미지 초기화: /users/me에 profileImageUrl을 null로 전송한다.
     mutationFn: () => updateMe({ profileImageUrl: null }),
     onSuccess: (user: User) => {
       queryClient.setQueryData(['me'], user);

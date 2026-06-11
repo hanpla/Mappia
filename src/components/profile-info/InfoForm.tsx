@@ -21,6 +21,8 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
+import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
+
 export const INFO_FORM_ID = 'info-form';
 
 type FieldName = 'nickname' | 'email' | 'password' | 'passwordConfirm';
@@ -149,6 +151,7 @@ export default function InfoForm() {
         <ProfileImageUpload
           name="profileImage"
           defaultSrc={user?.profileImageUrl}
+          defaultImage={DefaultProfileImage}
           className="bg-white shadow-[0_6px_13px_rgba(0,0,0,0.06)]"
         />
         <div className="flex flex-col items-center gap-1">

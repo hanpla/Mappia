@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image, { type ImageProps } from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
@@ -17,12 +17,14 @@ interface ProfileImageUploadProps {
   name: string;
   defaultSrc?: string;
   className?: string;
+  defaultImage?: ImageProps['src'];
 }
 
 export default function ProfileImageUpload({
   name,
   defaultSrc,
   className,
+  defaultImage,
 }: ProfileImageUploadProps) {
   const blobUrlRef = useRef<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
@@ -63,7 +65,6 @@ export default function ProfileImageUpload({
   });
 
   const handleDelete = () => {
-    // 삭제 성공 시 로컬 미리보기도 비워 기본(빈) 상태로 돌린다.
     deleteImage(undefined, { onSuccess: clearPreview });
   };
 
@@ -85,23 +86,30 @@ export default function ProfileImageUpload({
             className="object-cover"
             unoptimized
           />
+        ) : defaultImage ? (
+          <Image
+            src={defaultImage}
+            alt="기본 프로필 이미지"
+            fill
+            className="object-contain p-[15%] opacity-60"
+          />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <Logo404 size={60} />
+            <Logo404 className="h-3/5 w-3/5" />
           </div>
         )}
       </div>
-      {/* 삭제(초기화) 버튼 — 오른쪽 위 */}
-      <button
-        type="button"
-        onClick={handleDelete}
-        disabled={isBusy}
-        className="bg-gray-DDD hover:bg-gray-CBC absolute top-0 left-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
-        aria-label="프로필 이미지 삭제"
-      >
-        <IconX size={16} color="#1b1b1b" strokeWidth={5.5} />
-      </button>
-      {/* 변경(수정) 버튼 — 오른쪽 아래 */}
+      {imageSrc && (
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={isBusy}
+          className="bg-gray-DDD hover:bg-gray-CBC absolute top-0 left-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
+          aria-label="프로필 이미지 삭제"
+        >
+          <IconX size={16} color="#1b1b1b" strokeWidth={5.5} />
+        </button>
+      )}
       <button
         type="button"
         onClick={trigger}
