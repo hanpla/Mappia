@@ -60,7 +60,7 @@ export default function ProfileImageUpload({
       blobUrlRef.current = url;
       setPreviewSrc(url);
 
-      uploadImage(file, { onError: clearPreview });
+      uploadImage(file, { onSettled: clearPreview });
     },
   });
 
