@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import ManageList from '@/components/profile-manages/ManageList';
-import Title from '@/components/profile-title/Title';
+import Title from '@/components/profile-ui/Title';
 
 export default function ManagesPage() {
   return (

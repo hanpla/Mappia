@@ -11,8 +11,8 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ReservationStatus } from '@/types/activities';
 
 import FilterDropdown from '@/components/common/dropdown/FilterDropdown';
-import ReservationsEmpty from '@/components/profile-reservations/EmptySpace';
-import Title from '@/components/profile-title/Title';
+import ReservationsEmpty from '@/components/profile-ui/EmptySpace';
+import Title from '@/components/profile-ui/Title';
 
 import ReservationCard from './ReservationCard';
 import ReservationsSkeleton from './ReservationSkeleton';
