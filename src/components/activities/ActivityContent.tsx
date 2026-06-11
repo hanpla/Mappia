@@ -13,7 +13,10 @@ interface ActivityContentProps {
   currentPage: number;
 }
 
-export default function ActivityContent({ activity }: ActivityContentProps) {
+export default function ActivityContent({
+  activity,
+  currentPage,
+}: ActivityContentProps) {
   return (
     <div className="pt-6 lg:pt-18">
       <div className="flex flex-col lg:grid lg:grid-cols-8 lg:gap-10">
@@ -24,7 +27,7 @@ export default function ActivityContent({ activity }: ActivityContentProps) {
           </div>
           <ActivityDescription description={activity.description} />
           <ActivityMap address={activity.address} />
-          <Review />
+          <Review activityId={activity.id} currentPage={currentPage} />
         </div>
 
         <div className="hidden space-y-16 lg:col-span-3 lg:block">
