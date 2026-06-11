@@ -32,11 +32,11 @@ export default function ActivityContent({
 
         <div className="hidden space-y-16 lg:col-span-3 lg:block">
           <ActivityHeader activity={activity} />
-          <Reservation />
+          <Reservation activity={activity} />
         </div>
       </div>
 
-      <MobileReservation />
+      <MobileReservation activity={activity} />
     </div>
   );
 }
