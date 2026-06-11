@@ -52,11 +52,11 @@ export default function useReservation(
 
   const totalPrice = initialPrice * headCount;
 
-  const isSelectedDateInCurrentMonth =
-    selectedDateStr &&
-    selectedDateStr.startsWith(
-      `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`,
-    );
+  const isSelectedDateInCurrentMonth = selectedDateStr
+    ? selectedDateStr.startsWith(
+        `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`,
+      )
+    : false;
 
   const selectedDateTimes =
     availableSchedules.find((s) => s.date === selectedDateStr)?.times ?? [];

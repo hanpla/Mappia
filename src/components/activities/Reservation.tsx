@@ -6,6 +6,8 @@ import { ActivityDetailContent } from '@/types/activities';
 
 import Button from '../common/button/Button';
 import CalendarReverse from '../common/calendar/CalendarReverse';
+import IconMinus from '../common/icon/IconMinus';
+import IconPlus from '../common/icon/IconPlus';
 import LogoJoy from '../common/logo/LogoJoy';
 import ConfirmModal from '../common/modal/ConfirmModal';
 
@@ -61,20 +63,12 @@ export default function Reservation({ activity }: ReservationProps) {
       <div className="flex flex-row items-center justify-between">
         <label className="textlg-bold block">참여 인원 수</label>
         <div className="border-gray-EEE flex w-35 items-center justify-between rounded-3xl border px-4.75 py-1.5">
-          <button
-            type="button"
-            onClick={handleDecrease}
-            className="text-gray-4B4 flex h-5 w-5 cursor-pointer items-center justify-center outline-none"
-          >
-            −
+          <button type="button" onClick={handleDecrease}>
+            <IconMinus size="16" color="#4B4B4B" />
           </button>
           <span className="textlg-bold text-gray-4B4">{headCount}</span>
-          <button
-            type="button"
-            onClick={handleIncrease}
-            className="text-gray-4B4 flex h-5 w-5 cursor-pointer items-center justify-center outline-none"
-          >
-            +
+          <button type="button" onClick={handleIncrease}>
+            <IconPlus size="16" color="#4B4B4B" />
           </button>
         </div>
       </div>
