@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import ReservationsContent from '@/components/profile-dashboard/ReservationsContent';
 import ReservationsSkeleton from '@/components/profile-dashboard/ReservationsSkeleton';
-import Title from '@/components/profile-title/Title';
+import Title from '@/components/profile-ui/Title';
 
 export default function DashboardPage() {
   return (

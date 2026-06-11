@@ -6,8 +6,8 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getMyActivities } from '@/lib/api/my-activities';
 
+import DashboardEmpty from '@/components/profile-ui/EmptySpace';
 import CalendarContent from './CalendarContent';
-import EmptySpace from './EmptySpace';
 import ReservationsSkeleton from './ReservationsSkeleton';
 
 function ReservationsQueryContent() {
@@ -23,7 +23,7 @@ function ReservationsQueryContent() {
   return (
     <div className="mt-7.5">
       {activities.length === 0 ? (
-        <EmptySpace />
+        <DashboardEmpty />
       ) : (
         <CalendarContent activities={activities} />
       )}
