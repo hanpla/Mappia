@@ -1,6 +1,6 @@
 import { privateInstance } from '@/lib/api/instance';
 
-import type { ReservationStatus } from '@/types/activities';
+import type { ReservationContent, ReservationStatus } from '@/types/activities';
 import type {
   CreateReviewContent,
   CreateReviewRequest,
@@ -36,7 +36,7 @@ export const createReview = async (
 // 예약 취소
 export const cancelReservation = async (
   reservationId: number,
-): Promise<unknown> => {
+): Promise<ReservationContent> => {
   const res = await privateInstance.patch(`/my-reservations/${reservationId}`, {
     status: 'canceled',
   });

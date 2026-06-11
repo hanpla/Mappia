@@ -8,16 +8,24 @@ import Button from '../common/button/Button';
 export interface SearchbarProps {
   value: string;
   setValue: (value: string) => void;
+  onSubmit?: () => void;
   className?: string;
 }
 
 export default function Searchbar({
   value,
   setValue,
+  onSubmit,
   className = '',
 }: SearchbarProps) {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit?.();
+  };
+
   return (
     <form
+      onSubmit={handleSubmit}
       className={`border-gray-DDD flex w-full flex-col gap-3.75 rounded-2xl border bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] md:gap-8 md:p-8 ${className}`}
     >
       <h2 className="textlg-bold text-black-1B1 md:text2xl-bold">

@@ -30,7 +30,6 @@ privateInstance.interceptors.request.use((config) => {
 let refreshPromise: Promise<string> | null = null;
 
 const refreshAccessToken = () => {
-  const accessToken = getAccessToken();
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
@@ -40,11 +39,10 @@ const refreshAccessToken = () => {
   }
 
   if (!refreshPromise) {
-    refreshPromise = axios
-      .post<TokensResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
-        { accessToken, refreshToken },
-      )
+    refreshPromise = publicInstance
+      .post<TokensResponse>('/auth/tokens', undefined, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      })
       .then(async ({ data }) => {
         await setAuthCookies(data.accessToken, data.refreshToken);
         return data.accessToken;
