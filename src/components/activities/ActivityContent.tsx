@@ -2,7 +2,7 @@ import { ActivityDetailContent } from '@/types/activities';
 
 import ActivityDescription from '@/components/activities/ActivityDescription';
 import ActivityHeader from '@/components/activities/ActivityHeader';
-import Map from '@/components/activities/Map';
+import ActivityMap from '@/components/activities/ActivityMap';
 import MobileReservation from '@/components/activities/MobileReservation';
 import PhotoGallery from '@/components/activities/PhotoGallery';
 import Reservation from '@/components/activities/Reservation';
@@ -23,7 +23,7 @@ export default function ActivityContent({ activity }: ActivityContentProps) {
             <ActivityHeader activity={activity} />
           </div>
           <ActivityDescription description={activity.description} />
-          <Map />
+          <ActivityMap address={activity.address} />
           <Review />
         </div>
 
