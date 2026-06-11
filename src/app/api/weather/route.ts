@@ -227,7 +227,9 @@ export const GET = async (request: Request) => {
     const land = landItems[0];
     const temp = tempItems[0];
 
-    const today = new Date(Date.now() + 9 * 60 * 60 * 1000); // KST
+    const offsetNow = new Date();
+    const utc = offsetNow.getTime() + offsetNow.getTimezoneOffset() * 60000;
+    const today = new Date(utc + 9 * 60 * 60 * 1000); // KST
     const midForecasts: DailyForecast[] = [];
 
     // 중기 예보에서 4일차(오늘+3일) ~ 5일차(오늘+4일)를 추출 (총 5일 예보)
