@@ -43,7 +43,7 @@ export default function StandardModal({
             onClose();
           }}
           type="button"
-          className="absolute top-4 right-6 z-50 cursor-pointer md:top-[26px] md:right-[30px]"
+          className="absolute top-4 right-6 z-50 cursor-pointer md:top-6.5 md:right-7.5"
           aria-label="모달 닫기"
         >
           <IconX size={24} />

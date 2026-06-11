@@ -20,7 +20,7 @@ export default function ActivityContent({ activity }: ActivityContentProps) {
         <div className="space-y-5 md:space-y-7.5 lg:col-span-5 lg:space-y-10">
           <PhotoGallery activity={activity} />
           <div className="block lg:hidden">
-            <ActivityHeader />
+            <ActivityHeader activity={activity} />
           </div>
           <ActivityDescription />
           <Map />
@@ -28,7 +28,7 @@ export default function ActivityContent({ activity }: ActivityContentProps) {
         </div>
 
         <div className="hidden space-y-16 lg:col-span-3 lg:block">
-          <ActivityHeader />
+          <ActivityHeader activity={activity} />
           <Reservation />
         </div>
       </div>
