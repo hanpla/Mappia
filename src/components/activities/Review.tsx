@@ -1,3 +1,5 @@
+import AIReviewAnalysis from '@/components/activities/AIReviewAnalysis';
+
 import IconStarOn from '../common/icon/IconStarOn';
 import Pagination from '../common/pagination/Pagination';
 
@@ -34,10 +36,18 @@ export default function Review() {
       <div className="mb-[30px] flex flex-col items-center justify-center">
         <div className="text2xl-bold md:text3xl-bold mb-[2px]">4.2</div>
         <div className="textmd-bold md:textlg-bold mb-[6px]">매우 만족</div>
-        <div className="flex items-center gap-[2px]">
+        <div className="mb-3 flex items-center gap-[2px]">
           <IconStarOn size={16} />
           <span className="textmd-medium text-[#79747E]">1,300개 후기</span>
         </div>
+        <AIReviewAnalysis
+          analysis={{
+            summary:
+              '이 체험은 매우 만족스럽다는 평가를 받고 있습니다. 많은 참가자들이 새로운 스타일과 춤추기에 대한 열정을 느끼고 있으며, 전문가 강사의 친절한 설명 덕분에 모든 수준의 참가자들이 쉽게 이해할 수 있다는 점이 특히 긍정적으로 언급되고 있습니다.',
+            keywords: ['만족도 높음', '친절한 강사', '적합한 수준'],
+            basedOnReviews: true,
+          }}
+        />
       </div>
       <ul className="mb-10 space-y-5">
         {MOCK_REVIEWS.map((review) => (
