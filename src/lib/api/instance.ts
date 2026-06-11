@@ -39,12 +39,10 @@ const refreshAccessToken = () => {
   }
 
   if (!refreshPromise) {
-    refreshPromise = axios
-      .post<TokensResponse>(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
-        null,
-        { headers: { Authorization: `Bearer ${refreshToken}` } },
-      )
+    refreshPromise = publicInstance
+      .post<TokensResponse>('/auth/tokens', null, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      })
       .then(async ({ data }) => {
         await setAuthCookies(data.accessToken, data.refreshToken);
         return data.accessToken;
