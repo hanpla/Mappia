@@ -1,6 +1,6 @@
 import { MyActivity } from '@/types/my-activities';
 
-import ReservationCardContainer from '../profile-ui/ReservationCardContainer';
+import ReservationCardContainer from '@/components/profile-ui/ReservationCardContainer';
 import CardFooter from './CardFooter';
 import CardInfo from './CardInfo';
 
