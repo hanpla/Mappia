@@ -40,7 +40,7 @@ const refreshAccessToken = () => {
 
   if (!refreshPromise) {
     refreshPromise = publicInstance
-      .post<TokensResponse>('/auth/tokens', null, {
+      .post<TokensResponse>('/auth/tokens', undefined, {
         headers: { Authorization: `Bearer ${refreshToken}` },
       })
       .then(async ({ data }) => {
