@@ -1,3 +1,5 @@
+import { ActivityDetailContent } from '@/types/activities';
+
 import ActivityDescription from '@/components/activities/ActivityDescription';
 import ActivityHeader from '@/components/activities/ActivityHeader';
 import Map from '@/components/activities/Map';
@@ -6,12 +8,17 @@ import PhotoGallery from '@/components/activities/PhotoGallery';
 import Reservation from '@/components/activities/Reservation';
 import Review from '@/components/activities/Review';
 
-export default function ActivityContent() {
+interface ActivityContentProps {
+  activity: ActivityDetailContent;
+  currentPage: number;
+}
+
+export default function ActivityContent({ activity }: ActivityContentProps) {
   return (
-    <div className="pt-[24px] lg:pt-[72px]">
+    <div className="pt-6 lg:pt-18">
       <div className="flex flex-col lg:grid lg:grid-cols-8 lg:gap-10">
-        <div className="space-y-5 md:space-y-[30px] lg:col-span-5 lg:space-y-10">
-          <PhotoGallery />
+        <div className="space-y-5 md:space-y-7.5 lg:col-span-5 lg:space-y-10">
+          <PhotoGallery activity={activity} />
           <div className="block lg:hidden">
             <ActivityHeader />
           </div>
