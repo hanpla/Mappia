@@ -39,9 +39,9 @@ export const createReview = async (
 export const cancelReservation = async (
   reservationId: number,
 ): Promise<unknown> => {
-  const res = await privateInstance.post(
-    `/my-reservations/${reservationId}/cancel`,
-  );
+  const res = await privateInstance.patch(`/my-reservations/${reservationId}`, {
+    status: 'canceled',
+  });
 
   return res.data;
 };
