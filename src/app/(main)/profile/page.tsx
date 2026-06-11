@@ -1,5 +1,5 @@
 import InfoForm, { INFO_FORM_ID } from '@/components/profile-info/InfoForm';
-import Title from '@/components/profile-title/Title';
+import Title from '@/components/profile-ui/Title';
 
 export default function InfoPage() {
   return (

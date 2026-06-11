@@ -13,8 +13,8 @@ import { deleteMyActivity, getMyActivities } from '@/lib/api/my-activities';
 import { useCursorInfiniteQuery } from '@/hooks/useCursorInfiniteQuery';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
-import EmptySpace from '@/components/common/empty-space/EmptySpace';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
+import ManageEmpty from '@/components/profile-ui/EmptySpace';
 
 import LogoSurprise from '../common/logo/LogoSurprise';
 import Card from './Card';
@@ -82,7 +82,7 @@ export default function ManageList() {
   if (visibleActivities.length === 0) {
     return (
       <div className="mt-10">
-        <EmptySpace />
+        <ManageEmpty />
       </div>
     );
   }
