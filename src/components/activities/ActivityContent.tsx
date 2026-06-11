@@ -22,7 +22,7 @@ export default function ActivityContent({ activity }: ActivityContentProps) {
           <div className="block lg:hidden">
             <ActivityHeader activity={activity} />
           </div>
-          <ActivityDescription />
+          <ActivityDescription description={activity.description} />
           <Map />
           <Review />
         </div>
