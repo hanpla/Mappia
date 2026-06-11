@@ -36,7 +36,7 @@ export default function CardTitle({ bannerImageUrl, title }: CardTitleProps) {
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className={
           isFallback
-            ? 'h-full w-full object-contain p-4'
+            ? 'h-14 w-14 object-contain opacity-40 md:h-16 md:w-16'
             : 'h-full w-full object-cover'
         }
         onError={() => setImgSrc(logoImg.src)}

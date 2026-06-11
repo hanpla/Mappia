@@ -96,6 +96,17 @@
     background-color: var(--color-gray-FAF);
     color: var(--color-black-1B1);
   }
+
+  /* Browser Autofill Styling Overrides */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+    box-shadow: 0 0 0 1000px white inset !important;
+    -webkit-text-fill-color: var(--color-black-1B1) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
 /* ==========================================================================
@@ -276,3 +287,48 @@
   margin: 0 auto;
   padding: 0 24px;
 }
+
+/* ==========================================================================
+   ANIMATIONS (Bottom Sheet & Modal)
+   ========================================================================== */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-zoom-in {
+  animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
