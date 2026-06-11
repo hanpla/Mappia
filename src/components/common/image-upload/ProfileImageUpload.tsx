@@ -5,10 +5,12 @@ import { useEffect, useRef, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
+import useDeleteProfileImage from '@/hooks/useDeleteProfileImage';
 import useFileInput from '@/hooks/useFileInput';
 import useUpdateProfileImage from '@/hooks/useUpdateProfileImage';
 
 import IconEdit from '@/components/common/icon/IconEdit';
+import IconX from '@/components/common/icon/IconX';
 import Logo404 from '@/components/common/logo/Logo404';
 
 interface ProfileImageUploadProps {
@@ -24,7 +26,11 @@ export default function ProfileImageUpload({
 }: ProfileImageUploadProps) {
   const blobUrlRef = useRef<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
-  const { mutate, isPending } = useUpdateProfileImage();
+  const { mutate: uploadImage, isPending: isUploading } =
+    useUpdateProfileImage();
+  const { mutate: deleteImage, isPending: isDeleting } =
+    useDeleteProfileImage();
+  const isBusy = isUploading || isDeleting;
 
   useEffect(() => {
     return () => {
@@ -52,14 +58,19 @@ export default function ProfileImageUpload({
       blobUrlRef.current = url;
       setPreviewSrc(url);
 
-      mutate(file, { onError: clearPreview });
+      uploadImage(file, { onError: clearPreview });
     },
   });
+
+  const handleDelete = () => {
+    // 삭제 성공 시 로컬 미리보기도 비워 기본(빈) 상태로 돌린다.
+    deleteImage(undefined, { onSuccess: clearPreview });
+  };
 
   const imageSrc = previewSrc ?? defaultSrc;
 
   return (
-    <div className="relative h-30 w-30">
+    <div className="relative h-25 w-25 md:h-17.5 md:w-17.5 lg:h-30 lg:w-30">
       <div
         className={twMerge(
           'absolute inset-0 overflow-hidden rounded-full bg-[#F2EBDC]',
@@ -80,11 +91,22 @@ export default function ProfileImageUpload({
           </div>
         )}
       </div>
+      {/* 삭제(초기화) 버튼 — 오른쪽 위 */}
+      <button
+        type="button"
+        onClick={handleDelete}
+        disabled={isBusy}
+        className="bg-gray-DDD hover:bg-gray-CBC absolute top-0 left-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-colors disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
+        aria-label="프로필 이미지 삭제"
+      >
+        <IconX size={16} color="#1b1b1b" strokeWidth={5.5} />
+      </button>
+      {/* 변경(수정) 버튼 — 오른쪽 아래 */}
       <button
         type="button"
         onClick={trigger}
-        disabled={isPending}
-        className="absolute right-0 bottom-0 flex h-7.5 w-7.5 cursor-pointer items-center justify-center rounded-full bg-[#8B7355] transition-colors hover:bg-[#7a6449] disabled:cursor-not-allowed disabled:opacity-60"
+        disabled={isBusy}
+        className="absolute right-0 bottom-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-[#8B7355] transition-colors hover:bg-[#7a6449] disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
         aria-label="프로필 이미지 변경"
       >
         <IconEdit size={16} color="white" />

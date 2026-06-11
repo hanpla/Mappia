@@ -1,6 +1,7 @@
 export interface UpdateMyInfoRequest {
   nickname?: string;
-  profileImageUrl?: string;
+  // null을 보내면 프로필 이미지를 초기화한다.
+  profileImageUrl?: string | null;
   newPassword?: string;
 }
 
