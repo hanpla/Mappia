@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import { privateInstance } from '@/lib/api/instance';
 
 import type { ReservationStatus } from '@/types/activities';
