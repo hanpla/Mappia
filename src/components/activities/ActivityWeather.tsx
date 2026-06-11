@@ -53,13 +53,7 @@ function WeatherCard({
   const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
 
   return (
-    <div
-      className={`flex w-20.5 shrink-0 flex-col items-center gap-1.5 rounded-2xl p-3 shadow-[0_2px_8px_rgba(17,34,17,0.02)] transition-all md:w-26.25 md:gap-2 md:p-4 ${
-        isToday
-          ? 'border-dark-111 border bg-white ring-2 ring-stone-900/5'
-          : 'border border-stone-200/60 bg-white hover:border-stone-300'
-      }`}
-    >
+    <div className="flex w-20.5 shrink-0 flex-col items-center gap-1.5 rounded-2xl border border-stone-200/60 bg-white p-3 shadow-[0_2px_8px_rgba(17,34,17,0.02)] transition-all hover:border-stone-300 min-[480px]:w-full md:gap-2 md:p-4">
       {/* 요일 및 일자 */}
       <div className="text-center">
         <span
@@ -108,12 +102,29 @@ function WeatherCard({
 
 function SkeletonCard() {
   return (
-    <div className="flex w-20.5 shrink-0 animate-pulse flex-col items-center gap-2 rounded-2xl border border-stone-100 bg-white p-3 md:w-26.25 md:p-4">
-      <div className="h-4 w-10 rounded-sm bg-stone-200" />
-      <div className="h-3 w-8 rounded-sm bg-stone-100" />
-      <div className="my-1 size-10 rounded-full bg-stone-200 md:size-12" />
-      <div className="h-3 w-12 rounded-sm bg-stone-200" />
-      <div className="h-4 w-14 rounded-sm bg-stone-200" />
+    <div className="flex w-20.5 shrink-0 animate-pulse flex-col items-center gap-1.5 rounded-2xl border border-stone-200/60 bg-white p-3 shadow-[0_2px_8px_rgba(17,34,17,0.02)] min-[480px]:w-full md:gap-2 md:p-4">
+      {/* 요일 및 일자 */}
+      <div className="flex flex-col items-center text-center">
+        <div className="h-3.5 w-8 rounded bg-stone-200 md:h-4 md:w-10" />
+        <div className="mt-1 h-3 w-6 rounded bg-stone-100 md:h-3.5 md:w-8" />
+      </div>
+
+      {/* 날씨 아이콘 */}
+      <div className="my-1 flex items-center justify-center">
+        <div className="size-10 rounded-full bg-stone-200 md:size-12" />
+      </div>
+
+      {/* 강수 확률 */}
+      <div className="flex h-4 items-center justify-center">
+        <div className="h-3 w-8 rounded bg-stone-100" />
+      </div>
+
+      {/* 기온 레인지 */}
+      <div className="flex h-4 items-center justify-center gap-1">
+        <div className="h-3.5 w-5 rounded bg-stone-200 md:h-4 md:w-6" />
+        <span className="text-xs font-normal text-stone-200">/</span>
+        <div className="h-3.5 w-5 rounded bg-stone-200 md:h-4 md:w-6" />
+      </div>
     </div>
   );
 }
@@ -149,7 +160,7 @@ export default function ActivityWeather({ address }: ActivityWeatherProps) {
           </h3>
           <div className="mt-1.5 h-3 w-60 animate-pulse rounded bg-stone-200 md:h-3.5 md:w-80" />
         </div>
-        <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 md:gap-4">
+        <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 min-[480px]:grid min-[480px]:grid-cols-5 min-[480px]:gap-3 min-[480px]:overflow-visible md:gap-4">
           {Array(5)
             .fill(null)
             .map((_, i) => (
@@ -174,7 +185,7 @@ export default function ActivityWeather({ address }: ActivityWeatherProps) {
         </p>
       </div>
 
-      <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 md:gap-4">
+      <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 min-[480px]:grid min-[480px]:grid-cols-5 min-[480px]:gap-3 min-[480px]:overflow-visible md:gap-4">
         {forecasts.map((forecast, index) => (
           <WeatherCard
             key={forecast.date}
