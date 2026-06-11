@@ -26,6 +26,7 @@ privateInstance.interceptors.request.use((config) => {
   return config;
 });
 
+// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
 let refreshPromise: Promise<string> | null = null;
 
 const refreshAccessToken = () => {
