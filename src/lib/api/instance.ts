@@ -26,11 +26,9 @@ privateInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
 let refreshPromise: Promise<string> | null = null;
 
 const refreshAccessToken = () => {
-  const accessToken = getAccessToken();
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
@@ -43,7 +41,8 @@ const refreshAccessToken = () => {
     refreshPromise = axios
       .post<TokensResponse>(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/tokens`,
-        { accessToken, refreshToken },
+        null,
+        { headers: { Authorization: `Bearer ${refreshToken}` } },
       )
       .then(async ({ data }) => {
         await setAuthCookies(data.accessToken, data.refreshToken);
