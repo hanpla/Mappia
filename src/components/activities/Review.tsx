@@ -80,11 +80,11 @@ export default async function Review({ activityId, currentPage }: ReviewProps) {
                 className="mb-2 flex md:mb-3"
                 aria-label={`평점 ${review.rating}점`}
               >
-                {Array(Math.floor(review.rating))
-                  .fill(null)
-                  .map((_, i) => (
+                {Array.from({ length: Math.floor(review.rating || 0) }).map(
+                  (_, i) => (
                     <IconStarOn key={i} size={16} />
-                  ))}
+                  ),
+                )}
               </div>
               <p className="textmd-medium md:textlg-medium leading-relaxed whitespace-pre-wrap">
                 {review.content}

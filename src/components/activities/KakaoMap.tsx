@@ -33,9 +33,12 @@ export default function KakaoMap({ address }: KakaoMapProps) {
       return;
     }
 
+    let isActive = true;
     const geocoder = new window.kakao.maps.services.Geocoder();
 
     geocoder.addressSearch(address, (result, status) => {
+      if (!isActive) return;
+
       if (
         status === window.kakao.maps.services.Status.OK &&
         result.length > 0
@@ -46,6 +49,10 @@ export default function KakaoMap({ address }: KakaoMapProps) {
         });
       }
     });
+
+    return () => {
+      isActive = false;
+    };
   }, [address, isLoading, hasError]);
 
   if (isLoading) {

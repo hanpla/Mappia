@@ -16,7 +16,7 @@ export default function PhotoGallery({ activity }: PhotoGalleryProps) {
   const displaySubImages = Array.from(
     { length: MAX_SUB_IMAGES },
     (_, index) => {
-      return subImages[index]?.imageUrl || null;
+      return subImages?.[index]?.imageUrl || null;
     },
   );
 

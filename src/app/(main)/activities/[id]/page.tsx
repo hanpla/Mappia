@@ -23,14 +23,15 @@ export default async function ActivityPage({
 
   if (Number.isNaN(activityId) || activityId <= 0) notFound();
 
-  let activity;
+  let activity = null;
 
   try {
     activity = await getActivityDetail(activityId);
-    if (!activity) redirect('/404');
   } catch {
-    redirect('/404');
+    activity = null;
   }
+
+  if (!activity) notFound();
 
   return <ActivityContent activity={activity} currentPage={currentPage} />;
 }

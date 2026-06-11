@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import axios from 'axios';
 
@@ -33,23 +33,21 @@ export default function useReservation(
 
   const showToast = useToastStore((state) => state.showToast);
 
-  const loadAvailableSchedules = useCallback(async () => {
-    try {
-      const year = String(currentYear);
-      const month = String(currentMonth + 1).padStart(2, '0');
+  const requestVersion = useRef(0);
 
-      const data = await getAvailableSchedules(activityId, year, month);
+  const loadAvailableSchedules = useCallback(async () => {
+    const version = ++requestVersion.current;
+    const year = String(currentYear);
+    const month = String(currentMonth + 1).padStart(2, '0');
+
+    const data = await getAvailableSchedules(activityId, year, month);
+    if (version === requestVersion.current) {
       setAvailableSchedules(data);
-    } catch {
-      showToast('error', '스케줄을 불러오는 중 문제가 발생했습니다.');
     }
-  }, [activityId, currentYear, currentMonth, showToast]);
+  }, [activityId, currentYear, currentMonth]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      loadAvailableSchedules();
-    }, 0);
-    return () => clearTimeout(timer);
+    loadAvailableSchedules();
   }, [loadAvailableSchedules]);
 
   const totalPrice = initialPrice * headCount;
