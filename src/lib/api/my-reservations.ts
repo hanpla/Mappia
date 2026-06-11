@@ -1,8 +1,6 @@
-'use server';
-
-import { cookies } from 'next/headers';
-
 import axios from 'axios';
+
+import { privateInstance } from '@/lib/api/instance';
 
 import type { ReservationStatus } from '@/types/activities';
 import type {
@@ -17,64 +15,35 @@ export interface GetMyReservationsParams {
   status?: ReservationStatus;
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-const getAccessToken = async () => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('accessToken')?.value;
-
-  if (!token) {
-    throw new Error('로그인이 필요합니다.');
-  }
-
-  return token;
-};
-
-// 1. 내 예약 리스트 조회
+// 내 예약 조회
 export const getMyReservations = async (
   params?: GetMyReservationsParams,
 ): Promise<MyReservationsContent> => {
-  try {
-    const accessToken = await getAccessToken();
-
-    const res = await axios.get(`${BASE_URL}/my-reservations`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params,
-    });
-    return res.data;
-  } catch (error) {
-    console.error(error);
-  }
-  return {
-    cursorId: null,
-    totalCount: 0,
-    reservations: [],
-  };
+  const res = await privateInstance.get('/my-reservations', { params });
+  return res.data;
 };
 
-// 2. 내 예약 리뷰 작성
+// 리뷰 등록
 export const createReview = async (
   reservationId: number,
   body: CreateReviewRequest,
-): Promise<CreateReviewContent | undefined> => {
-  try {
-    const accessToken = await getAccessToken();
-
-    const res = await axios.post(
-      `${BASE_URL}/my-reservations/${reservationId}/reviews`,
-      body,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      },
-    );
-    return res.data;
-  } catch (error) {
-    console.error(error);
-  }
+): Promise<CreateReviewContent> => {
+  const res = await privateInstance.post(
+    `/my-reservations/${reservationId}/reviews`,
+    body,
+  );
+  return res.data;
 };
+
+// 예약 취소
+export const cancelReservation = async (
+  reservationId: number,
+): Promise<unknown> => {
+  const res = await privateInstance.post(
+    `/my-reservations/${reservationId}/cancel`,
+  );
+
+  return res.data;
+};
+
+// 내 예약 수정, 취소 추후 구현 예정

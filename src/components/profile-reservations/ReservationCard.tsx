@@ -1,9 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
+
+import { cancelReservation, createReview } from '@/lib/api/my-reservations';
 
 import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
@@ -12,8 +16,8 @@ import Button from '@/components/common/button/Button';
 import Textarea from '@/components/common/input/Textarea';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
 import StandardModal from '@/components/common/modal/StandardModal';
+import ReservationCardContainer from '@/components/profile-ui/ReservationCardContainer';
 
-import Logo from '@/assets/logo/logo.svg';
 import LogoHead from '@/assets/logo/logo_head-1.svg';
 
 const STATUS_MAPPER: Record<
@@ -32,32 +36,50 @@ const STATUS_MAPPER: Record<
 
 interface ReservationCardProps {
   item: MyReservationItem;
-  onRefresh?: () => void;
 }
 
-export default function ReservationCard({
-  item,
-  onRefresh,
-}: ReservationCardProps) {
+export default function ReservationCard({ item }: ReservationCardProps) {
+  const queryClient = useQueryClient();
+
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [buttonSize, setButtonSize] = useState<'sm' | 'md' | 'lg'>('lg');
 
   const showToast = useToastStore((state) => state.showToast);
 
-  useEffect(() => {
-    const update = () => {
-      if (window.innerWidth < 768) setButtonSize('sm');
-      else if (window.innerWidth < 1024) setButtonSize('md');
-      else setButtonSize('lg');
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
+  const reviewMutation = useMutation({
+    mutationFn: () => createReview(item.id, { rating, content: reviewContent }),
+    onSuccess: () => {
+      showToast('success', '후기가 성공적으로 저장되었습니다!');
+      setIsReviewModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : '후기 등록에 실패했습니다.',
+      );
+    },
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: () => cancelReservation(item.id),
+    onSuccess: () => {
+      showToast(
+        'success',
+        `[${item.activity.title}] 예약 취소가 완료되었습니다.`,
+      );
+      setIsCancelModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : '예약 취소에 실패했습니다.',
+      );
+    },
+  });
 
   if (!item || !item.activity) {
     console.warn(
@@ -77,10 +99,12 @@ export default function ReservationCard({
     reviewSubmitted: isReviewSubmitted,
   } = item;
 
-  const currentStatus = STATUS_MAPPER[status] || {
+  const currentStatus = STATUS_MAPPER[status] ?? {
     label: status,
     className: 'text-black-1B1',
   };
+
+  const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
 
   const handleReviewClick = () => {
     setRating(0);
@@ -88,7 +112,7 @@ export default function ReservationCard({
     setIsReviewModalOpen(true);
   };
 
-  const handleReviewSubmit = async (e: React.FormEvent) => {
+  const handleReviewSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (rating === 0) {
@@ -100,65 +124,14 @@ export default function ReservationCard({
       return;
     }
 
-    try {
-      setIsSubmitting(true);
-      showToast('success', '후기가 성공적으로 저장되었습니다!');
-      setIsReviewModalOpen(false);
-      if (onRefresh) onRefresh();
-    } catch (error) {
-      console.error(error);
-      showToast('error', '후기 등록에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCancelClick = () => {
-    setIsCancelModalOpen(true);
-  };
-
-  const handleCancelConfirm = async () => {
-    try {
-      setIsSubmitting(true);
-      showToast('success', `[${activity.title}] 예약 취소가 완료되었습니다.`);
-      setIsCancelModalOpen(false);
-      if (onRefresh) onRefresh();
-    } catch (error) {
-      console.error(error);
-      showToast('error', '예약 취소에 실패했습니다.');
-    } finally {
-      setIsSubmitting(false);
-    }
+    reviewMutation.mutate();
   };
 
   return (
-    <div className="bg-white-FFF border-gray-DDD hover:shadow-dropdown flex h-32 w-full rounded-2xl border transition-all md:h-[156px] lg:h-auto lg:min-h-[200px]">
-      <div className="bg-gray-FAF relative w-24 flex-shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-[156px] lg:w-[200px]">
-        {activity.bannerImageUrl ? (
-          <Image
-            src={activity.bannerImageUrl}
-            alt={activity.title}
-            fill
-            sizes="(max-width: 768px) 96px, (max-width: 1024px) 156px, 200px"
-            className="object-cover"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <div className="relative h-14 w-14 md:h-16 md:w-16 lg:h-20 lg:w-20">
-              <Image
-                src={Logo.src ?? Logo}
-                alt="Mappia Logo"
-                fill
-                className="object-contain opacity-40"
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="flex flex-grow flex-col px-3 pt-3 pb-2.5 md:px-4 md:pt-4 md:pb-3">
-        <div>
-          <span className={`textsm-semibold ${currentStatus.className}`}>
+    <>
+      <ReservationCardContainer imageUrl={activity.bannerImageUrl}>
+        <div className="pl-1 md:pl-0">
+          <span className={`text-sm font-semibold ${currentStatus.className}`}>
             {currentStatus.label}
           </span>
           <h3 className="text-black-1B1 textlg-bold mt-1 mb-1 line-clamp-1 text-sm md:mt-1.5 md:mb-2 md:text-base">
@@ -169,8 +142,8 @@ export default function ReservationCard({
           </p>
         </div>
 
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-1 pt-2 lg:mt-6">
-          <span className="text-black-1B1 textxl-bold flex-shrink-0 text-sm md:text-base">
+        <div className="flex flex-wrap items-center justify-between gap-1 pl-1 md:pl-0">
+          <span className="text-black-1B1 textxl-bold flex-shrink-0 pb-3 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
           <div className="flex items-center justify-end">
@@ -178,41 +151,38 @@ export default function ReservationCard({
               <Button
                 type="button"
                 variant="outline"
-                size={buttonSize}
-                onClick={handleCancelClick}
+                onClick={() => setIsCancelModalOpen(true)}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
+                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 예약 취소
               </Button>
             )}
-
             {status === 'completed' && !isReviewSubmitted && (
               <Button
                 type="button"
                 variant="solid"
-                size={buttonSize}
                 onClick={handleReviewClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="h-8 w-20 flex-shrink-0 rounded-md px-4 md:h-10 md:w-28 md:rounded-2xl md:px-4"
+                className="h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 작성
               </Button>
             )}
           </div>
         </div>
-      </div>
+      </ReservationCardContainer>
 
       <ConfirmModal
         isOpen={isCancelModalOpen}
         onClose={() => !isSubmitting && setIsCancelModalOpen(false)}
-        onConfirm={handleCancelConfirm}
+        onConfirm={() => cancelMutation.mutate()}
         icon={
           <div className="relative h-[88px] w-[88px]">
             <Image
-              src={LogoHead.src || LogoHead}
+              src={LogoHead}
               alt="Mappia Logo"
               fill
               className="object-contain"
@@ -299,6 +269,6 @@ export default function ReservationCard({
           </form>
         </div>
       </StandardModal>
-    </div>
+    </>
   );
 }
