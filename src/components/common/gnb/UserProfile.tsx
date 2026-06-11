@@ -30,6 +30,7 @@ export default function UserProfile({ nickname, profileImageUrl }: Props) {
               src={profileImageUrl}
               alt="프로필 이미지"
               fill
+              sizes="32px"
               className="object-cover"
             />
           ) : (
