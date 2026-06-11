@@ -9,7 +9,7 @@ import { getMe } from '@/lib/api/users';
 
 import { profileMenuItems } from '@/constants/profileMenu';
 
-import ProfileImageUpload from '../common/image-upload/ProfileImageUpload';
+import ProfileImageUpload from '@/components/common/image-upload/ProfileImageUpload';
 
 export default function SideMenu() {
   const pathname = usePathname();
