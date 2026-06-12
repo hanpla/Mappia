@@ -1,7 +1,6 @@
 'use client';
 
 import Image, { type ImageProps } from 'next/image';
-import { useEffect, useRef, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
 
@@ -26,49 +25,27 @@ export default function ProfileImageUpload({
   className,
   defaultImage,
 }: ProfileImageUploadProps) {
-  const blobUrlRef = useRef<string | null>(null);
-  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const { mutate: uploadImage, isPending: isUploading } =
     useUpdateProfileImage();
   const { mutate: deleteImage, isPending: isDeleting } =
     useDeleteProfileImage();
   const isBusy = isUploading || isDeleting;
 
-  useEffect(() => {
-    return () => {
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-    };
-  }, []);
-
-  const clearPreview = () => {
-    if (blobUrlRef.current) {
-      URL.revokeObjectURL(blobUrlRef.current);
-      blobUrlRef.current = null;
-    }
-    setPreviewSrc(null);
-  };
-
   const { trigger, inputProps } = useFileInput({
     name,
     accept: 'image/jpeg,image/png',
     onUpload: (files) => {
       const file = files[0];
-      if (!file) return;
-
-      if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
-      const url = URL.createObjectURL(file);
-      blobUrlRef.current = url;
-      setPreviewSrc(url);
-
-      uploadImage(file, { onSettled: clearPreview });
+      if (file) uploadImage(file);
     },
   });
 
   const handleDelete = () => {
-    deleteImage(undefined, { onSuccess: clearPreview });
+    deleteImage();
   };
 
-  const imageSrc = previewSrc ?? defaultSrc;
+  // 미리보기·교체·삭제 모두 ['me'] 캐시(defaultSrc)를 단일 진실원천으로 사용한다.
+  const imageSrc = defaultSrc;
 
   return (
     <div className="relative h-25 w-25 md:h-17.5 md:w-17.5 lg:h-30 lg:w-30">
