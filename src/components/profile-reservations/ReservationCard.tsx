@@ -143,7 +143,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-1 pl-1 md:pl-0">
-          <span className="text-black-1B1 textxl-bold flex-shrink-0 pb-3 text-sm md:text-base">
+          <span className="text-black-1B1 textxl-bold shrink-0 pb-3 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
           <div className="flex items-center justify-end">
@@ -154,7 +154,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 onClick={() => setIsCancelModalOpen(true)}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 예약 취소
               </Button>
@@ -166,7 +166,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 onClick={handleReviewClick}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="h-8 w-16 flex-shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 작성
               </Button>
@@ -180,7 +180,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         onClose={() => !isSubmitting && setIsCancelModalOpen(false)}
         onConfirm={() => cancelMutation.mutate()}
         icon={
-          <div className="relative h-[88px] w-[88px]">
+          <div className="relative size-22">
             <Image
               src={LogoHead}
               alt="Mappia Logo"
@@ -262,7 +262,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
               size="lg"
               hasHover={false}
               disabled={isSubmitting}
-              className="text-white-FFF mt-4 h-[54px] w-full rounded-xl font-bold"
+              className="text-white-FFF mt-4 h-13.5 w-full rounded-xl font-bold"
             >
               {isSubmitting ? '작성 중...' : '작성하기'}
             </Button>

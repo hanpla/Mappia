@@ -18,7 +18,7 @@ export default function SideMenu() {
   const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
 
   return (
-    <div className="flex flex-col items-center rounded-xl border border-gray-50 bg-white p-[24px_14px] shadow-[0_4px_24px_rgba(139,115,85,0.2)]">
+    <div className="flex flex-col items-center rounded-xl border border-gray-50 bg-white px-3.5 py-6 shadow-[0_4px_24px_rgba(139,115,85,0.2)]">
       <div className="mb-6">
         <ProfileImageUpload
           name="profileImage"
@@ -35,7 +35,7 @@ export default function SideMenu() {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className={`flex w-full gap-2 rounded-2xl p-[15px_20px] ${
+                className={`flex w-full gap-2 rounded-2xl px-5 py-3.75 ${
                   isActive
                     ? 'bg-khaki-6B5 text-white'
                     : 'hover:bg-ivory-F2E text-gray-600'

@@ -27,7 +27,7 @@ export default function StandardModal({
   onClose,
 }: StandardModalProps) {
   const hasCustomWidth = /(?:^|\s)(?:[a-z]+:)?(?:min-|max-)?w-/.test(className);
-  const widthStyle = hasCustomWidth ? '' : 'w-full max-w-[385px]';
+  const widthStyle = hasCustomWidth ? '' : 'w-full max-w-96.25';
 
   return (
     <Modal
@@ -36,7 +36,7 @@ export default function StandardModal({
       isGlobal={isGlobal}
       onClose={onClose}
     >
-      <div className="relative w-full p-[40px_24px_30px] md:p-[50px_30px_40px]">
+      <div className="relative w-full px-6 pt-10 pb-7.5 md:px-7.5 md:pt-12.5 md:pb-10">
         <button
           onClick={(e) => {
             e.stopPropagation();
