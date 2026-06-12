@@ -20,7 +20,7 @@ export default function Error({ reset }: ErrorProps) {
       />
       <div className="mt-8 flex flex-col gap-4 md:flex-row">
         <RetryButton onClick={reset} />
-        <NotFoundLink />
+        <CallbackLink />
       </div>
     </Container>
   );
