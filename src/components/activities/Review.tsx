@@ -71,7 +71,7 @@ export default async function Review({
           </div>
         </div>
       )}
-      <div className="mb-6">
+      <div className="mt-6 mb-6">
         <AIReviewSection
           activityId={activityId}
           title={title}
