@@ -8,6 +8,8 @@ import PhotoGallery from '@/components/activities/PhotoGallery';
 import Reservation from '@/components/activities/Reservation';
 import Review from '@/components/activities/Review';
 
+import ActivityWeather from './ActivityWeather';
+
 interface ActivityContentProps {
   activity: ActivityDetailContent;
   currentPage: number;
@@ -27,6 +29,7 @@ export default function ActivityContent({
           </div>
           <ActivityDescription description={activity.description} />
           <ActivityMap address={activity.address} />
+          <ActivityWeather address={activity.address} />
           <Review activityId={activity.id} currentPage={currentPage} />
         </div>
 
