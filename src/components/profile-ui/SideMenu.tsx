@@ -9,9 +9,9 @@ import { getMe } from '@/lib/api/users';
 
 import { profileMenuItems } from '@/constants/profileMenu';
 
-import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
+import ProfileImageUpload from '@/components/common/image-upload/ProfileImageUpload';
 
-import ProfileImageUpload from '../image-upload/ProfileImageUpload';
+import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
 
 export default function SideMenu() {
   const pathname = usePathname();

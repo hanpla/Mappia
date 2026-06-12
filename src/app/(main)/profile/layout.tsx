@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import ProfileMenu from '@/components/common/profile-menu/ProfileMenu';
-import SideMenu from '@/components/common/side-menu/SideMenu';
+import ProfileMenu from '@/components/profile-ui/ProfileMenu';
+import SideMenu from '@/components/profile-ui/SideMenu';
 
 export default function ProfileLayout({ children }: { children: ReactNode }) {
   return (

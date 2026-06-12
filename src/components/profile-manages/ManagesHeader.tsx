@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import Button from '@/components/common/button/Button';
-import Title from '@/components/profile-title/Title';
+import Title from '@/components/profile-ui/Title';
 
 export default function ManagesHeader() {
   const router = useRouter();
