@@ -29,7 +29,7 @@ export default function CategoryButton({
   return (
     <button
       className={twMerge(
-        'inline-flex cursor-pointer items-center justify-center gap-[8px] rounded-[16px] border transition-all duration-200',
+        'inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border transition-all duration-200',
         isActive
           ? 'bg-beige-8B7 border-beige-8B7 text-white-FFF'
           : 'text-beige-8B7 border-beige-8B7 bg-white-FFF',

@@ -63,3 +63,31 @@ export interface UpdateMyActivityRequest extends Partial<
 export interface UpdateReservationStatusRequest {
   status: 'confirmed' | 'declined';
 }
+
+// ==========================================
+// 내 체험 일별 예약 현황 및 예약 조회 데이터 타입
+// ==========================================
+
+export interface ReservationDashboardItem {
+  date: string;
+  reservations: {
+    completed: number;
+    confirmed: number;
+    pending: number;
+  };
+}
+
+export interface ActivityReservationItem extends ReservationContent {
+  nickname?: string;
+  user: {
+    id: number;
+    nickname: string;
+    profileImageUrl: string | null;
+  };
+}
+
+export interface ActivityReservationsResponse {
+  cursorId: number | null;
+  totalCount: number;
+  reservations: ActivityReservationItem[];
+}

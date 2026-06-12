@@ -1,196 +1,31 @@
 'use client';
 
+import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useRef, useState } from 'react';
 
-import { BaseActivity } from '@/types/activities';
+import type { ActivitySort } from '@/lib/api/activities';
+
+import { useActivities, usePopularActivities } from '@/hooks/useActivities';
+
+import type { ActivityCategory, BaseActivity } from '@/types/activities';
 
 import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
 import IconChevronRight from '@/components/common/icon/IconChevronRight';
+import ImageWithFallback from '@/components/common/image/ImageWithFallback';
 import Pagination from '@/components/common/pagination/Pagination';
 import Searchbar from '@/components/searchbar/Searchbar';
 
-// 목업용이라 카드 표시에 필요한 필드만 추출했습니다.
-type CardActivity = Pick<
-  BaseActivity,
-  | 'id'
-  | 'title'
-  | 'rating'
-  | 'reviewCount'
-  | 'price'
-  | 'bannerImageUrl'
-  | 'category'
->;
-
-const POPULAR_ACTIVITIES: CardActivity[] = [
-  {
-    id: 1,
-    title: '함께 배우면 즐거운 스트릿 댄스',
-    rating: 4.9,
-    reviewCount: 793,
-    price: 38000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
-    category: '문화 · 예술',
-  },
-  {
-    id: 2,
-    title: '연인과 사랑의 징검다리 건너기',
-    rating: 4.9,
-    reviewCount: 593,
-    price: 5600,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 3,
-    title: 'VR 게임 마스터 하는 법',
-    rating: 4.9,
-    reviewCount: 241,
-    price: 38000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&q=80',
-    category: '스포츠',
-  },
-  {
-    id: 4,
-    title: '피오르 체험',
-    rating: 3.9,
-    reviewCount: 106,
-    price: 42800,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&q=80',
-    category: '투어',
-  },
+const CATEGORIES: ActivityCategory[] = [
+  '문화 · 예술',
+  '식음료',
+  '스포츠',
+  '투어',
+  '관광',
+  '웰빙',
 ];
-
-const ALL_ACTIVITIES: CardActivity[] = [
-  {
-    id: 5,
-    title: '해안가 마을에서 1주일 살아보기',
-    rating: 2.9,
-    reviewCount: 67,
-    price: 217000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 6,
-    title: '부모님과 함께 갈대숲 체험',
-    rating: 4.0,
-    reviewCount: 113,
-    price: 6000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?w=400&q=80',
-    category: '문화 · 예술',
-  },
-  {
-    id: 7,
-    title: '열기구 페스티벌',
-    rating: 4.1,
-    reviewCount: 85,
-    price: 35000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80',
-    category: '스포츠',
-  },
-  {
-    id: 8,
-    title: '베트남 자전거 여행',
-    rating: 3.9,
-    reviewCount: 108,
-    price: 42800,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 9,
-    title: '다양한 딸대어 구경하기',
-    rating: 2.9,
-    reviewCount: 67,
-    price: 217000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&q=80',
-    category: '관광',
-  },
-  {
-    id: 10,
-    title: '세상에서 가장 멋진 석양',
-    rating: 4.0,
-    reviewCount: 113,
-    price: 6000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80',
-    category: '관광',
-  },
-  {
-    id: 11,
-    title: '여행 가이드와 함께하는 숲',
-    rating: 4.1,
-    reviewCount: 85,
-    price: 35000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1448375240586-882707db888b?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 12,
-    title: '썰매견과 함께 히말라야 건너기',
-    rating: 3.9,
-    reviewCount: 108,
-    price: 42800,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1605568427561-40dd23c2acea?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 13,
-    title: '함께 배우면 즐거운 스트릿 댄스',
-    rating: 4.9,
-    reviewCount: 793,
-    price: 38000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1545959570-a94084071b5d?w=400&q=80',
-    category: '문화 · 예술',
-  },
-  {
-    id: 14,
-    title: '연인과 사랑의 징검다리 건너기',
-    rating: 4.9,
-    reviewCount: 593,
-    price: 5600,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
-    category: '투어',
-  },
-  {
-    id: 15,
-    title: 'VR 게임 마스터 하는 법',
-    rating: 4.9,
-    reviewCount: 241,
-    price: 38000,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400&q=80',
-    category: '스포츠',
-  },
-  {
-    id: 16,
-    title: '피오르 체험',
-    rating: 3.9,
-    reviewCount: 106,
-    price: 42800,
-    bannerImageUrl:
-      'https://images.unsplash.com/photo-1520769669658-f07657f5a307?w=400&q=80',
-    category: '투어',
-  },
-];
-
-const CATEGORIES = ['문화·예술', '식음료', '스포츠', '투어', '관광', '웰빙'];
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -200,15 +35,19 @@ function StarRating({ rating }: { rating: number }) {
   );
 }
 
-function PopularActivityCard({ activity }: { activity: CardActivity }) {
+function PopularActivityCard({ activity }: { activity: BaseActivity }) {
   return (
-    <div className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96">
+    <Link
+      href={`/activities/${activity.id}`}
+      className="group relative w-56 shrink-0 cursor-pointer overflow-hidden rounded-2xl md:w-96"
+    >
       <div className="relative h-40 overflow-hidden md:h-96">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <ImageWithFallback
           src={activity.bannerImageUrl}
           alt={activity.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 224px, 384px"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
         <div className="text-white-FFF absolute bottom-0 left-0 p-3 md:p-4">
@@ -218,7 +57,7 @@ function PopularActivityCard({ activity }: { activity: CardActivity }) {
               ({activity.reviewCount})
             </span>
           </div>
-          <p className="line-clamp-2 max-w-[146px] text-[18px] leading-snug font-bold md:max-w-[251px] md:text-[32px]">
+          <p className="line-clamp-2 max-w-36.5 text-[18px] leading-snug font-bold md:max-w-62.75 md:text-[32px]">
             {activity.title}
           </p>
           <p className="mt-1 text-[16px] font-bold md:text-[20px]">
@@ -227,19 +66,23 @@ function PopularActivityCard({ activity }: { activity: CardActivity }) {
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
-function ActivityCard({ activity }: { activity: CardActivity }) {
+function ActivityCard({ activity }: { activity: BaseActivity }) {
   return (
-    <div className="group w-[168px] cursor-pointer md:w-[221px] lg:w-[283px]">
-      <div className="mb-3 h-[168px] w-[168px] overflow-hidden rounded-2xl md:h-[221px] md:w-[221px] lg:h-[283px] lg:w-[283px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+    <Link
+      href={`/activities/${activity.id}`}
+      className="group w-full cursor-pointer"
+    >
+      <div className="relative mb-3 aspect-square w-full overflow-hidden rounded-2xl">
+        <ImageWithFallback
           src={activity.bannerImageUrl}
           alt={activity.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
       </div>
       <div>
@@ -256,20 +99,24 @@ function ActivityCard({ activity }: { activity: CardActivity }) {
           ₩ {activity.price.toLocaleString()} / 인
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function MainPageContent() {
-  const [searchValue, setSearchValue] = useState('');
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams?.get('page')) || 1;
 
-  const [pageSize, setPageSize] = useState(8);
+  const currentPage = Number(searchParams?.get('page')) || 1;
+  const activeCategory =
+    (searchParams?.get('category') as ActivityCategory | null) ?? null;
+  const keyword = searchParams?.get('keyword') ?? '';
+  const sort = (searchParams?.get('sort') as ActivitySort | null) ?? undefined;
+
+  const [searchValue, setSearchValue] = useState(keyword);
+
+  const [visibleCount, setVisibleCount] = useState(12);
 
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -277,17 +124,71 @@ function MainPageContent() {
   const [maxOffset, setMaxOffset] = useState(0);
   const [isPc, setIsPc] = useState(false);
 
+  const { data: popularData } = usePopularActivities(10);
+  const popularActivities = popularData?.activities ?? [];
+
+  const heroActivity = popularActivities[0];
+  const HERO_FALLBACK_IMAGE =
+    'https://images.unsplash.com/photo-1545959570-a94084071b5d';
+
+  const {
+    data: allData,
+    isLoading,
+    isError,
+  } = useActivities({
+    method: 'offset',
+    page: currentPage,
+    size: visibleCount,
+    category: activeCategory ?? undefined,
+    keyword: keyword || undefined,
+    sort,
+  });
+  const allActivities = allData?.activities ?? [];
+  const totalCount = allData?.totalCount ?? 0;
+
+  const updateQuery = (mutate: (params: URLSearchParams) => void) => {
+    const params = new URLSearchParams(searchParams?.toString() ?? '');
+    mutate(params);
+    params.set('page', '1');
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleCategoryClick = (category: ActivityCategory) => {
+    updateQuery((params) => {
+      if (activeCategory === category) {
+        params.delete('category');
+      } else {
+        params.set('category', category);
+      }
+    });
+  };
+
+  const handleAllClick = () => {
+    updateQuery((params) => params.delete('category'));
+  };
+
+  const handleSearchSubmit = () => {
+    updateQuery((params) => {
+      const trimmed = searchValue.trim();
+      if (trimmed) {
+        params.set('keyword', trimmed);
+      } else {
+        params.delete('keyword');
+      }
+    });
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       setIsPc(width >= 1024);
 
       if (width >= 1024) {
-        setPageSize(8);
+        setVisibleCount(8);
       } else if (width >= 768) {
-        setPageSize(9);
+        setVisibleCount(9);
       } else {
-        setPageSize(4);
+        setVisibleCount(4);
       }
 
       const track = trackRef.current;
@@ -302,76 +203,78 @@ function MainPageContent() {
     handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [popularActivities.length]);
 
   const effectiveOffset = isPc ? offset : 0;
   const isScrollableLeft = effectiveOffset > 0;
   const isScrollableRight = effectiveOffset < maxOffset;
 
+  const CARDS_PER_MOVE = 2;
+
+  const getCardStep = () => {
+    const track = trackRef.current;
+    if (!track || track.children.length < 2) {
+      return track?.children[0]?.getBoundingClientRect().width ?? 0;
+    }
+    const first = track.children[0].getBoundingClientRect();
+    const second = track.children[1].getBoundingClientRect();
+    return second.left - first.left;
+  };
+
   const moveTrack = (direction: 'left' | 'right') => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    const amount = viewport.clientWidth * 0.8;
+    const step = getCardStep();
+    if (step <= 0) return;
+    const amount = step * CARDS_PER_MOVE;
     setOffset((prev) => {
       const next = direction === 'left' ? prev - amount : prev + amount;
       return Math.min(Math.max(0, next), maxOffset);
     });
   };
 
-  const filteredActivities = ALL_ACTIVITIES.filter((a) =>
-    activeCategory ? a.category === activeCategory : true,
-  );
-
-  const paginatedActivities = filteredActivities.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize,
-  );
-
-  const totalPages = Math.max(
-    1,
-    Math.ceil(filteredActivities.length / pageSize),
-  );
-  const safePage = Math.min(currentPage, totalPages);
-  const visibleActivities =
-    paginatedActivities.length > 0
-      ? paginatedActivities
-      : filteredActivities.slice(
-          (safePage - 1) * pageSize,
-          safePage * pageSize,
-        );
-
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      const params = new URLSearchParams(searchParams?.toString());
-      params.set('page', String(totalPages));
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    }
-  }, [currentPage, totalPages, pathname, router, searchParams]);
-
   return (
     <>
-      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1545959570-a94084071b5d?w=1200&q=80"
-          alt="hero"
-          className="h-full w-full object-cover"
+      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-137.5">
+        <ImageWithFallback
+          src={heroActivity?.bannerImageUrl ?? HERO_FALLBACK_IMAGE}
+          alt={heroActivity?.title ?? 'hero'}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
-        <div className="inner absolute inset-0 flex flex-col justify-center">
-          <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
-            함께 배우면 즐거운
-            <br />
-            스트릿 댄스
-          </h1>
-          <p className="text-white-FFF/80 mt-2 text-[14px] md:text-[26px]">
-            1월의 인기 체험 BEST 🔥
-          </p>
-        </div>
+        {heroActivity ? (
+          <Link
+            href={`/activities/${heroActivity.id}`}
+            className="inner absolute inset-0 flex flex-col justify-center"
+          >
+            <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
+              🔥 이달의 인기 체험
+            </p>
+            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+              {heroActivity.title}
+            </h1>
+          </Link>
+        ) : (
+          <div className="inner absolute inset-0 flex flex-col justify-center">
+            <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+              함께 배우면 즐거운
+              <br />
+              스트릿 댄스
+            </h1>
+            <p className="text-white-FFF/80 mt-2 text-[14px] md:text-[26px]">
+              이달의 인기 체험 BEST 🔥
+            </p>
+          </div>
+        )}
       </section>
 
       <div className="relative z-10 -mt-6">
-        <Searchbar value={searchValue} setValue={setSearchValue} />
+        <Searchbar
+          value={searchValue}
+          setValue={setSearchValue}
+          onSubmit={handleSearchSubmit}
+        />
       </div>
 
       <section className="mt-6 mb-8 md:mt-8 md:mb-10">
@@ -423,7 +326,7 @@ function MainPageContent() {
               transform: isPc ? `translateX(-${effectiveOffset}px)` : undefined,
             }}
           >
-            {POPULAR_ACTIVITIES.map((activity) => (
+            {popularActivities.map((activity) => (
               <PopularActivityCard key={activity.id} activity={activity} />
             ))}
           </div>
@@ -432,22 +335,32 @@ function MainPageContent() {
 
       <div className="mb-5 flex items-center justify-between gap-2">
         <div className="scrollbar-hide flex min-w-0 flex-1 gap-2 overflow-x-auto">
-          {CATEGORIES.map((cat) => (
+          <CategoryButton
+            size="sm"
+            isActive={activeCategory === null}
+            className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
+            onClick={handleAllClick}
+          >
+            전체
+          </CategoryButton>
+          {CATEGORIES.map((category) => (
             <CategoryButton
-              key={cat}
+              key={category}
               size="sm"
-              isActive={activeCategory === cat}
-              className="h-[41px] w-[80px] shrink-0 px-1 whitespace-nowrap md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]"
-              onClick={() =>
-                setActiveCategory(activeCategory === cat ? null : cat)
-              }
+              isActive={activeCategory === category}
+              className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
+              onClick={() => handleCategoryClick(category)}
             >
-              {cat}
+              {category}
             </CategoryButton>
           ))}
         </div>
-        <div className="shrink-0">
-          <SortDropdown className="h-[41px] w-[80px] min-w-0 px-3 md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]" />
+        <div className="relative shrink-0">
+          <div
+            aria-hidden
+            className="via-ivory-F2E/80 to-ivory-F2E pointer-events-none absolute top-0 right-full bottom-0 w-10 bg-linear-to-r from-transparent lg:hidden"
+          />
+          <SortDropdown className="h-10.25 w-20 min-w-0 px-3 md:h-14.5 md:w-30 md:px-5 lg:w-31.75" />
         </div>
       </div>
 
@@ -455,18 +368,25 @@ function MainPageContent() {
         <h2 className="text-black-1B1 mb-4 text-[21px] font-bold md:text-[43px]">
           🛼 모든 체험
         </h2>
-        <div className="grid grid-cols-[repeat(2,168px)] justify-center gap-x-3 gap-y-6 md:grid-cols-[repeat(3,221px)] md:gap-x-4 lg:grid-cols-[repeat(4,283px)]">
-          {visibleActivities.map((activity) => (
+        <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
+          {allActivities.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
           ))}
         </div>
+        {!isLoading && isError && (
+          <p className="text-gray-A1A py-20 text-center">
+            체험 목록을 불러오지 못했습니다.
+          </p>
+        )}
+        {!isLoading && !isError && allActivities.length === 0 && (
+          <p className="text-gray-A1A py-20 text-center">
+            검색 결과가 없습니다.
+          </p>
+        )}
       </section>
 
       <div className="flex items-center justify-center">
-        <Pagination
-          totalCount={filteredActivities.length}
-          pageSize={pageSize}
-        />
+        <Pagination totalCount={totalCount} pageSize={visibleCount} />
       </div>
     </>
   );

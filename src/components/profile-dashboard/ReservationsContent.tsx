@@ -1,26 +1,49 @@
-import { MOCK_ACTIVITIES } from '@/lib/mock-data/reservations';
+'use client';
 
-import { MyActivity } from '@/types/my-activities';
+import { useSyncExternalStore } from 'react';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { getMyActivities } from '@/lib/api/my-activities';
+
+import DashboardEmpty from '@/components/profile-ui/EmptySpace';
 
 import CalendarContent from './CalendarContent';
-import EmptySpace from './EmptySpace';
+import ReservationsSkeleton from './ReservationsSkeleton';
 
-const fetchActivities = async (): Promise<MyActivity[]> => {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-  return MOCK_ACTIVITIES.activities;
-};
+function ReservationsQueryContent() {
+  const { data } = useSuspenseQuery({
+    queryKey: ['my-activities', { size: 100 }],
+    queryFn: () => getMyActivities({ size: 100 }),
+    staleTime: 5 * 60 * 1000,
+  });
 
-export default async function ReservationsContent() {
-  const res = await fetchActivities();
-  const activities = res.map(({ id, title }) => ({ id, title }));
+  const activities =
+    data?.activities.map(({ id, title }) => ({ id, title })) ?? [];
 
   return (
     <div className="mt-7.5">
-      {res.length === 0 ? (
-        <EmptySpace />
+      {activities.length === 0 ? (
+        <DashboardEmpty />
       ) : (
         <CalendarContent activities={activities} />
       )}
     </div>
   );
+}
+
+const emptySubscribe = () => () => {};
+
+export default function ReservationsContent() {
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false,
+  );
+
+  if (!isMounted) {
+    return <ReservationsSkeleton />;
+  }
+
+  return <ReservationsQueryContent />;
 }

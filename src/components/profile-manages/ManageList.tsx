@@ -4,22 +4,24 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
-import { deleteMyActivity } from '@/lib/api/my-activities';
+import { deleteMyActivity, getMyActivities } from '@/lib/api/my-activities';
 
+import { useCursorInfiniteQuery } from '@/hooks/useCursorInfiniteQuery';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
-import { useMyActivitiesInfinite } from '@/hooks/useMyActivitiesInfinite';
 
-import EmptySpace from '@/components/common/empty-space/EmptySpace';
 import ConfirmModal from '@/components/common/modal/ConfirmModal';
+import ManageEmpty from '@/components/profile-ui/EmptySpace';
 
 import LogoSurprise from '../common/logo/LogoSurprise';
 import Card from './Card';
 import CardSkeleton from './CardSkeleton';
 import ListSkeleton from './ListSkeleton';
+
+const PAGE_SIZE = 6;
 
 export default function ManageList() {
   const [deletedIds, setDeletedIds] = useState<number[]>([]);
@@ -30,7 +32,11 @@ export default function ManageList() {
   const showToast = useToastStore((state) => state.showToast);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useMyActivitiesInfinite();
+    useCursorInfiniteQuery({
+      queryKey: ['my-activities'],
+      queryFn: (pageParam) =>
+        getMyActivities({ cursorId: pageParam, size: PAGE_SIZE }),
+    });
 
   const observerRef = useIntersectionObserver({
     onIntersect: () => {
@@ -53,9 +59,11 @@ export default function ManageList() {
       showToast('success', '체험이 삭제되었습니다.');
       queryClient.invalidateQueries({ queryKey: ['my-activities'] });
     } catch (error) {
-      const message = isAxiosError<{ message: string }>(error)
-        ? (error.response?.data?.message ?? '체험 삭제에 실패했습니다.')
-        : '체험 삭제에 실패했습니다.';
+      const message =
+        axios.isAxiosError<{ message?: string }>(error) &&
+        error.response?.data?.message
+          ? error.response.data.message
+          : '체험 삭제에 실패했습니다.';
       showToast('error', message);
     } finally {
       setDeleteTargetId(null);
@@ -74,7 +82,7 @@ export default function ManageList() {
   if (visibleActivities.length === 0) {
     return (
       <div className="mt-10">
-        <EmptySpace />
+        <ManageEmpty />
       </div>
     );
   }

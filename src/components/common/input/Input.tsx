@@ -26,8 +26,8 @@ export default function Input({
   return (
     <div
       className={twMerge(
-        'border-gray-A4A flex h-14 items-center rounded-2xl border bg-white transition-colors duration-200',
-        hasError ? 'border-red-FF4' : 'focus-within:border-[#8B7355]',
+        'border-gray-A4A flex h-14 items-center overflow-hidden rounded-2xl border bg-white transition-colors duration-200',
+        hasError ? 'border-red-FF4' : 'focus-within:border-beige-8B7',
         className,
       )}
     >

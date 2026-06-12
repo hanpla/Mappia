@@ -35,11 +35,11 @@ export default function ConfirmModal({
   return (
     <Modal
       isOpen={isOpen}
-      className={`w-full max-w-[400px] p-[24px_40px] md:p-[30px_60px] ${className}`}
+      className={`w-full max-w-100 px-10 py-6 md:px-15 md:py-7.5 ${className}`}
       onClose={onClose}
     >
       <div className="flex flex-col items-center text-center">
-        {icon && <div className="mb-[2px]">{icon}</div>}
+        {icon && <div className="mb-0.5">{icon}</div>}
         <div className="text2lg-bold md:textxl-bold mb-5 whitespace-pre-line md:mb-6">
           {message}
         </div>

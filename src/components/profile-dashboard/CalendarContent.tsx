@@ -1,11 +1,14 @@
 'use client';
 
+import { useState } from 'react';
+
 import useReservationDashboard from '@/hooks/useReservationDashboard';
 
 import { MyActivity } from '@/types/my-activities';
 
 import CalendarStatus from '../common/calendar/CalendarStatus';
 import Dropdown from '../common/dropdown/Dropdown';
+import ReservationModal from './ReservationModal';
 
 interface CalendarContentProps {
   activities: Pick<MyActivity, 'id' | 'title'>[];
@@ -17,6 +20,9 @@ export default function CalendarContent({ activities }: CalendarContentProps) {
     label: activity.title,
   }));
 
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
     selectedActivityId,
     setSelectedActivityId,
@@ -27,6 +33,11 @@ export default function CalendarContent({ activities }: CalendarContentProps) {
     handlePrevMonth,
     handleNextMonth,
   } = useReservationDashboard(options[0].value);
+
+  const handleDateClick = (dateStr: string) => {
+    setSelectedDate(dateStr);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -45,8 +56,18 @@ export default function CalendarContent({ activities }: CalendarContentProps) {
           currentMonth={currentMonth}
           onPrevMonth={handlePrevMonth}
           onNextMonth={handleNextMonth}
+          onDateClick={handleDateClick}
         />
       </div>
+
+      {isModalOpen && selectedDate && (
+        <ReservationModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          date={selectedDate}
+          activityId={Number(selectedActivityId)}
+        />
+      )}
     </div>
   );
 }
