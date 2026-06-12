@@ -1,5 +1,5 @@
 import Logo404 from '@/components/common/logo/Logo404';
-import NotFoundLink from '@/components/not-found-error/CallbackLink';
+import CallbackLink from '@/components/not-found-error/CallbackLink';
 import Container from '@/components/not-found-error/Container';
 import Msg from '@/components/not-found-error/Msg';
 
