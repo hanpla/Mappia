@@ -5,6 +5,8 @@ import { useState } from 'react';
 
 import useClickOutside from '@/hooks/useClickOutside';
 
+import DefaultProfileImage from '@/assets/logo/logo_head-smile.svg';
+
 import UserDropdown from './UserDropdown';
 
 interface Props {
@@ -28,9 +30,18 @@ export default function UserProfile({ nickname, profileImageUrl }: Props) {
               src={profileImageUrl}
               alt="프로필 이미지"
               fill
+              sizes="32px"
               className="object-cover"
             />
-          ) : null}
+          ) : (
+            <Image
+              src={DefaultProfileImage}
+              alt="기본 프로필 이미지"
+              width={91}
+              height={89}
+              className="h-3/4 w-3/4 object-contain opacity-60"
+            />
+          )}
         </div>
         <span>{nickname}</span>
       </button>
