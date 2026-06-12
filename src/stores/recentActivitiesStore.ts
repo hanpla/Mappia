@@ -3,7 +3,7 @@ import { create } from 'zustand';
 export interface RecentActivity {
   id: number;
   title: string;
-  bannerImageUrl: string;
+  bannerImageUrl?: string;
 }
 
 interface RecentActivitiesState {

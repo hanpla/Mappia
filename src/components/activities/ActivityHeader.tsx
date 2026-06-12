@@ -28,16 +28,8 @@ interface ActivityHeaderProps {
 }
 
 export default function ActivityHeader({ activity }: ActivityHeaderProps) {
-  const {
-    id,
-    userId,
-    title,
-    category,
-    address,
-    rating,
-    reviewCount,
-    bannerImageUrl,
-  } = activity;
+  const { id, userId, title, category, address, rating, reviewCount } =
+    activity;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,10 +85,9 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
       addActivity({
         id,
         title,
-        bannerImageUrl,
       });
     }
-  }, [id, addActivity, title, bannerImageUrl]);
+  }, [id, addActivity, title]);
 
   return (
     <section className="flex justify-between border-b border-[#E0E0E5] pb-5 md:pb-7.5 lg:border-b-0 lg:pb-0">
