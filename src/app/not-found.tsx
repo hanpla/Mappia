@@ -13,7 +13,7 @@ export default function NotFound() {
           description="요청하신 페이지가 존재하지 않거나 변경되었을 수 있습니다."
         />
         <div className="mt-8">
-          <NotFoundLink />
+          <CallbackLink />
         </div>
       </div>
     </Container>
