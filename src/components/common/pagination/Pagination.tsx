@@ -19,11 +19,12 @@ export default function Pagination({
   visiblePageCount = 5,
 }: PaginationProps) {
   const { currentPage, createPageUrl } = usePaginationUrl();
+  const activePage = currentPage || 1;
 
   const totalPages = pageSize > 0 ? Math.ceil(totalCount / pageSize) : 0;
-  if (totalPages <= 1) return null;
+  if (totalPages < 1) return null;
 
-  const clampedPage = Math.min(Math.max(1, currentPage), totalPages);
+  const clampedPage = Math.min(Math.max(1, activePage), totalPages);
   const currentGroupIndex = Math.floor((clampedPage - 1) / visiblePageCount);
   const startPage = currentGroupIndex * visiblePageCount + 1;
   const endPage = Math.min(startPage + visiblePageCount - 1, totalPages);
@@ -41,9 +42,9 @@ export default function Pagination({
 
   const commonButton =
     'flex items-center justify-center w-10 h-10 md:w-13.75 md:h-13.75 rounded-[15px] border';
-  const baseButton = `${commonButton} bg-[#FFFFFF] border-khaki-6B5  text-[#6B5747] text-2lg-regular`;
-  const activeButton = `${commonButton} bg-[#8B7355] border-[#8B7355] text-[#FFFFFF] text-2lg-medium`;
-  const disabledButton = `${commonButton} bg-[#FFFFFF] border-[#DDDDDD] cursor-not-allowed`;
+  const baseButton = `${commonButton} bg-white border-khaki-6B5 text-khaki-6B5 text2lg-regular`;
+  const activeButton = `${commonButton} bg-beige-8B7 border-beige-8B7 text-white text2lg-medium`;
+  const disabledButton = `${commonButton} bg-white border-gray-DDD cursor-not-allowed`;
 
   return (
     <div className="flex items-center gap-2.5 select-none">
@@ -63,7 +64,7 @@ export default function Pagination({
       )}
 
       {pageNumbers.map((page) => {
-        const isActive = page === currentPage;
+        const isActive = page === clampedPage;
 
         return (
           <Link

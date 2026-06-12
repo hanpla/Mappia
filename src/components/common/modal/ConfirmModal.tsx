@@ -35,7 +35,7 @@ export default function ConfirmModal({
   return (
     <Modal
       isOpen={isOpen}
-      className={`w-full max-w-[400px] px-10 py-6 md:px-15 md:py-7.5 ${className}`}
+      className={`w-full max-w-100 px-10 py-6 md:px-15 md:py-7.5 ${className}`}
       onClose={onClose}
     >
       <div className="flex flex-col items-center text-center">

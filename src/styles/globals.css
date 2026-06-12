@@ -96,17 +96,6 @@
     background-color: var(--color-gray-FAF);
     color: var(--color-black-1B1);
   }
-
-  /* Browser Autofill Styling Overrides */
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px white inset !important;
-    box-shadow: 0 0 0 1000px white inset !important;
-    -webkit-text-fill-color: var(--color-black-1B1) !important;
-    transition: background-color 5000s ease-in-out 0s;
-  }
 }
 
 /* ==========================================================================
@@ -300,6 +289,15 @@
   }
 }
 
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
 @keyframes zoomIn {
   from {
     transform: scale(0.95);
@@ -320,8 +318,21 @@
   }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 @utility animate-slide-up {
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-slide-down {
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @utility animate-zoom-in {
@@ -347,4 +358,6 @@
   }
 }
 
-
+@utility animate-fade-out {
+  animation: fadeOut 0.2s ease-out forwards;
+}
