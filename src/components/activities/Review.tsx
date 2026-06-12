@@ -1,3 +1,6 @@
+'use client';
+import { useAIReviewAnalysis } from '@/hooks/useAIReviewAnalysis';
+
 import AIReviewAnalysis from '@/components/activities/AIReviewAnalysis';
 
 import IconStarOn from '../common/icon/IconStarOn';
@@ -23,7 +26,22 @@ export default function Review() {
       date: '2023. 2. 4',
       text: '전문가가 직접 강사로 참여하기 때문에 어떤 수준의 춤추는 사람도 쉽게 이해할 수 있었습니다. 이번 체험을 거쳐 저의 춤추기 실력은 더욱 향상되었어요.',
     },
+    {
+      id: 4,
+      name: '박지원',
+      date: '2023. 2. 5',
+      text: '강사님이 친절하고 초보자도 쉽게 따라갈 수 있었습니다.',
+    },
   ];
+  const reviewTexts = MOCK_REVIEWS.map((review) => review.text);
+
+  const { data: analysis, isLoading } = useAIReviewAnalysis({
+    activityId: 1,
+    title: '함께 배우면 즐거운 스트릿댄스',
+    category: '댄스',
+    description: '초보자도 쉽게 배울 수 있는 스트릿댄스 체험',
+    reviews: reviewTexts,
+  });
 
   return (
     <section>
@@ -40,14 +58,11 @@ export default function Review() {
           <IconStarOn size={16} />
           <span className="textmd-medium text-[#79747E]">1,300개 후기</span>
         </div>
-        <AIReviewAnalysis
-          analysis={{
-            summary:
-              '이 체험은 매우 만족스럽다는 평가를 받고 있습니다. 많은 참가자들이 새로운 스타일과 춤추기에 대한 열정을 느끼고 있으며, 전문가 강사의 친절한 설명 덕분에 모든 수준의 참가자들이 쉽게 이해할 수 있다는 점이 특히 긍정적으로 언급되고 있습니다.',
-            keywords: ['만족도 높음', '친절한 강사', '적합한 수준'],
-            basedOnReviews: true,
-          }}
-        />
+        {isLoading ? (
+          <div>AI 분석 중...</div>
+        ) : analysis ? (
+          <AIReviewAnalysis analysis={analysis} />
+        ) : null}
       </div>
       <ul className="mb-10 space-y-5">
         {MOCK_REVIEWS.map((review) => (

@@ -3,3 +3,8 @@ export interface AIReviewAnalysis {
   keywords: string[];
   basedOnReviews: boolean;
 }
+
+export interface CachedAIReviewAnalysis {
+  reviewCount: number;
+  analysis: AIReviewAnalysis;
+}
