@@ -35,12 +35,12 @@ export default function ConfirmModal({
   return (
     <Modal
       isOpen={isOpen}
-      className={`w-full max-w-[400px] p-[24px_40px] md:p-[30px_60px] ${className}`}
+      className={`w-full max-w-100 p-[24px_40px] md:p-[30px_60px] ${className}`}
       onClose={onClose}
     >
       <div className="flex flex-col items-center text-center">
-        {icon && <div className="mb-[2px]">{icon}</div>}
-        <div className="text2lg-bold md:textxl-bold mb-5 whitespace-pre-line md:mb-6">
+        {icon && <div className="mb-0.5">{icon}</div>}
+        <div className="textlg-bold md:text2lg-bold mb-5 whitespace-pre-line md:mb-6">
           {message}
         </div>
         <div className="flex w-full gap-2 md:gap-3">

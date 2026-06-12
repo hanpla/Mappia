@@ -16,6 +16,7 @@
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "react-kakao-maps-sdk": "^1.2.1",
     "tailwind-merge": "^3.6.0",
     "zustand": "^5.0.13"
   },
@@ -33,6 +34,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-check-file": "^3.3.1",
     "eslint-plugin-import-x": "^4.16.2",
+    "kakao.maps.d.ts": "^0.1.40",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
