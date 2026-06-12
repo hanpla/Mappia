@@ -1,4 +1,4 @@
-import Button from '../common/button/Button';
+import Button from '@/components/common/button/Button';
 
 interface RetryButtonProps {
   onClick: () => void;
