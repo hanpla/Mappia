@@ -11,6 +11,8 @@ import { profileMenuItems } from '@/constants/profileMenu';
 
 import ProfileImageUpload from '@/components/common/image-upload/ProfileImageUpload';
 
+import DefaultProfileImage from '@/assets/logo/logo_head-smile.svg';
+
 export default function SideMenu() {
   const pathname = usePathname();
   const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
@@ -21,6 +23,7 @@ export default function SideMenu() {
         <ProfileImageUpload
           name="profileImage"
           defaultSrc={user?.profileImageUrl}
+          defaultImage={DefaultProfileImage}
         />
       </div>
       <ul className="w-full space-y-[14px]">
