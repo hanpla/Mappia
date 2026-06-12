@@ -45,7 +45,6 @@ export const buildUpdateActivityBody = async (
     body.bannerImageUrl = banner;
   }
 
-  const originalSubUrls = original.subImages.map((img) => img.imageUrl);
   const keptUrls = values.introImages.filter(
     (img): img is string => typeof img === 'string',
   );
@@ -67,7 +66,6 @@ export const buildUpdateActivityBody = async (
     );
     body.subImageUrlsToAdd = uploadedUrls;
   }
-  void originalSubUrls;
 
   const originalKeys = new Set(
     original.schedules.map((s) => scheduleKey(s.date, s.startTime, s.endTime)),
@@ -103,19 +101,3 @@ export const buildUpdateActivityBody = async (
 
   return body;
 };
-
-export const mapDetailToFormValues = (detail: ActivityDetailContent) => ({
-  title: detail.title,
-  category: detail.category as string,
-  description: detail.description,
-  price: String(detail.price),
-  address: detail.address,
-  schedules: detail.schedules.map((s) => ({
-    id: `schedule-server-${s.id}`,
-    date: s.date,
-    startTime: s.startTime,
-    endTime: s.endTime,
-  })),
-  bannerImages: detail.bannerImageUrl ? [detail.bannerImageUrl] : [],
-  introImages: detail.subImages.map((img) => img.imageUrl),
-});

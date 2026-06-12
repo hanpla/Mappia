@@ -128,6 +128,38 @@ export default function ActivityRegisterForm({
     );
   };
 
+  const validateForm = (): string | null => {
+    if (!title.trim()) return '제목을 입력해 주세요.';
+    if (!category) return '카테고리를 선택해 주세요.';
+    if (!description.trim()) return '설명을 입력해 주세요.';
+    if (!address.trim()) return '주소를 입력해 주세요.';
+
+    if (!price.trim()) return '가격을 입력해 주세요.';
+    const priceNumber = Number(price);
+    if (Number.isNaN(priceNumber) || priceNumber < 0) {
+      return '가격은 0 이상의 숫자로 입력해 주세요.';
+    }
+
+    if (bannerImages.length === 0) {
+      return '배너 이미지를 최소 1개 이상 등록해 주세요.';
+    }
+
+    const filledSchedules = schedules.filter(
+      (schedule) =>
+        schedule.date ||
+        schedule.startTime !== '00:00' ||
+        schedule.endTime !== '00:00',
+    );
+    for (const schedule of filledSchedules) {
+      if (!schedule.date) return '예약 가능한 시간대의 날짜를 입력해 주세요.';
+      if (schedule.startTime >= schedule.endTime) {
+        return '시작 시간은 종료 시간보다 빨라야 합니다.';
+      }
+    }
+
+    return null;
+  };
+
   const collectValues = (): ActivityFormValues => ({
     title,
     category,
@@ -200,6 +232,13 @@ export default function ActivityRegisterForm({
 
   const handleSubmit = () => {
     if (isSubmitting) return;
+
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      showToast('information', errorMessage);
+      return;
+    }
+
     if (isEdit) {
       handleEditSubmit();
     } else {
@@ -338,7 +377,7 @@ export default function ActivityRegisterForm({
       <ImageUploadField
         name="bannerImages"
         label="배너 이미지 등록"
-        maxCount={4}
+        maxCount={1}
         images={bannerImages}
         onChange={(images) => {
           markDirty();
