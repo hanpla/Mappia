@@ -91,7 +91,7 @@ export default function ProfileImageUpload({
         type="button"
         onClick={trigger}
         disabled={isBusy}
-        className="absolute right-0 bottom-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full bg-[#8B7355] transition-colors hover:bg-[#7a6449] disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
+        className="bg-beige-8B7 absolute right-0 bottom-0 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-[#7a6449] disabled:cursor-not-allowed disabled:opacity-60 lg:h-7.5 lg:w-7.5"
         aria-label="프로필 이미지 변경"
       >
         <IconEdit size={16} color="white" />
