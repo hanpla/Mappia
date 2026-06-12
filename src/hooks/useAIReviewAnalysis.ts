@@ -6,6 +6,30 @@ import { getAIReviewAnalysis } from '@/lib/api/ai-review';
 
 import { CachedAIReviewAnalysis } from '@/types/ai-review';
 
+const safeLocalStorage = {
+  getItem: (key: string): string | null => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      localStorage.setItem(key, value);
+    } catch (e) {
+      console.warn('localStorage 저장 불가', e);
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key);
+    } catch (e) {
+      console.warn('localStorage 저장 불가', e);
+    }
+  },
+};
+
 export const useAIReviewAnalysis = (
   params: Parameters<typeof getAIReviewAnalysis>[0],
 ) => {
@@ -14,24 +38,24 @@ export const useAIReviewAnalysis = (
 
     queryFn: async () => {
       const storageKey = `ai-review-${params.activityId}`;
-
-      const cached = localStorage.getItem(storageKey);
+      const cached = safeLocalStorage.getItem(storageKey);
 
       if (cached) {
         const parsed: CachedAIReviewAnalysis = JSON.parse(cached);
 
         if (parsed.reviewCount === params.reviews.length) {
           console.log('📦 캐시 사용');
-
           return parsed.analysis;
         }
+
+        console.log('🔄 후기 수 변경 감지 → 재분석');
+        safeLocalStorage.removeItem(storageKey);
       }
 
       console.log('🤖 Gemini 호출');
-
       const result = await getAIReviewAnalysis(params);
 
-      localStorage.setItem(
+      safeLocalStorage.setItem(
         storageKey,
         JSON.stringify({
           reviewCount: params.reviews.length,

@@ -1,6 +1,11 @@
 import { IconProps } from '@/types/svg';
 
-export default function IconX({ size = 40, color, ...props }: IconProps) {
+export default function IconX({
+  size = 40,
+  color,
+  strokeWidth = 2.5,
+  ...props
+}: IconProps) {
   return (
     <svg
       width={size}
@@ -13,13 +18,13 @@ export default function IconX({ size = 40, color, ...props }: IconProps) {
       <path
         d="M10 10L30 30"
         stroke={color || '#4B4B4B'}
-        strokeWidth="2.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <path
         d="M30 10L10 30"
         stroke={color || '#4B4B4B'}
-        strokeWidth="2.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>

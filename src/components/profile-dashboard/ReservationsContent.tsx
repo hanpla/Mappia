@@ -7,6 +7,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { getMyActivities } from '@/lib/api/my-activities';
 
 import DashboardEmpty from '@/components/profile-ui/EmptySpace';
+
 import CalendarContent from './CalendarContent';
 import ReservationsSkeleton from './ReservationsSkeleton';
 

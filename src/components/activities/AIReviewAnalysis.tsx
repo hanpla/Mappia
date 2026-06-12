@@ -7,7 +7,7 @@ interface Props {
 export default function AIReviewAnalysis({ analysis }: Props) {
   return (
     <section className="rounded-2xl border border-gray-500 p-4">
-      <h3 className="mb-3 text-lg font-bold">🤖 AI 체험 분석</h3>
+      <h3 className="mb-3 text-lg font-bold">🤖 AI 후기 요약</h3>
 
       <p className="mb-3 text-sm">{analysis.summary}</p>
 

@@ -80,7 +80,7 @@ function WeatherCard({
             ☔ {rainProbability}%
           </span>
         ) : (
-          <span className="text-[10px] font-normal text-stone-300 md:text-xs">
+          <span className="text-black-1B1 text-[10px] font-normal md:text-xs">
             맑음
           </span>
         )}
@@ -155,9 +155,7 @@ export default function ActivityWeather({ address }: ActivityWeatherProps) {
     return (
       <section className="space-y-3 border-b border-[#E0E0E5] pb-5 md:pb-7.5 lg:pb-10">
         <div>
-          <h3 className="textlg-bold md:text2lg-bold">
-            체험 장소 5일 날씨 예보
-          </h3>
+          <h3 className="textlg-bold md:text2lg-bold">체험 장소 날씨 예보</h3>
           <div className="mt-1.5 h-3 w-60 animate-pulse rounded bg-stone-200 md:h-3.5 md:w-80" />
         </div>
         <div className="scrollbar-hide flex gap-2.5 overflow-x-auto pb-1 min-[480px]:grid min-[480px]:grid-cols-5 min-[480px]:gap-3 min-[480px]:overflow-visible md:gap-4">
@@ -179,9 +177,9 @@ export default function ActivityWeather({ address }: ActivityWeatherProps) {
   return (
     <section className="space-y-3 border-b border-[#E0E0E5] pb-5 md:pb-7.5 lg:pb-10">
       <div>
-        <h3 className="textlg-bold md:text2lg-bold">체험 장소 5일 날씨 예보</h3>
-        <p className="textxs-medium md:textsm-medium text-gray-A1A mt-0.5">
-          기상청 실시간 예보 정보를 바탕으로 예약 일정을 세워보세요.
+        <h3 className="textlg-bold md:text2lg-bold">체험 장소 날씨 예보</h3>
+        <p className="textxs-medium md:textsm-medium text-gray-797 mt-0.5">
+          기상청 실시간 정보를 바탕으로 5일간의 날씨 예보를 확인할 수 있습니다.
         </p>
       </div>
 
