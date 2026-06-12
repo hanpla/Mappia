@@ -32,7 +32,7 @@ export default function Searchbar({
         무엇을 체험하고 싶으신가요?
       </h2>
 
-      <div className="flex items-center gap-[10px] md:gap-3">
+      <div className="flex items-center gap-2.5 md:gap-3">
         <Input
           id="search-input"
           name="keyword"
@@ -46,7 +46,7 @@ export default function Searchbar({
         <Button
           type="submit"
           disabled={value.trim() === ''}
-          className="h-14! w-[96px] shrink-0 px-2 whitespace-nowrap md:w-auto md:px-8"
+          className="h-14! w-24 shrink-0 px-2 whitespace-nowrap md:w-auto md:px-8"
         >
           검색하기
         </Button>

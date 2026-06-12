@@ -51,7 +51,7 @@ export default function SortDropdown({
         type="button"
         onClick={toggle}
         className={twMerge(
-          'bg-white-FFF text-khaki-6B5 textlg-medium border-beige-8B7 flex h-[41px] min-w-30 cursor-pointer items-center justify-between gap-2 rounded-[16px] border px-5 transition-all duration-200 outline-none',
+          'bg-white-FFF text-khaki-6B5 textlg-medium border-beige-8B7 flex h-10.25 min-w-30 cursor-pointer items-center justify-between gap-2 rounded-2xl border px-5 transition-all duration-200 outline-none',
           className,
         )}
       >
@@ -70,7 +70,7 @@ export default function SortDropdown({
       </button>
 
       {isOpen && (
-        <div className="shadow-dropdown border-beige-8B7 bg-white-FFF absolute right-0 z-50 mt-2 w-full min-w-30 overflow-hidden rounded-[16px] border">
+        <div className="shadow-dropdown border-beige-8B7 bg-white-FFF absolute right-0 z-50 mt-2 w-full min-w-30 overflow-hidden rounded-2xl border">
           <ul className="flex flex-col">
             {SORT_OPTIONS.map((option, index) => {
               const isActive = currentSort === option.value;

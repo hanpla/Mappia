@@ -29,7 +29,7 @@ export default function Chip({ status, count }: ChipProps) {
 
   return (
     <div
-      className={`rounded-[4px] px-1 text-[12px]/[20px] font-medium whitespace-nowrap md:text-[14px]/[23px] ${chip.style}`}
+      className={`textxs-medium md:textmd-medium rounded-sm px-1 whitespace-nowrap ${chip.style}`}
     >
       {chip.label} {count}
     </div>

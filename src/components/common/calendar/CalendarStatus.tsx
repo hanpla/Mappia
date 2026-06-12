@@ -48,7 +48,7 @@ export default function CalendarStatus({
   }, [currentYear, currentMonth]);
 
   return (
-    <aside className="border-gray-EEE font-pretendard flex h-[800px] w-full flex-col rounded-[24px] border bg-white p-4 shadow-sm select-none md:h-[760px] md:p-5 lg:h-[860px] lg:p-6">
+    <aside className="border-gray-EEE font-pretendard flex h-200 w-full flex-col rounded-3xl border bg-white p-4 shadow-sm select-none md:h-190 md:p-5 lg:h-215 lg:p-6">
       <div className="mb-2 flex items-center justify-center gap-6 py-1 lg:mb-4 lg:gap-8 lg:py-2">
         <button
           onClick={onPrevMonth}
@@ -56,7 +56,7 @@ export default function CalendarStatus({
         >
           ◀
         </button>
-        <span className="textmd-semibold text-black-1B1 md:text2lg-semibold lg:textxl-semibold min-w-[100px] text-center tracking-tight lg:min-w-[110px]">
+        <span className="textmd-semibold text-black-1B1 md:text2lg-semibold lg:textxl-semibold min-w-25 text-center tracking-tight lg:min-w-27.5">
           {currentYear}년 {currentMonth + 1}월
         </span>
         <button

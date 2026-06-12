@@ -12,7 +12,7 @@ export default function NotificationDropdown({
   onClose,
 }: NotificationDropdownProps) {
   return (
-    <div className="absolute top-full right-0 z-50 mt-2 w-96 rounded-lg bg-[#CED8D5] p-4 shadow-[0px_2px_8px_rgba(120,116,134,0.25)]">
+    <div className="bg-green-CED absolute top-full right-0 z-50 mt-2 w-96 rounded-lg p-4 shadow-[0px_2px_8px_rgba(120,116,134,0.25)]">
       <div className="mb-3 flex items-center justify-between">
         <span className="font-medium text-[#111322]">
           알림 {notifications.length}개
@@ -25,7 +25,7 @@ export default function NotificationDropdown({
           ×
         </button>
       </div>
-      <div className="flex max-h-96 flex-col gap-2 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-solid [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-thumb]:bg-gray-400 [&::-webkit-scrollbar-thumb]:bg-clip-padding [&::-webkit-scrollbar-track]:bg-transparent">
+      <div className="scrollbar-custom flex max-h-96 flex-col gap-2 overflow-y-auto">
         {notifications.map((notification) => (
           <NotificationItem
             key={notification.id}
