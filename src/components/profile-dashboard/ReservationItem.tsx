@@ -41,7 +41,7 @@ export default function ReservationItem({
             variant="solid"
             onClick={() => onUpdateStatus(item.id, 'confirmed')}
             disabled={isMutationPending}
-            className="border-gray-DDD bg-beige-8B7 hover:bg-beige-8B7 h-8 rounded-lg px-3 py-1.5 text-xs font-bold text-white hover:text-white"
+            className="border-gray-DDD bg-beige-8B7 hover:bg-beige-8B7 textxs-bold h-8 rounded-lg px-3 py-1.5 text-white hover:text-white"
           >
             승인하기
           </Button>
@@ -50,7 +50,7 @@ export default function ReservationItem({
             variant="outline"
             onClick={() => onUpdateStatus(item.id, 'declined')}
             disabled={isMutationPending}
-            className="border-beige-8B7 text-beige-8B7 hover:text-beige-8B7 h-8 rounded-lg px-3 py-1.5 text-xs font-bold hover:bg-white"
+            className="border-beige-8B7 text-beige-8B7 hover:text-beige-8B7 textxs-bold h-8 rounded-lg px-3 py-1.5 hover:bg-white"
           >
             거절하기
           </Button>

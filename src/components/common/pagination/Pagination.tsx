@@ -40,13 +40,13 @@ export default function Pagination({
   const isLastPage = clampedPage === totalPages;
 
   const commonButton =
-    'flex items-center justify-center w-[40px] h-[40px] md:w-[55px] md:h-[55px] rounded-[15px] border';
-  const baseButton = `${commonButton} bg-[#FFFFFF] border-[#6B5747] text-[#6B5747] text-[18px]/[26px] font-normal`;
-  const activeButton = `${commonButton} bg-[#8B7355] border-[#8B7355] text-[#FFFFFF] text-[18px]/[26px] font-medium`;
+    'flex items-center justify-center w-10 h-10 md:w-13.75 md:h-13.75 rounded-[15px] border';
+  const baseButton = `${commonButton} bg-[#FFFFFF] border-khaki-6B5  text-[#6B5747] text-2lg-regular`;
+  const activeButton = `${commonButton} bg-[#8B7355] border-[#8B7355] text-[#FFFFFF] text-2lg-medium`;
   const disabledButton = `${commonButton} bg-[#FFFFFF] border-[#DDDDDD] cursor-not-allowed`;
 
   return (
-    <div className="flex items-center gap-[10px] select-none">
+    <div className="flex items-center gap-2.5 select-none">
       {isFirstPage ? (
         <div className={disabledButton} aria-label="이전 페이지 비활성화">
           <IconPaginationLeft color="#A1A1A1" />

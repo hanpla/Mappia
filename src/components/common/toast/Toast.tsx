@@ -29,7 +29,7 @@ export default function Toast({ type, message }: ToastProps) {
       className={`flex items-center gap-2 rounded-lg px-4 py-3 text-white shadow-md ${TOAST_STYLES[type]}`}
     >
       <Image src={TOAST_ICONS[type]} alt="" width={20} height={20} />
-      <span className="text-sm font-medium">{message}</span>
+      <span className="textsm-medium">{message}</span>
     </div>
   );
 }

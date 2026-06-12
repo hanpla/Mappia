@@ -7,11 +7,11 @@ interface TagProps {
 const TAG_STATUS: Record<TagStatus, { label: string; style: string }> = {
   approved: {
     label: '예약 승인',
-    style: 'bg-[#FFF4E8] text-[#FF7C1D]',
+    style: 'bg-orange-FFF text-[#FF7C1D]',
   },
   rejected: {
     label: '예약 거절',
-    style: 'bg-[#FFE4E0] text-[#FF472E]',
+    style: 'bg-red-FFE text-[#FF472E]',
   },
 };
 
@@ -20,7 +20,7 @@ export default function Tag({ status }: TagProps) {
 
   return (
     <div
-      className={`w-max rounded-[26.5px] p-[10px_15px] text-[14px]/[24px] font-bold ${tag.style}`}
+      className={`text-md-bold w-max rounded-[26.5px] px-3.75 py-2.5 ${tag.style}`}
     >
       {tag.label}
     </div>

@@ -57,7 +57,7 @@ function PopularActivityCard({ activity }: { activity: BaseActivity }) {
               ({activity.reviewCount})
             </span>
           </div>
-          <p className="line-clamp-2 max-w-[146px] text-[18px] leading-snug font-bold md:max-w-[251px] md:text-[32px]">
+          <p className="line-clamp-2 max-w-36.5 text-[18px] leading-snug font-bold md:max-w-62.75 md:text-[32px]">
             {activity.title}
           </p>
           <p className="mt-1 text-[16px] font-bold md:text-[20px]">
@@ -233,7 +233,7 @@ function MainPageContent() {
 
   return (
     <>
-      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-[550px]">
+      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-137.5">
         <ImageWithFallback
           src={heroActivity?.bannerImageUrl ?? HERO_FALLBACK_IMAGE}
           alt={heroActivity?.title ?? 'hero'}
@@ -251,7 +251,7 @@ function MainPageContent() {
             <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
               🔥 이달의 인기 체험
             </p>
-            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-[600px] text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
               {heroActivity.title}
             </h1>
           </Link>
@@ -338,7 +338,7 @@ function MainPageContent() {
           <CategoryButton
             size="sm"
             isActive={activeCategory === null}
-            className="h-[41px] w-[80px] shrink-0 px-1 whitespace-nowrap md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]"
+            className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
             onClick={handleAllClick}
           >
             전체
@@ -348,7 +348,7 @@ function MainPageContent() {
               key={category}
               size="sm"
               isActive={activeCategory === category}
-              className="h-[41px] w-[80px] shrink-0 px-1 whitespace-nowrap md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]"
+              className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
               onClick={() => handleCategoryClick(category)}
             >
               {category}
@@ -360,7 +360,7 @@ function MainPageContent() {
             aria-hidden
             className="via-ivory-F2E/80 to-ivory-F2E pointer-events-none absolute top-0 right-full bottom-0 w-10 bg-linear-to-r from-transparent lg:hidden"
           />
-          <SortDropdown className="h-[41px] w-[80px] min-w-0 px-3 md:h-[58px] md:w-[120px] md:px-5 lg:w-[127px]" />
+          <SortDropdown className="h-10.25 w-20 min-w-0 px-3 md:h-14.5 md:w-30 md:px-5 lg:w-31.75" />
         </div>
       </div>
 

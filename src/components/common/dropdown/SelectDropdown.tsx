@@ -40,8 +40,8 @@ export default function SelectDropdown({
       <button
         type="button"
         onClick={toggle}
-        className={`bg-white-FFF text-black-1B1 textlg-regular flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border px-5 text-left transition-all duration-200 outline-none ${
-          isOpen ? 'border-khaki-6B5' : 'border-[#8b7355]'
+        className={`textlg-regular bg-white-FFF text-black-1B1 flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border px-5 text-left transition-all duration-200 outline-none ${
+          isOpen ? 'border-khaki-6B5' : 'border-khaki-8B7'
         }`}
       >
         <span className={selectedOption ? 'text-black-1B1' : 'text-gray-A1A'}>

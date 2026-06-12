@@ -20,11 +20,11 @@ export default function ReservationsSkeleton({
         {Array.from({ length: count }).map((_, index) => (
           <div
             key={index}
-            className="bg-white-FFF border-gray-DDD flex min-h-[200px] w-full animate-pulse rounded-2xl border"
+            className="bg-white-FFF border-gray-DDD flex min-h-50 w-full animate-pulse rounded-2xl border"
           >
-            <div className="w-[200px] flex-shrink-0 self-stretch rounded-l-2xl bg-gray-200" />
+            <div className="w-50 shrink-0 self-stretch rounded-l-2xl bg-gray-200" />
 
-            <div className="flex flex-grow flex-col px-4 pt-4 pb-3">
+            <div className="flex grow flex-col px-4 pt-4 pb-3">
               <div>
                 <div className="h-5 w-16 rounded bg-gray-200" />
                 <div className="mt-1.5 mb-2 h-7 w-2/3 rounded bg-gray-200" />
@@ -33,7 +33,7 @@ export default function ReservationsSkeleton({
 
               <div className="mt-8 flex flex-wrap items-center justify-between gap-1">
                 <div className="h-8 w-28 rounded bg-gray-200" />
-                <div className="h-12 w-[108px] flex-shrink-0" />
+                <div className="h-12 w-27 shrink-0" />
               </div>
             </div>
           </div>
