@@ -11,7 +11,7 @@ import { profileMenuItems } from '@/constants/profileMenu';
 
 import ProfileImageUpload from '@/components/common/image-upload/ProfileImageUpload';
 
-import DefaultProfileImage from '@/assets/logo/logo_head-4.svg';
+import DefaultProfileImage from '@/assets/logo/logo_head-smile.svg';
 
 export default function SideMenu() {
   const pathname = usePathname();
