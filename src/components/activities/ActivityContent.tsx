@@ -39,7 +39,7 @@ export default function ActivityContent({
           />
         </div>
 
-        <div className="hidden space-y-16 lg:col-span-3 lg:block">
+        <div className="hidden space-y-16 lg:col-span-3 lg:block lg:items-start">
           <ActivityHeader activity={activity} />
           <Reservation activity={activity} />
         </div>
