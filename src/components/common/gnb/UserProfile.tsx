@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import useClickOutside from '@/hooks/useClickOutside';
 
-import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
+import DefaultProfileImage from '@/assets/logo/logo_head-4.svg';
 
 import UserDropdown from './UserDropdown';
 

@@ -15,7 +15,7 @@ import Logo404 from '@/components/common/logo/Logo404';
 
 interface ProfileImageUploadProps {
   name: string;
-  defaultSrc?: string;
+  defaultSrc?: string | null;
   className?: string;
   defaultImage?: ImageProps['src'];
 }

@@ -21,7 +21,7 @@ import InputField from '@/components/common/input-field/InputField';
 import Input from '@/components/common/input/Input';
 import PasswordInput from '@/components/common/input/PasswordInput';
 
-import DefaultProfileImage from '@/assets/logo/logo_head-3.svg';
+import DefaultProfileImage from '@/assets/logo/logo_head-4.svg';
 
 export const INFO_FORM_ID = 'info-form';
 
