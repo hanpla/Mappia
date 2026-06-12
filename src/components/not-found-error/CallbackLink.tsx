@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export default function NotFoundLink() {
+export default function CallbackLink() {
   return (
     <Link
       href="/activities"
