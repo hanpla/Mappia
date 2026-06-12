@@ -11,7 +11,7 @@ export default function ManagesPage() {
         action={
           <Link
             href="/my-activities/register"
-            className="bg-brown-2A2 textlg-bold inline-flex h-12 w-30 items-center justify-center rounded-sm text-center text-white"
+            className="bg-brown-2A2 textlg-bold inline-flex h-12 w-30 items-center justify-center rounded-xl text-center text-white"
           >
             체험 등록하기
           </Link>
