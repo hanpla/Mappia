@@ -1,7 +1,7 @@
 'use client';
 
 import LogoSad from '@/components/common/logo/LogoSad';
-import NotFoundLink from '@/components/not-found-error/CallbackLink';
+import CallbackLink from '@/components/not-found-error/CallbackLink';
 import Container from '@/components/not-found-error/Container';
 import Msg from '@/components/not-found-error/Msg';
 import RetryButton from '@/components/not-found-error/RetryButton';
