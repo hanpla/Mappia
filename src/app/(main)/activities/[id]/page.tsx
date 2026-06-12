@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 
+import axios from 'axios';
+
 import { getActivityDetail } from '@/lib/api/activities';
 
 import ActivityContent from '@/components/activities/ActivityContent';
@@ -23,12 +25,15 @@ export default async function ActivityPage({
 
   if (Number.isNaN(activityId) || activityId <= 0) notFound();
 
-  let activity = null;
+  let activity;
 
   try {
     activity = await getActivityDetail(activityId);
-  } catch {
-    activity = null;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      notFound();
+    }
+    throw error;
   }
 
   if (!activity) notFound();

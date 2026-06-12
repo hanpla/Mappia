@@ -9,7 +9,7 @@ import { ActivityDetailContent } from '@/types/activities';
 import Button from '../common/button/Button';
 import LogoJoy from '../common/logo/LogoJoy';
 import ConfirmModal from '../common/modal/ConfirmModal';
-import MoblieReservationSheet from './MoblieReservationSheet';
+import MobileReservationSheet from './MobileReservationSheet';
 
 interface MobileReservationProps {
   activity: ActivityDetailContent;
@@ -71,7 +71,7 @@ export default function MobileReservation({
         </Button>
       </div>
 
-      <MoblieReservationSheet
+      <MobileReservationSheet
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         {...reservationState}

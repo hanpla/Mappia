@@ -16,6 +16,8 @@ const MESSAGE_STYLE = `textmd-medium md:textlg-medium text-gray-797 flex h-[180p
 
 export default function KakaoMap({ address }: KakaoMapProps) {
   const [coords, setCoords] = useState<MapCoordinate | null>(null);
+  const [isGeocodeError, setIsGeocodeError] = useState(false);
+
   const [isLoading, hasError] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_JS_KEY!,
     libraries: ['services'],
@@ -47,6 +49,10 @@ export default function KakaoMap({ address }: KakaoMapProps) {
           lat: Number(result[0].y),
           lng: Number(result[0].x),
         });
+        setIsGeocodeError(false);
+      } else {
+        setIsGeocodeError(true);
+        setCoords(null);
       }
     });
 
@@ -55,15 +61,15 @@ export default function KakaoMap({ address }: KakaoMapProps) {
     };
   }, [address, isLoading, hasError]);
 
-  if (isLoading) {
+  if (hasError || isGeocodeError) {
+    return <div className={MESSAGE_STYLE}>지도를 불러오지 못했습니다.</div>;
+  }
+
+  if (isLoading || !coords) {
     return <div className={MESSAGE_STYLE}>지도를 불러오는 중입니다...</div>;
   }
 
-  if (hasError) {
-    return <div className={MESSAGE_STYLE}>지도를 불러오지 못 했습니다.</div>;
-  }
-
-  return coords ? (
+  return (
     <div className="bg-gray-FAF h-45 w-full overflow-hidden rounded-3xl md:h-112.5">
       <Map center={coords} level={3} className="h-full w-full">
         <MapMarker position={coords}>
@@ -73,7 +79,5 @@ export default function KakaoMap({ address }: KakaoMapProps) {
         </MapMarker>
       </Map>
     </div>
-  ) : (
-    <div className={MESSAGE_STYLE}>위치 정보를 불러오는 중입니다...</div>
   );
 }
