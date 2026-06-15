@@ -19,7 +19,7 @@ export default function CardInfo({
         <span className="text-gray-A4A">({reviewCount})</span>
       </div>
 
-      <h3 className="textlg-bold md:text2lg-bold">{title}</h3>
+      <h3 className="textlg-bold md:text2lg-bold truncate">{title}</h3>
     </div>
   );
 }

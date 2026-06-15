@@ -31,13 +31,13 @@ export default function ActivityEditPage() {
   }
 
   return (
-    <main className="min-h-screen py-10">
+    <section className="pt-6">
       <ActivityRegisterForm
         key={activityId}
         mode="edit"
         activityId={activityId}
         initialData={data}
       />
-    </main>
+    </section>
   );
 }

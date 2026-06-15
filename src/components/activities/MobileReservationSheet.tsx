@@ -53,7 +53,7 @@ export default function MoblieReservationSheet({
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
     };
   }, [isOpen]);
 
