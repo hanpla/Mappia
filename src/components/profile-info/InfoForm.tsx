@@ -2,16 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
-
 import useToastStore from '@/stores/toastStore';
 
-import { getMe } from '@/lib/api/users';
 import {
   validateNickname,
   validatePasswordConfirm,
 } from '@/lib/utils/validation';
 
+import useMe from '@/hooks/useMe';
 import useUpdateMyInfo from '@/hooks/useUpdateMyInfo';
 
 import type { UpdateMyInfoRequest } from '@/types/my-info';
@@ -48,7 +46,7 @@ const FIELDS: FieldConfig[] = [
     name: 'email',
     label: '이메일',
     placeholder: '이메일을 입력해 주세요',
-    autoComplete: 'username',
+    autoComplete: 'email',
     type: 'email',
     disabled: true,
   },
@@ -76,7 +74,7 @@ const EMPTY_FIELDS: Record<FieldName, string> = {
 };
 
 export default function InfoForm() {
-  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
+  const { data: user } = useMe();
   const { mutate: updateInfo, isPending } = useUpdateMyInfo();
   const showToast = useToastStore((state) => state.showToast);
 
@@ -99,9 +97,7 @@ export default function InfoForm() {
       setValues((prev) => ({ ...prev, [name]: e.target.value }));
       setErrors((prev) => ({
         ...prev,
-        // 입력 중인 필드의 에러는 초기화
         [name]: '',
-        // 비밀번호 쌍은 둘 중 하나만 바뀌어도 재입력 에러를 초기화
         ...(name === 'password' || name === 'passwordConfirm'
           ? { passwordConfirm: '' }
           : {}),
@@ -146,7 +142,6 @@ export default function InfoForm() {
 
   return (
     <>
-      {/* 모바일 프로필 요약 — 폼 데이터 아님, 이미지는 선택 즉시 업로드된다 */}
       <div className="mt-6 flex flex-col items-center gap-1 md:hidden">
         <ProfileImageUpload
           name="profileImage"
@@ -186,15 +181,11 @@ export default function InfoForm() {
                 disabled,
                 hasError: !!errors[name],
               };
-              const labelClassName =
-                name === 'email'
-                  ? 'textlg-regular text-gray-797'
-                  : 'textlg-bold text-[#1F1F22]';
               return (
                 <div key={name} className="flex w-full flex-col gap-2">
                   <label
                     htmlFor={name}
-                    className={`flex items-center ${labelClassName}`}
+                    className={`textlg-bold flex items-center text-[#1F1F22]`}
                   >
                     {label}
                   </label>

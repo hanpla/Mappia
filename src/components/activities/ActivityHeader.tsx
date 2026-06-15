@@ -3,15 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
 import { deleteMyActivity } from '@/lib/api/my-activities';
-import { getMe } from '@/lib/api/users';
 
 import useClickOutside from '@/hooks/useClickOutside';
+import useMe from '@/hooks/useMe';
 
 import { ActivityDetailContent } from '@/types/activities';
 
@@ -37,11 +36,7 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
 
   const showToast = useToastStore((state) => state.showToast);
 
-  const { data: currentUser } = useQuery({
-    queryKey: ['me'],
-    queryFn: getMe,
-    retry: false,
-  });
+  const { data: currentUser } = useMe({ retry: false });
   const isOwner = currentUser && currentUser.id === userId;
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {

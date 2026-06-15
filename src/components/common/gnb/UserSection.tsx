@@ -8,9 +8,9 @@ import {
   deleteNotification,
   getMyNotifications,
 } from '@/lib/api/my-notifications';
-import { getMe } from '@/lib/api/users';
 
 import useClickOutside from '@/hooks/useClickOutside';
+import useMe from '@/hooks/useMe';
 
 import IconNotification from '../icon/IconNotification';
 import IconNotificationDot from '../icon/IconNotificationDot';
@@ -18,7 +18,7 @@ import NotificationDropdown from './NotificationDropdown';
 import UserProfile from './UserProfile';
 
 export default function UserSection() {
-  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
+  const { data: user } = useMe();
 
   const queryClient = useQueryClient();
   const { data: notificationsData } = useQuery({
