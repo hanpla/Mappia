@@ -2,8 +2,8 @@ import ActivityRegisterForm from '@/components/my-activity-register/ActivityRegi
 
 export default function ActivityRegisterPage() {
   return (
-    <main className="min-h-screen py-10">
+    <section className="pt-6">
       <ActivityRegisterForm />
-    </main>
+    </section>
   );
 }

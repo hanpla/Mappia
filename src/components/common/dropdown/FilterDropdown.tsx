@@ -11,7 +11,7 @@ const FILTER_OPTIONS = [
   { label: '전체', value: null },
   { label: '예약 완료', value: 'pending' },
   { label: '예약 취소', value: 'canceled' },
-  { label: '예약 승인', value: 'approved' },
+  { label: '예약 승인', value: 'confirmed' },
   { label: '예약 거절', value: 'declined' },
   { label: '체험 완료', value: 'completed' },
 ];

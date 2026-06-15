@@ -40,11 +40,18 @@ export default function SelectDropdown({
       <button
         type="button"
         onClick={toggle}
-        className={"textlg-regular bg-white-FFF text-black-1B1 flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border px-5 text-left transition-all duration-200 outline-none " + (
-          isOpen ? 'border-khaki-6B5' : 'border-beige-8B7'
-        )}
+        className={
+          'textlg-regular bg-white-FFF text-black-1B1 flex h-14 w-full cursor-pointer items-center justify-between rounded-2xl border px-5 text-left transition-all duration-200 outline-none ' +
+          (isOpen ? 'border-khaki-6B5' : 'border-beige-8B7')
+        }
       >
-        <span className={selectedOption ? 'text-black-1B1' : 'text-gray-A1A'}>
+        <span
+          className={
+            selectedOption
+              ? 'text-black-1B1 truncate'
+              : 'text-gray-A1A truncate'
+          }
+        >
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         {isOpen ? (
@@ -63,7 +70,7 @@ export default function SelectDropdown({
                 <button
                   type="button"
                   onClick={() => handleSelect(option.value)}
-                  className={`textlg-regular flex w-full cursor-pointer items-center rounded-md px-5 py-3 text-left transition-all duration-150 outline-none ${
+                  className={`textlg-regular flex w-full cursor-pointer items-center truncate rounded-md px-5 py-3 text-left transition-all duration-150 outline-none ${
                     isSelected
                       ? 'bg-khaki-6B5 text-white-FFF'
                       : 'text-black-1B1 hover:bg-gray-FAF'
