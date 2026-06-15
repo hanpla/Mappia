@@ -3,6 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
+import useToastStore from '@/stores/toastStore';
+
+import { createActivity } from '@/lib/api/activities';
+import { updateMyActivity } from '@/lib/api/my-activities';
+import {
+  type ActivityFormValues,
+  buildUpdateActivityBody,
+} from '@/lib/utils/activityDiff';
+import { buildCreateActivityBody } from '@/lib/utils/activityPayload';
+import { getApiErrorMessage } from '@/lib/utils/error';
+
+import type { ActivityDetailContent } from '@/types/activities';
+
 import Button from '@/components/common/button/Button';
 import SelectDropdown from '@/components/common/dropdown/SelectDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
@@ -12,6 +25,8 @@ import ImageUploadField, {
 } from '@/components/common/image-upload/ImageUploadField';
 import Input from '@/components/common/input/Input';
 import Textarea from '@/components/common/input/Textarea';
+import LogoSurprise from '@/components/common/logo/LogoSurprise';
+import ConfirmModal from '@/components/common/modal/ConfirmModal';
 
 import ScheduleInput, { Schedule } from './ScheduleInput';
 
@@ -19,7 +34,7 @@ const INPUT_BORDER =
   'border-beige-8B7 focus:border-khaki-6B5 focus-within:border-khaki-6B5';
 
 const CATEGORY_OPTIONS = [
-  { label: '문화·예술', value: '문화·예술' },
+  { label: '문화 · 예술', value: '문화 · 예술' },
   { label: '식음료', value: '식음료' },
   { label: '스포츠', value: '스포츠' },
   { label: '투어', value: '투어' },
@@ -29,33 +44,63 @@ const CATEGORY_OPTIONS = [
 
 interface ActivityRegisterFormProps {
   mode?: 'register' | 'edit';
+  activityId?: number;
+  initialData?: ActivityDetailContent;
 }
 
 export default function ActivityRegisterForm({
   mode = 'register',
+  activityId,
+  initialData,
 }: ActivityRegisterFormProps) {
   const router = useRouter();
+  const { showToast } = useToastStore();
 
   const isEdit = mode === 'edit';
   const headingText = isEdit ? '내 체험 수정' : '내 체험 등록';
   const submitText = isEdit ? '수정하기' : '등록하기';
 
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [address, setAddress] = useState('');
+  const [title, setTitle] = useState(initialData?.title ?? '');
+  const [category, setCategory] = useState<string>(initialData?.category ?? '');
+  const [description, setDescription] = useState(
+    initialData?.description ?? '',
+  );
+  const [price, setPrice] = useState(
+    initialData ? String(initialData.price) : '',
+  );
+  const [address, setAddress] = useState(initialData?.address ?? '');
 
   const scheduleIdRef = useRef(1);
 
-  const [schedules, setSchedules] = useState<Schedule[]>([
-    { id: 'schedule-0', date: '', startTime: '00:00', endTime: '00:00' },
-  ]);
+  const [schedules, setSchedules] = useState<Schedule[]>(
+    initialData && initialData.schedules.length > 0
+      ? initialData.schedules.map((s) => ({
+          id: `schedule-server-${s.id}`,
+          date: s.date,
+          startTime: s.startTime,
+          endTime: s.endTime,
+        }))
+      : [{ id: 'schedule-0', date: '', startTime: '00:00', endTime: '00:00' }],
+  );
 
-  const [bannerImages, setBannerImages] = useState<UploadImage[]>([]);
-  const [introImages, setIntroImages] = useState<UploadImage[]>([]);
+  const [bannerImages, setBannerImages] = useState<UploadImage[]>(
+    initialData?.bannerImageUrl ? [initialData.bannerImageUrl] : [],
+  );
+  const [introImages, setIntroImages] = useState<UploadImage[]>(
+    initialData?.subImages.map((img) => img.imageUrl) ?? [],
+  );
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [isDirty, setIsDirty] = useState(false);
+  const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
+
+  const markDirty = () => {
+    if (!isDirty) setIsDirty(true);
+  };
 
   const handleAddSchedule = () => {
+    markDirty();
     setSchedules((prev) => [
       ...prev,
       {
@@ -68,6 +113,7 @@ export default function ActivityRegisterForm({
   };
 
   const handleRemoveSchedule = (id: string) => {
+    markDirty();
     setSchedules((prev) => prev.filter((s) => s.id !== id));
   };
 
@@ -76,23 +122,128 @@ export default function ActivityRegisterForm({
     field: keyof Omit<Schedule, 'id'>,
     value: string,
   ) => {
+    markDirty();
     setSchedules((prev) =>
       prev.map((s) => (s.id === id ? { ...s, [field]: value } : s)),
     );
   };
 
+  const validateForm = (): string | null => {
+    if (!title.trim()) return '제목을 입력해 주세요.';
+    if (!category) return '카테고리를 선택해 주세요.';
+    if (!description.trim()) return '설명을 입력해 주세요.';
+    if (!address.trim()) return '주소를 입력해 주세요.';
+
+    if (!price.trim()) return '가격을 입력해 주세요.';
+    const priceNumber = Number(price);
+    if (Number.isNaN(priceNumber) || priceNumber < 0) {
+      return '가격은 0 이상의 숫자로 입력해 주세요.';
+    }
+
+    if (bannerImages.length === 0) {
+      return '배너 이미지를 최소 1개 이상 등록해 주세요.';
+    }
+
+    const filledSchedules = schedules.filter(
+      (schedule) =>
+        schedule.date ||
+        schedule.startTime !== '00:00' ||
+        schedule.endTime !== '00:00',
+    );
+    for (const schedule of filledSchedules) {
+      if (!schedule.date) return '예약 가능한 시간대의 날짜를 입력해 주세요.';
+      if (schedule.startTime >= schedule.endTime) {
+        return '시작 시간은 종료 시간보다 빨라야 합니다.';
+      }
+    }
+
+    return null;
+  };
+
+  const collectValues = (): ActivityFormValues => ({
+    title,
+    category,
+    description,
+    price,
+    address,
+    schedules,
+    bannerImages,
+    introImages,
+  });
+
+  const handleLeave = () => {
+    if (isDirty) {
+      setIsLeaveModalOpen(true);
+    } else {
+      router.back();
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setIsLeaveModalOpen(false);
+    router.back();
+  };
+
+  const handleCancelLeave = () => {
+    setIsLeaveModalOpen(false);
+  };
+
+  const handleEditSubmit = async () => {
+    if (!activityId || !initialData) return;
+
+    setIsSubmitting(true);
+    try {
+      const body = await buildUpdateActivityBody(initialData, collectValues());
+
+      if (Object.keys(body).length === 0) {
+        showToast('information', '변경된 내용이 없습니다.');
+        return;
+      }
+
+      await updateMyActivity(activityId, body);
+      showToast('success', '체험이 수정되었습니다.');
+      router.push('/profile/manages');
+    } catch (error) {
+      showToast(
+        'error',
+        getApiErrorMessage(error, '체험 수정에 실패했습니다.'),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRegisterSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const body = await buildCreateActivityBody(collectValues());
+      await createActivity(body);
+      showToast('success', '체험이 등록되었습니다.');
+      router.push('/profile/manages');
+    } catch (error) {
+      showToast(
+        'error',
+        getApiErrorMessage(error, '체험 등록에 실패했습니다.'),
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleSubmit = () => {
-    // API 연동 예정
-    console.log({
-      title,
-      category,
-      description,
-      price,
-      address,
-      schedules,
-      bannerImages,
-      introImages,
-    });
+    if (isSubmitting) return;
+
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      showToast('information', errorMessage);
+      return;
+    }
+
+    if (isEdit) {
+      handleEditSubmit();
+    } else {
+      handleRegisterSubmit();
+    }
   };
 
   return (
@@ -101,7 +252,7 @@ export default function ActivityRegisterForm({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={handleLeave}
             aria-label="뒤로가기"
             className="group hover:bg-beige-8B7 hidden h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:text-white md:flex"
           >
@@ -111,7 +262,7 @@ export default function ActivityRegisterForm({
         </div>
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={handleLeave}
           aria-label="닫기"
           className="group hover:bg-beige-8B7 flex h-8 w-8 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:text-white"
         >
@@ -126,7 +277,10 @@ export default function ActivityRegisterForm({
         <Input
           id="title"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => {
+            markDirty();
+            setTitle(e.target.value);
+          }}
           placeholder="제목을 입력해 주세요"
           className={INPUT_BORDER}
         />
@@ -136,7 +290,10 @@ export default function ActivityRegisterForm({
         <span className="textlg-bold text-black-1B1">카테고리</span>
         <SelectDropdown
           value={category}
-          onChange={setCategory}
+          onChange={(value) => {
+            markDirty();
+            setCategory(value);
+          }}
           options={CATEGORY_OPTIONS}
           placeholder="카테고리를 선택해 주세요"
         />
@@ -149,7 +306,10 @@ export default function ActivityRegisterForm({
         <Textarea
           id="description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            markDirty();
+            setDescription(e.target.value);
+          }}
           placeholder="체험에 대한 설명을 입력해 주세요."
           rows={5}
           className={INPUT_BORDER}
@@ -164,7 +324,10 @@ export default function ActivityRegisterForm({
           id="price"
           type="number"
           value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          onChange={(e) => {
+            markDirty();
+            setPrice(e.target.value);
+          }}
           placeholder="체험 금액을 입력해 주세요"
           className={INPUT_BORDER}
         />
@@ -177,7 +340,10 @@ export default function ActivityRegisterForm({
         <Input
           id="address"
           value={address}
-          onChange={(e) => setAddress(e.target.value)}
+          onChange={(e) => {
+            markDirty();
+            setAddress(e.target.value);
+          }}
           placeholder="주소를 입력해 주세요"
           className={INPUT_BORDER}
         />
@@ -211,9 +377,12 @@ export default function ActivityRegisterForm({
       <ImageUploadField
         name="bannerImages"
         label="배너 이미지 등록"
-        maxCount={4}
+        maxCount={1}
         images={bannerImages}
-        onChange={setBannerImages}
+        onChange={(images) => {
+          markDirty();
+          setBannerImages(images);
+        }}
       />
 
       <ImageUploadField
@@ -221,14 +390,36 @@ export default function ActivityRegisterForm({
         label="소개 이미지 등록"
         maxCount={4}
         images={introImages}
-        onChange={setIntroImages}
+        onChange={(images) => {
+          markDirty();
+          setIntroImages(images);
+        }}
       />
 
       <div className="mt-2 flex justify-center">
-        <Button size="lg" className="w-30" onClick={handleSubmit}>
+        <Button
+          size="lg"
+          className="w-30"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
           {submitText}
         </Button>
       </div>
+
+      <ConfirmModal
+        isOpen={isLeaveModalOpen}
+        icon={
+          <span className="block w-20 [&>svg]:h-full [&>svg]:w-full">
+            <LogoSurprise />
+          </span>
+        }
+        message={'저장되지 않았습니다.\n정말 뒤로 가시겠습니까?'}
+        cancelText="아니오"
+        confirmText="네"
+        onClose={handleCancelLeave}
+        onConfirm={handleConfirmLeave}
+      />
     </div>
   );
 }

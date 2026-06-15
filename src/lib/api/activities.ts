@@ -3,6 +3,8 @@ import type {
   ActivityDetailContent,
   ActivityListContent,
   ActivityReviewsContent,
+  CreateActivityContent,
+  CreateActivityRequest,
   CreateReservationRequest,
   ReservationContent,
   ScheduleWithTimes,
@@ -90,6 +92,32 @@ export const createReservation = async (
   const response = await privateInstance.post<ReservationContent>(
     `/activities/${activityId}/reservations`,
     data,
+  );
+  return response.data;
+};
+
+// 활동 이미지 업로드
+export const uploadActivityImage = async (file: File): Promise<string> => {
+  const formData = new FormData();
+  formData.append('image', file);
+
+  const response = await privateInstance.post<{ activityImageUrl: string }>(
+    '/activities/image',
+    formData,
+    {
+      headers: { 'Content-Type': undefined },
+    },
+  );
+  return response.data.activityImageUrl;
+};
+
+// 체험 등록
+export const createActivity = async (
+  body: CreateActivityRequest,
+): Promise<CreateActivityContent> => {
+  const response = await privateInstance.post<CreateActivityContent>(
+    '/activities',
+    body,
   );
   return response.data;
 };
