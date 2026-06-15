@@ -7,6 +7,7 @@ import type {
   MyActivitiesContent,
   ReservationDashboardItem,
 } from '@/types/my-activities';
+import type { UpdateMyActivityRequest } from '@/types/my-activities';
 
 import { privateInstance } from './instance';
 
@@ -79,6 +80,17 @@ export const getActivityDetail = async (
 ): Promise<ActivityDetailContent> => {
   const res = await privateInstance.get<ActivityDetailContent>(
     `/activities/${activityId}`,
+  );
+  return res.data;
+};
+
+export const updateMyActivity = async (
+  activityId: number,
+  body: UpdateMyActivityRequest,
+): Promise<ActivityDetailContent> => {
+  const res = await privateInstance.patch<ActivityDetailContent>(
+    `/my-activities/${activityId}`,
+    body,
   );
   return res.data;
 };

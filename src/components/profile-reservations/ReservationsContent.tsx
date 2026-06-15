@@ -38,7 +38,7 @@ export default function ReservationsContent() {
         cursorId: pageParam ?? undefined,
         size: 2,
       }),
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 
   const handleIntersect = useCallback(() => {

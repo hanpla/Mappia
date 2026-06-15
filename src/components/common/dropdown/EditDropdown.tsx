@@ -41,7 +41,11 @@ export default function EditDropdown({
           </Link>
         </li>
         <li>
-          <button type="button" onClick={handleDelete} className={ITEM_CLASS}>
+          <button
+            type="button"
+            onClick={handleDelete}
+            className={`${ITEM_CLASS} text-red-FF4`}
+          >
             삭제하기
           </button>
         </li>
