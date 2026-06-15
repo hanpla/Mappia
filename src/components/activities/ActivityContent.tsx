@@ -30,10 +30,16 @@ export default function ActivityContent({
           <ActivityDescription description={activity.description} />
           <ActivityMap address={activity.address} />
           <ActivityWeather address={activity.address} />
-          <Review activityId={activity.id} currentPage={currentPage} />
+          <Review
+            activityId={activity.id}
+            currentPage={currentPage}
+            title={activity.title}
+            category={activity.category}
+            description={activity.description}
+          />
         </div>
 
-        <div className="hidden space-y-16 lg:col-span-3 lg:block">
+        <div className="hidden space-y-16 lg:col-span-3 lg:block lg:self-start">
           <ActivityHeader activity={activity} />
           <Reservation activity={activity} />
         </div>
