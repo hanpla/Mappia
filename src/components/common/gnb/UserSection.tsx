@@ -18,7 +18,10 @@ import NotificationDropdown from './NotificationDropdown';
 import UserProfile from './UserProfile';
 
 export default function UserSection() {
-  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['me'],
+    queryFn: getMe,
+  });
 
   const queryClient = useQueryClient();
   const { data: notificationsData } = useQuery({
@@ -65,6 +68,7 @@ export default function UserSection() {
         <UserProfile
           nickname={user?.nickname}
           profileImageUrl={user?.profileImageUrl}
+          isLoading={isLoading}
         />
       </div>
     </div>
