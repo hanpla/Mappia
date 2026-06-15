@@ -9,7 +9,6 @@ import {
   getMyNotifications,
 } from '@/lib/api/my-notifications';
 
-import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import useClickOutside from '@/hooks/useClickOutside';
 import useMe from '@/hooks/useMe';
 
@@ -39,7 +38,6 @@ export default function UserSection() {
   const notificationRef = useClickOutside<HTMLDivElement>(() =>
     setIsNotificationOpen(false),
   );
-  useBodyScrollLock(isNotificationOpen);
 
   return (
     <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
