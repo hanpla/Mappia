@@ -97,6 +97,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     headCount,
     totalPrice,
     reviewSubmitted: isReviewSubmitted,
+    updatedAt,
   } = item;
 
   const currentStatus = STATUS_MAPPER[status] ?? {
@@ -105,6 +106,16 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   };
 
   const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
+
+  const checkIfApproved = () => {
+    if (status !== 'completed') return false;
+    const classStartDateTime = new Date(`${date}T${startTime}:00`).getTime();
+    const lastUpdatedDateTime = new Date(updatedAt).getTime();
+    return lastUpdatedDateTime < classStartDateTime;
+  };
+
+  const isWriteReview =
+    status === 'completed' && !isReviewSubmitted && checkIfApproved();
 
   const handleReviewClick = () => {
     setRating(0);
@@ -159,7 +170,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 예약 취소
               </Button>
             )}
-            {status === 'completed' && !isReviewSubmitted && (
+            {isWriteReview && (
               <Button
                 type="button"
                 variant="solid"
