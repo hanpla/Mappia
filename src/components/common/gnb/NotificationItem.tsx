@@ -57,7 +57,7 @@ export default function NotificationItem({
   const parts = hasKeyword ? data.content.split(keyword) : [data.content];
 
   return (
-    <div className="rounded-lg border border-[#E5E4E7] bg-white p-4 shadow-[0px_2px_8px_rgba(125,121,134,0.25)]">
+    <div className="rounded-lg border border-[#E5E4E7] bg-white px-3 py-4 shadow-[0px_2px_8px_rgba(125,121,134,0.25)]">
       <div className="mb-2 flex items-center justify-between">
         <div className={`h-1.25 w-1.25 rounded-full ${DOT_CLASS_MAP[type]}`} />
         <button
