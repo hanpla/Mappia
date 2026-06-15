@@ -98,6 +98,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     totalPrice,
     reviewSubmitted: isReviewSubmitted,
     updatedAt,
+    createdAt,
   } = item;
 
   const currentStatus = STATUS_MAPPER[status] ?? {
@@ -107,15 +108,10 @@ export default function ReservationCard({ item }: ReservationCardProps) {
 
   const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
 
-  const checkIfApproved = () => {
-    if (status !== 'completed') return false;
-    const classStartDateTime = new Date(`${date}T${startTime}:00`).getTime();
-    const lastUpdatedDateTime = new Date(updatedAt).getTime();
-    return lastUpdatedDateTime < classStartDateTime;
-  };
+  const isApprovedByAdmin = createdAt !== updatedAt;
 
   const isWriteReview =
-    status === 'completed' && !isReviewSubmitted && checkIfApproved();
+    status === 'completed' && !isReviewSubmitted && isApprovedByAdmin;
 
   const handleReviewClick = () => {
     setRating(0);
