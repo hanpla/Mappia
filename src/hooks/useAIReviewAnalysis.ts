@@ -34,7 +34,7 @@ export const useAIReviewAnalysis = (
   params: Parameters<typeof getAIReviewAnalysis>[0],
 ) => {
   return useQuery({
-    queryKey: ['ai-review', params.activityId],
+    queryKey: ['ai-review', params.activityId, params.totalCount],
 
     queryFn: async () => {
       const storageKey = `ai-review-${params.activityId}`;
@@ -43,7 +43,7 @@ export const useAIReviewAnalysis = (
       if (cached) {
         const parsed: CachedAIReviewAnalysis = JSON.parse(cached);
 
-        if (parsed.reviewCount === params.reviews.length) {
+        if (parsed.totalCount === params.totalCount) {
           console.log('📦 캐시 사용');
           return parsed.analysis;
         }
@@ -58,7 +58,7 @@ export const useAIReviewAnalysis = (
       safeLocalStorage.setItem(
         storageKey,
         JSON.stringify({
-          reviewCount: params.reviews.length,
+          totalCount: params.totalCount,
           analysis: result,
         }),
       );

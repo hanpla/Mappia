@@ -12,6 +12,7 @@ interface Props {
   reviews: {
     content: string;
   }[];
+  totalCount: number;
 }
 
 export default function AIReviewSection({
@@ -20,6 +21,7 @@ export default function AIReviewSection({
   category,
   description,
   reviews,
+  totalCount,
 }: Props) {
   const reviewTexts = reviews.map((review) => review.content);
 
@@ -29,6 +31,7 @@ export default function AIReviewSection({
     category,
     description,
     reviews: reviewTexts,
+    totalCount,
   });
 
   return (

@@ -5,6 +5,6 @@ export interface AIReviewAnalysis {
 }
 
 export interface CachedAIReviewAnalysis {
-  reviewCount: number;
+  totalCount: number;
   analysis: AIReviewAnalysis;
 }

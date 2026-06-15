@@ -6,6 +6,7 @@ export interface AIReviewParams {
   category: string;
   description: string;
   reviews: string[];
+  totalCount: number;
 }
 
 export const getAIReviewAnalysis = async (

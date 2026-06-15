@@ -78,6 +78,7 @@ export default async function Review({
           category={category}
           description={description}
           reviews={allReviews}
+          totalCount={totalCount}
         />
       </div>
       <ul className="space-y-5">
