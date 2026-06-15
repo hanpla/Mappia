@@ -43,7 +43,7 @@ export default async function Review({
 
   const allReviews =
     totalCount > 0
-      ? (await getActivityReviews(activityId, 1, totalCount)).reviews
+      ? (await getActivityReviews(activityId, 1, 10)).reviews
       : [];
 
   return (
