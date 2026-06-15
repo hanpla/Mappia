@@ -101,10 +101,18 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     createdAt,
   } = item;
 
-  const currentStatus = STATUS_MAPPER[status] ?? {
-    label: status,
-    className: 'text-black-1B1',
-  };
+  const now = new Date();
+  const endDateTime = new Date(`${date}T${endTime}`);
+  const isPastEnd = now > endDateTime;
+
+  const currentStatus = (() => {
+    if (status === 'pending' && isPastEnd) {
+      return STATUS_MAPPER['completed'];
+    }
+    return (
+      STATUS_MAPPER[status] ?? { label: status, className: 'text-black-1B1' }
+    );
+  })();
 
   const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
 
@@ -154,7 +162,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
             ₩{totalPrice.toLocaleString()}
           </span>
           <div className="flex items-center justify-end">
-            {status === 'pending' && (
+            {status === 'pending' && !isPastEnd && (
               <Button
                 type="button"
                 variant="outline"
