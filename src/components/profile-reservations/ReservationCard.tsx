@@ -116,10 +116,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
 
   const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
 
-  const isApprovedByAdmin = createdAt !== updatedAt;
-
-  const isWriteReview =
-    status === 'completed' && !isReviewSubmitted && isApprovedByAdmin;
+  const isWriteReview = status === 'completed' && !isReviewSubmitted;
 
   const handleReviewClick = () => {
     setRating(0);
