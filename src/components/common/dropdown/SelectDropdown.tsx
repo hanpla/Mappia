@@ -83,7 +83,7 @@ export default function SelectDropdown({
                       className="mr-2 shrink-0"
                     />
                   )}
-                  {option.label}
+                  <span className="truncate">{option.label}</span>
                 </button>
               </li>
             );
