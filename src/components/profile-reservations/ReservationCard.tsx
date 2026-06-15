@@ -97,8 +97,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     headCount,
     totalPrice,
     reviewSubmitted: isReviewSubmitted,
-    updatedAt,
-    createdAt,
   } = item;
 
   const now = new Date();
