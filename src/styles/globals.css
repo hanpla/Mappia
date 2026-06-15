@@ -101,7 +101,14 @@
 /* ==========================================================================
    TYPOGRAPHY UTILITIES
    ========================================================================== */
+/* Text 4xl (48px / 56px) */
+@utility text4xl-medium {
+  font-size: 3rem; /* 48px */
+  line-height: 3.5rem; /* 56px */
+  font-weight: 500;
+}
 
+/* Text 3xl (32px / 42px) */
 @utility text3xl-bold {
   font-size: 2rem; /* 32px */
   line-height: 2.625rem; /* 42px */
@@ -111,6 +118,11 @@
   font-size: 2rem;
   line-height: 2.625rem;
   font-weight: 600;
+}
+@utility text3xl-medium {
+  font-size: 2rem;
+  line-height: 2.625rem;
+  font-weight: 500;
 }
 
 /* Text 2xl (24px / 32px) */

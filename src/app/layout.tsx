@@ -49,7 +49,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ko" className="antialiased">
-      <body className="bg-ivory-F2E overflow-x-hidden">
+      <body className="bg-ivory-F2E overflow-x-hidden has-[.is-landing-page]:bg-[#231C12]">
         <QueryProvider>
           <AuthProvider isLogin={!!accessToken || !!refreshToken}>
             {children}
