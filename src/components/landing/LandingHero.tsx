@@ -10,6 +10,7 @@ import usePointerSpotlight from '@/hooks/usePointerSpotlight';
 import Logo404 from '@/components/common/logo/Logo404';
 import LogoTitle from '@/components/common/logo/LogoTitle';
 
+import MagnifierIcon from '../common/icon/IconMagnifier';
 import DetectivePattern from './DetectivePattern';
 
 const MotionLink = motion.create(Link);
@@ -21,31 +22,8 @@ function SearchlightPair() {
   return (
     <>
       <div className="animate-searchlight-a absolute top-[-12%] left-1/2 h-[150%] w-[55%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(232,205,150,0.4),rgba(232,205,150,0.05)_58%,transparent_84%)] mix-blend-screen blur-[6px] [clip-path:polygon(46%_0,54%_0,100%_100%,0%_100%)]" />
-      <div className="animate-searchlight-b absolute top-[-12%] left-1/2 h-[150%] w-[48%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(214,178,122,0.35),rgba(214,178,122,0.04)_56%,transparent_82%)] mix-blend-screen blur-[8px] [clip-path:polygon(47%_0,53%_0,100%_100%,0%_100%)]" />
+      <div className="animate-searchlight-b absolute top-[-12%] left-1/2 h-[150%] w-[48%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(214,178,122,0.35),rgba(214,178,122,0.04)_56%,transparent_82%)] mix-blend-screen blur-sm [clip-path:polygon(47%_0,53%_0,100%_100%,0%_100%)]" />
     </>
-  );
-}
-
-function MagnifierIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-    >
-      <circle cx="7" cy="7" r="4.5" stroke="currentColor" strokeWidth="1.6" />
-      <line
-        x1="10.5"
-        y1="10.5"
-        x2="14"
-        y2="14"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-      />
-    </svg>
   );
 }
 
@@ -145,7 +123,7 @@ export default function LandingHero() {
       className="is-landing-page relative isolate flex min-h-screen w-full items-center overflow-hidden bg-[#160f07]"
     >
       {/* 1. 탐정 패턴 (천천히 표류) */}
-      <DetectivePattern className="animate-stage-drift text-beige-8B7 absolute -inset-[25%] z-0 h-[150%] w-[150%] opacity-[0.55]" />
+      <DetectivePattern className="animate-stage-drift text-beige-8B7 absolute inset-[-25%] z-0 h-[150%] w-[150%] opacity-[0.55]" />
 
       {/* 2. 무대 안개 — 불빛 주변만 선명하게 뚫린다 */}
       <div className="stage-fog pointer-events-none absolute inset-0 z-10" />
@@ -163,7 +141,7 @@ export default function LandingHero() {
             <SearchlightPair />
           </div>
           {/* 같은 조명을 좌우 반전해 오른쪽에도 복사 */}
-          <div className="absolute inset-0 [transform:scaleX(-1)]">
+          <div className="absolute inset-0 transform-[scaleX(-1)]">
             <SearchlightPair />
           </div>
         </motion.div>
@@ -172,7 +150,7 @@ export default function LandingHero() {
       {/* 4. 무대를 비추는 동그란 불빛 — 서서히 나타나며 이동 → 이후 커서 추적 */}
       {!shouldReduceMotion && (
         <motion.div
-          className="stage-cursor-glow pointer-events-none absolute top-[var(--my,40%)] left-[var(--mx,50%)] z-20 h-[34rem] w-[34rem] -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen blur-2xl"
+          className="stage-cursor-glow pointer-events-none absolute top-(--my,40%) left-(--mx,50%) z-20 h-136 w-136 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen blur-2xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
@@ -257,7 +235,7 @@ export default function LandingHero() {
             className="stage-cursor-glow absolute -inset-8 rounded-full blur-3xl"
             aria-hidden="true"
           />
-          <div className="relative flex h-70 w-70 items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_32%,#fdf7ea,#f2ebdc_46%,#d9c7a3_78%,#bda478_100%)] shadow-[0_0_90px_rgba(228,196,132,0.35)] md:h-100 md:w-100 lg:h-[34rem] lg:w-[34rem]">
+          <div className="relative flex h-70 w-70 items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_32%,#fdf7ea,#f2ebdc_46%,#d9c7a3_78%,#bda478_100%)] shadow-[0_0_90px_rgba(228,196,132,0.35)] md:h-100 md:w-100 lg:h-136 lg:w-136">
             <motion.div
               animate={
                 isReady && !shouldReduceMotion ? { y: [0, -16, 0] } : { y: 0 }
