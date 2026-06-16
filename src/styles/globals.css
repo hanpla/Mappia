@@ -373,3 +373,80 @@
 @utility animate-fade-out {
   animation: fadeOut 0.2s ease-out forwards;
 }
+
+/* ==========================================================================
+   LANDING — DETECTIVE STAGE
+   ========================================================================== */
+@keyframes stage-drift {
+  from {
+    transform: translate3d(-10%, -7%, 0);
+  }
+  to {
+    transform: translate3d(7%, 9%, 0);
+  }
+}
+
+/* 진입 시 위에서 좌우로 훑는 무대 조명 */
+@keyframes searchlight-sweep-a {
+  0% {
+    transform: translateX(-50%) rotate(-26deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(22deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(-26deg);
+  }
+}
+
+@keyframes searchlight-sweep-b {
+  0% {
+    transform: translateX(-50%) rotate(20deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(-24deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(20deg);
+  }
+}
+
+/* 불빛 주변만 선명하게 뚫리는 다크 무대 안개 */
+@utility stage-fog {
+  background: radial-gradient(
+    circle 15rem at var(--mx, 50%) var(--my, 40%),
+    transparent 0%,
+    rgba(18, 13, 7, 0.45) 34%,
+    rgba(12, 9, 5, 0.94) 72%
+  );
+}
+
+/* 따뜻한 스포트라이트 불빛 */
+@utility stage-cursor-glow {
+  background: radial-gradient(
+    circle at center,
+    rgba(226, 192, 132, 0.45) 0%,
+    rgba(198, 158, 96, 0.14) 32%,
+    transparent 68%
+  );
+}
+
+@utility animate-stage-drift {
+  animation: stage-drift 26s ease-in-out infinite alternate;
+}
+
+@utility animate-searchlight-a {
+  animation: searchlight-sweep-a 3s ease-in-out infinite;
+}
+
+@utility animate-searchlight-b {
+  animation: searchlight-sweep-b 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-stage-drift,
+  .animate-searchlight-a,
+  .animate-searchlight-b {
+    animation: none;
+  }
+}
