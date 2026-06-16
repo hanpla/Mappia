@@ -1,10 +1,11 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import axios from 'axios';
 
+import useRecentActivitiesStore from '@/stores/recentActivitiesStore';
 import useToastStore from '@/stores/toastStore';
 
 import { deleteMyActivity } from '@/lib/api/my-activities';
@@ -31,6 +32,8 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { addActivity } = useRecentActivitiesStore();
 
   const router = useRouter();
 
@@ -71,6 +74,15 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
       setIsModalOpen(false);
     }
   };
+
+  useEffect(() => {
+    if (id && !isNaN(id)) {
+      addActivity({
+        id,
+        title,
+      });
+    }
+  }, [id, addActivity, title]);
 
   return (
     <section className="flex justify-between border-b border-[#E0E0E5] pb-5 md:pb-7.5 lg:border-b-0 lg:pb-0">
