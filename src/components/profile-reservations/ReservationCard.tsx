@@ -328,16 +328,18 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         </div>
       </StandardModal>
 
-      <ReservationEditModal
-        item={item}
-        isOpen={isEditModalOpen}
-        isSubmitting={editMutation.isPending}
-        price={totalPrice / headCount}
-        onClose={() => setIsEditModalOpen(false)}
-        onConfirm={(scheduleId, headCount) =>
-          editMutation.mutate({ scheduleId, headCount })
-        }
-      />
+      {isEditModalOpen && (
+        <ReservationEditModal
+          item={item}
+          isOpen={isEditModalOpen}
+          isSubmitting={editMutation.isPending}
+          price={totalPrice / headCount}
+          onClose={() => setIsEditModalOpen(false)}
+          onConfirm={(scheduleId, headCount) =>
+            editMutation.mutate({ scheduleId, headCount })
+          }
+        />
+      )}
     </>
   );
 }

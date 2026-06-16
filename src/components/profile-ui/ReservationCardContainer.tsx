@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { ReactNode, useState } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 import DefaultImg from '@/assets/logo/logo.svg';
 
 interface ReservationCardProps {
@@ -33,7 +35,9 @@ export default function ReservationCardContainer({
 
   return (
     <div
-      className={`hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50 ${className ?? ''}`}
+      className={twMerge(
+        `hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50 ${className ?? ''}`,
+      )}
     >
       <div
         className={`relative w-36 shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-38 lg:w-50 ${
