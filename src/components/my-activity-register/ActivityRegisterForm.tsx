@@ -1,6 +1,6 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
 import { useRef, useState } from 'react';
 
 import useToastStore from '@/stores/toastStore';
@@ -46,6 +46,22 @@ interface ActivityRegisterFormProps {
   mode?: 'register' | 'edit';
   activityId?: number;
   initialData?: ActivityDetailContent;
+}
+
+interface DaumPostcodeData {
+  address: string;
+  roadAddress: string;
+  jibunAddress: string;
+}
+
+declare global {
+  interface Window {
+    daum?: {
+      Postcode: new (options: {
+        oncomplete: (data: DaumPostcodeData) => void;
+      }) => { open: () => void };
+    };
+  }
 }
 
 export default function ActivityRegisterForm({
@@ -246,6 +262,29 @@ export default function ActivityRegisterForm({
     }
   };
 
+  const handleAddressSearchClick = () => {
+    if (!window.daum) {
+      showToast(
+        'error',
+        '주소 검색을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.',
+      );
+      return;
+    }
+
+    new window.daum.Postcode({
+      oncomplete: (data) => {
+        markDirty();
+        setAddress(data.roadAddress || data.address);
+      },
+    }).open();
+  };
+
+  const handleAddressClearClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    markDirty();
+    setAddress('');
+  };
+
   return (
     <div className="mx-auto flex max-w-[800px] flex-col gap-6 px-4">
       <div className="flex items-center justify-between">
@@ -337,16 +376,37 @@ export default function ActivityRegisterForm({
         <label htmlFor="address" className="textlg-bold text-black-1B1">
           주소
         </label>
-        <Input
-          id="address"
-          value={address}
-          onChange={(e) => {
-            markDirty();
-            setAddress(e.target.value);
-          }}
-          placeholder="주소를 입력해 주세요"
-          className={INPUT_BORDER}
-        />
+        <div className="flex gap-2">
+          <Input
+            id="address"
+            value={address}
+            readOnly
+            onClick={handleAddressSearchClick}
+            placeholder="주소를 검색해 주세요"
+            className={`${INPUT_BORDER} flex-1 cursor-pointer`}
+            rightIcon={
+              address && (
+                <button
+                  type="button"
+                  onClick={handleAddressClearClick}
+                  aria-label="주소 초기화"
+                  className="hover:bg-beige-8B7 mr-2 flex h-6 w-6 items-center justify-center rounded-full text-[#1b1b1b] transition-colors hover:text-white"
+                >
+                  <IconX size={16} color="currentColor" />
+                </button>
+              )
+            }
+          />
+          <Button
+            type="button"
+            size="lg"
+            variant="outline"
+            onClick={handleAddressSearchClick}
+            className="h-14"
+          >
+            주소 검색
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -419,6 +479,10 @@ export default function ActivityRegisterForm({
         confirmText="네"
         onClose={handleCancelLeave}
         onConfirm={handleConfirmLeave}
+      />
+      <Script
+        src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+        strategy="lazyOnload"
       />
     </div>
   );
