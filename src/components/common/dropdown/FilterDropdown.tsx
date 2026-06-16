@@ -70,7 +70,7 @@ export default function FilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="shadow-dropdown border-gray-DDD bg-white-FFF absolute left-0 z-50 mt-2 w-40 overflow-hidden rounded-lg border">
+        <div className="shadow-dropdown border-gray-DDD bg-white-FFF absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-lg border">
           <ul className="flex flex-col">
             {FILTER_OPTIONS.map((option, index) => {
               const isActive = currentFilter === option.value;
