@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import useToastStore from '@/stores/toastStore';
+
 import {
   deleteAllNotifications,
   deleteNotification,
@@ -22,6 +24,8 @@ export default function UserSection() {
   const { data: user } = useMe();
 
   const queryClient = useQueryClient();
+  const showToast = useToastStore((state) => state.showToast);
+
   const { data: notificationsData } = useQuery({
     queryKey: ['my-notifications'],
     queryFn: getMyNotifications,
@@ -31,13 +35,27 @@ export default function UserSection() {
   const { mutate: dismiss } = useMutation({
     mutationFn: deleteNotification,
     onSuccess: () => {
+      showToast('success', '알림 삭제 완료');
       queryClient.invalidateQueries({ queryKey: ['my-notifications'] });
+    },
+    onError: () => {
+      showToast('error', '알림 삭제에 실패했어요.');
     },
   });
 
   const { mutate: dismissAll } = useMutation({
     mutationFn: deleteAllNotifications,
     onSuccess: () => {
+      showToast('success', '전체 삭제 완료');
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error ? error.message : '전체 삭제에 실패했어요.',
+      );
+    },
+    // 일부만 성공해도 성공분을 즉시 반영하기 위해, 성공/실패 무관하게 항상 재조회한다.
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['my-notifications'] });
     },
   });
