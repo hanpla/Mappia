@@ -17,6 +17,15 @@ const MotionLink = motion.create(Link);
 const EASE = [0.16, 1, 0.3, 1] as const;
 const INTRO_DURATION = 2200;
 
+function SearchlightPair() {
+  return (
+    <>
+      <div className="animate-searchlight-a absolute top-[-12%] left-1/2 h-[150%] w-[55%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(232,205,150,0.4),rgba(232,205,150,0.05)_58%,transparent_84%)] mix-blend-screen blur-[6px] [clip-path:polygon(46%_0,54%_0,100%_100%,0%_100%)]" />
+      <div className="animate-searchlight-b absolute top-[-12%] left-1/2 h-[150%] w-[48%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(214,178,122,0.35),rgba(214,178,122,0.04)_56%,transparent_82%)] mix-blend-screen blur-[8px] [clip-path:polygon(47%_0,53%_0,100%_100%,0%_100%)]" />
+    </>
+  );
+}
+
 function MagnifierIcon() {
   return (
     <svg
@@ -149,8 +158,14 @@ export default function LandingHero() {
           animate={{ opacity: isReady ? 0 : 1 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
-          <div className="animate-searchlight-a absolute top-[-12%] left-1/2 h-[150%] w-[55%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(232,205,150,0.4),rgba(232,205,150,0.05)_58%,transparent_84%)] mix-blend-screen blur-[6px] [clip-path:polygon(46%_0,54%_0,100%_100%,0%_100%)]" />
-          <div className="animate-searchlight-b absolute top-[-12%] left-1/2 h-[150%] w-[48%] origin-top -translate-x-1/2 bg-[linear-gradient(to_bottom,rgba(214,178,122,0.35),rgba(214,178,122,0.04)_56%,transparent_82%)] mix-blend-screen blur-[8px] [clip-path:polygon(47%_0,53%_0,100%_100%,0%_100%)]" />
+          {/* 왼쪽 조명 2개 */}
+          <div className="absolute inset-0">
+            <SearchlightPair />
+          </div>
+          {/* 같은 조명을 좌우 반전해 오른쪽에도 복사 */}
+          <div className="absolute inset-0 [transform:scaleX(-1)]">
+            <SearchlightPair />
+          </div>
         </motion.div>
       )}
 
@@ -201,7 +216,7 @@ export default function LandingHero() {
           </motion.p>
 
           <motion.div
-            className="mt-12 flex justify-center md:mt-16 lg:justify-start"
+            className="mt-12 flex w-full justify-center md:mt-16 lg:justify-start"
             variants={itemVariants}
           >
             <MotionLink
