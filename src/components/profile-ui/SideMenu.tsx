@@ -3,9 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { useQuery } from '@tanstack/react-query';
-
-import { getMe } from '@/lib/api/users';
+import useMe from '@/hooks/useMe';
 
 import { profileMenuItems } from '@/constants/profileMenu';
 
@@ -15,7 +13,7 @@ import DefaultProfileImage from '@/assets/logo/logo_head-smile.svg';
 
 export default function SideMenu() {
   const pathname = usePathname();
-  const { data: user } = useQuery({ queryKey: ['me'], queryFn: getMe });
+  const { data: user } = useMe();
 
   return (
     <div className="flex flex-col items-center rounded-xl border border-gray-50 bg-white px-3.5 py-6 shadow-[0_4px_24px_rgba(139,115,85,0.2)]">
