@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import {
+  deleteAllNotifications,
   deleteNotification,
   getMyNotifications,
 } from '@/lib/api/my-notifications';
@@ -34,6 +35,13 @@ export default function UserSection() {
     },
   });
 
+  const { mutate: dismissAll } = useMutation({
+    mutationFn: deleteAllNotifications,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['my-notifications'] });
+    },
+  });
+
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const notificationRef = useClickOutside<HTMLDivElement>(() =>
     setIsNotificationOpen(false),
@@ -56,6 +64,7 @@ export default function UserSection() {
           <NotificationDropdown
             notifications={notifications}
             onDismiss={dismiss}
+            onDismissAll={() => dismissAll(notifications.map((n) => n.id))}
             onClose={() => setIsNotificationOpen(false)}
           />
         )}

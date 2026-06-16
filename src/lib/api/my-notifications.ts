@@ -13,3 +13,9 @@ export const deleteNotification = async (
 ): Promise<void> => {
   await privateInstance.delete(`/my-notifications/${notificationId}`);
 };
+
+export const deleteAllNotifications = async (
+  notificationIds: number[],
+): Promise<void> => {
+  await Promise.all(notificationIds.map((id) => deleteNotification(id)));
+};
