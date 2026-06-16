@@ -1,5 +1,6 @@
 'use client';
 
+import useActivityOwner from '@/hooks/useActivityOwner';
 import useReservation from '@/hooks/useReservation';
 
 import { ActivityDetailContent } from '@/types/activities';
@@ -16,7 +17,9 @@ interface ReservationProps {
 }
 
 export default function Reservation({ activity }: ReservationProps) {
-  const { id, price } = activity;
+  const { id, userId, price } = activity;
+
+  const { isOwner } = useActivityOwner(userId);
 
   const {
     currentYear,
@@ -38,6 +41,8 @@ export default function Reservation({ activity }: ReservationProps) {
     handleReservation,
     handleNavigation,
   } = useReservation(id, price);
+
+  if (isOwner) return null;
 
   return (
     <section className="border-beige-8B7 space-y-6 rounded-3xl border bg-white p-7.5 shadow-[0_4px_16px_rgba(17,34,17,0.05)]">

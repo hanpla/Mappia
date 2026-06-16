@@ -10,8 +10,8 @@ import useToastStore from '@/stores/toastStore';
 
 import { deleteMyActivity } from '@/lib/api/my-activities';
 
+import useActivityOwner from '@/hooks/useActivityOwner';
 import useClickOutside from '@/hooks/useClickOutside';
-import useMe from '@/hooks/useMe';
 
 import { ActivityDetailContent } from '@/types/activities';
 
@@ -39,8 +39,7 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
 
   const showToast = useToastStore((state) => state.showToast);
 
-  const { data: currentUser } = useMe({ retry: false });
-  const isOwner = currentUser && currentUser.id === userId;
+  const { isOwner } = useActivityOwner(userId);
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
     setIsDropdownOpen(false);

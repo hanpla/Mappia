@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import useActivityOwner from '@/hooks/useActivityOwner';
 import useReservation from '@/hooks/useReservation';
 
 import { ActivityDetailContent } from '@/types/activities';
@@ -18,9 +19,11 @@ interface MobileReservationProps {
 export default function MobileReservation({
   activity,
 }: MobileReservationProps) {
-  const { id, price } = activity;
+  const { id, userId, price } = activity;
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const { isOwner } = useActivityOwner(userId);
 
   const reservationState = useReservation(id, price);
   const {
@@ -33,6 +36,8 @@ export default function MobileReservation({
     handleReservation,
     handleNavigation,
   } = reservationState;
+
+  if (isOwner) return null;
 
   const formatSelectedText = () => {
     if (!selectedDateStr || !selectedTimeSlot) return '날짜 선택하기';
