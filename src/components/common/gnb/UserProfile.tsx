@@ -12,11 +12,25 @@ import UserDropdown from './UserDropdown';
 interface Props {
   nickname?: string;
   profileImageUrl?: string;
+  isLoading: boolean;
 }
 
-export default function UserProfile({ nickname, profileImageUrl }: Props) {
+export default function UserProfile({
+  nickname,
+  profileImageUrl,
+  isLoading,
+}: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useClickOutside<HTMLDivElement>(() => setIsOpen(false));
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center gap-2.5">
+        <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />
+        <div className="h-5 w-20 animate-pulse rounded bg-gray-200" />
+      </div>
+    );
+  }
 
   return (
     <div ref={containerRef} className="relative">

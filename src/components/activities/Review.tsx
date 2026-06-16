@@ -42,9 +42,7 @@ export default async function Review({
   const averageRating = res.averageRating || 0;
 
   const allReviews =
-    totalCount > 0
-      ? (await getActivityReviews(activityId, 1, 10)).reviews
-      : [];
+    totalCount > 0 ? (await getActivityReviews(activityId, 1, 10)).reviews : [];
 
   return (
     <section>
