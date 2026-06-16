@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
 import useRecentActivitiesStore from '@/stores/recentActivitiesStore';
@@ -45,6 +46,27 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
     setIsDropdownOpen(false);
   });
 
+  const { mutate: deleteActivityMutate } = useMutation({
+    mutationFn: () => deleteMyActivity(id),
+    onSuccess: () => {
+      showToast('success', '체험이 삭제되었습니다.');
+
+      router.push('/activities');
+
+      setIsModalOpen(false);
+    },
+    onError: (error) => {
+      const message =
+        axios.isAxiosError<{ message?: string }>(error) &&
+        error.response?.data?.message
+          ? error.response.data.message
+          : '체험 삭제에 실패했습니다.';
+
+      showToast('error', message);
+      setIsModalOpen(false);
+    },
+  });
+
   const handleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -54,24 +76,8 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
     setIsModalOpen(true);
   };
 
-  const handleDelete = async () => {
-    try {
-      await deleteMyActivity(id);
-
-      router.push('/activities');
-
-      showToast('success', '체험이 삭제되었습니다.');
-    } catch (error) {
-      const message =
-        axios.isAxiosError<{ message?: string }>(error) &&
-        error.response?.data?.message
-          ? error.response.data.message
-          : '체험 삭제에 실패했습니다.';
-
-      showToast('error', message);
-    } finally {
-      setIsModalOpen(false);
-    }
+  const handleDelete = () => {
+    deleteActivityMutate();
   };
 
   useEffect(() => {
