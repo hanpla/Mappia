@@ -9,49 +9,49 @@ import LogoTitle from '@/components/common/logo/LogoTitle';
 
 const MotionLink = motion.create(Link);
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.215, 0.61, 0.355, 1] as const,
+    },
+  },
+};
+
+const floatingVariants = {
+  hidden: { opacity: 0, scale: 0.92 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: [0, -16, 0],
+    transition: {
+      opacity: { duration: 1.5, delay: 0.2 },
+      scale: { duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] as const },
+      y: {
+        duration: 2,
+        ease: 'easeInOut' as const,
+        repeat: Infinity,
+        repeatType: 'reverse' as const,
+      },
+    },
+  },
+};
+
 export default function LandingPage() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.215, 0.61, 0.355, 1] as const,
-      },
-    },
-  };
-
-  const floatingVariants = {
-    hidden: { opacity: 0, scale: 0.92 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      y: [0, -16, 0],
-      transition: {
-        opacity: { duration: 1.5, delay: 0.2 },
-        scale: { duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] as const },
-        y: {
-          duration: 2,
-          ease: 'easeInOut' as const,
-          repeat: Infinity,
-          repeatType: 'reverse' as const,
-        },
-      },
-    },
-  };
-
   return (
     <section className="is-landing-page relative flex min-h-[calc(100vh-351px)] w-full flex-col-reverse items-center justify-between gap-12 overflow-hidden pt-14 md:gap-24 md:pt-20 lg:flex-row lg:gap-0 lg:pt-30">
       <motion.div
