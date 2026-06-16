@@ -7,7 +7,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
 
-import { cancelReservation, createReview } from '@/lib/api/my-reservations';
+import {
+  cancelReservation,
+  createReview,
+  updateReservationApplication,
+} from '@/lib/api/my-reservations';
 
 import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
@@ -19,6 +23,8 @@ import StandardModal from '@/components/common/modal/StandardModal';
 import ReservationCardContainer from '@/components/profile-ui/ReservationCardContainer';
 
 import LogoHead from '@/assets/logo/logo_head-1.svg';
+
+import ReservationEdit from './ReservationEditModal';
 
 const STATUS_MAPPER: Record<
   ReservationStatus,
@@ -43,6 +49,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [reviewContent, setReviewContent] = useState<string>('');
 
@@ -81,6 +88,29 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     },
   });
 
+  const editMutation = useMutation({
+    mutationFn: ({
+      scheduleId,
+      headCount,
+    }: {
+      scheduleId: number;
+      headCount: number;
+    }) => updateReservationApplication(item.id, { scheduleId, headCount }),
+    onSuccess: () => {
+      showToast('success', '예약 정보가 성공적으로 수정되었습니다.');
+      setIsEditModalOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+    },
+    onError: (error) => {
+      showToast(
+        'error',
+        error instanceof Error
+          ? error.message
+          : '예약 정보 수정에 실패했습니다.',
+      );
+    },
+  });
+
   if (!item || !item.activity) {
     console.warn(
       'ReservationCard: 유효하지 않거나 activity 데이터가 없는 아이템입니다.',
@@ -112,7 +142,10 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     );
   })();
 
-  const isSubmitting = reviewMutation.isPending || cancelMutation.isPending;
+  const isSubmitting =
+    reviewMutation.isPending ||
+    cancelMutation.isPending ||
+    editMutation.isPending;
 
   const isWriteReview = status === 'completed' && !isReviewSubmitted;
 
@@ -156,18 +189,30 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           <span className="text-black-1B1 textxl-bold shrink-0 pb-3 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-end gap-2 md:gap-3">
             {status === 'pending' && !isPastEnd && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setIsCancelModalOpen(true)}
-                disabled={isSubmitting}
-                hasHover={false}
-                className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
-              >
-                예약 취소
-              </Button>
+              <>
+                <Button
+                  type="button"
+                  variant="solid"
+                  onClick={() => setIsEditModalOpen(true)}
+                  disabled={isSubmitting}
+                  hasHover={false}
+                  className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                >
+                  예약 변경
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsCancelModalOpen(true)}
+                  disabled={isSubmitting}
+                  hasHover={false}
+                  className="hover:bg-gray-FAF hover:text-brown-2A2 h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                >
+                  예약 취소
+                </Button>
+              </>
             )}
             {isWriteReview && (
               <Button
@@ -279,6 +324,17 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           </form>
         </div>
       </StandardModal>
+
+      <ReservationEdit
+        item={item}
+        isOpen={isEditModalOpen}
+        isSubmitting={editMutation.isPending}
+        price={totalPrice / headCount}
+        onClose={() => setIsEditModalOpen(false)}
+        onConfirm={(scheduleId, headCount) =>
+          editMutation.mutate({ scheduleId, headCount })
+        }
+      />
     </>
   );
 }
