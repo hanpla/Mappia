@@ -53,7 +53,7 @@ const floatingVariants = {
 
 export default function LandingPage() {
   return (
-    <section className="is-landing-page relative flex min-h-[calc(100vh-351px)] w-full flex-col-reverse items-center justify-between gap-12 overflow-hidden pt-14 md:gap-24 md:pt-20 lg:flex-row lg:gap-0 lg:pt-30">
+    <section className="is-landing-page inner relative flex min-h-screen w-full flex-col-reverse items-center justify-center gap-12 overflow-hidden py-10 md:gap-20 lg:flex-row lg:justify-between">
       <motion.div
         className="flex flex-col"
         variants={containerVariants}
