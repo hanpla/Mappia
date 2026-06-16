@@ -133,7 +133,7 @@ export default function LandingHero() {
   return (
     <section
       ref={stageRef}
-      className="is-landing-page relative isolate mx-[calc(50%-50vw)] flex min-h-[32rem] w-screen grow items-center overflow-hidden bg-[#160f07]"
+      className="is-landing-page relative isolate flex min-h-screen w-full items-center overflow-hidden bg-[#160f07]"
     >
       {/* 1. 탐정 패턴 (천천히 표류) */}
       <DetectivePattern className="animate-stage-drift text-beige-8B7 absolute -inset-[25%] z-0 h-[150%] w-[150%] opacity-[0.55]" />

@@ -12,7 +12,7 @@ export default function MainLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <Gnb />
-      <main className="inner flex grow flex-col">{children}</main>
+      <main className="inner grow">{children}</main>
       <RecentActivitiesButton />
       <Footer />
     </div>
