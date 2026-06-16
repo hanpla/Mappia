@@ -24,7 +24,7 @@ import ReservationCardContainer from '@/components/profile-ui/ReservationCardCon
 
 import LogoHead from '@/assets/logo/logo_head-1.svg';
 
-import ReservationEdit from './ReservationEditModal';
+import ReservationEditModal from './ReservationEditModal';
 
 const STATUS_MAPPER: Record<
   ReservationStatus,
@@ -328,7 +328,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         </div>
       </StandardModal>
 
-      <ReservationEdit
+      <ReservationEditModal
         item={item}
         isOpen={isEditModalOpen}
         isSubmitting={editMutation.isPending}
