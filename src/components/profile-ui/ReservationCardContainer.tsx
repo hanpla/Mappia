@@ -8,11 +8,13 @@ import DefaultImg from '@/assets/logo/logo.svg';
 interface ReservationCardProps {
   imageUrl?: string;
   children: ReactNode;
+  className?: string;
 }
 
 export default function ReservationCardContainer({
   imageUrl,
   children,
+  className = '',
 }: ReservationCardProps) {
   const normalizedImageUrl = imageUrl ?? null;
   const [imgSrc, setImgSrc] = useState<string | null>(normalizedImageUrl);
@@ -30,7 +32,9 @@ export default function ReservationCardContainer({
   const isFallback = !imgSrc || imgSrc === fallbackSrc;
 
   return (
-    <div className="hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50">
+    <div
+      className={`hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50 ${className ?? ''}`}
+    >
       <div
         className={`relative w-36 shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-38 lg:w-50 ${
           isFallback ? 'bg-gray-FAF flex items-center justify-center' : ''
