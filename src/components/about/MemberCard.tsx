@@ -13,7 +13,7 @@ export default function MemberCard({ name, githubId, role }: MemberCardProps) {
     <div className="group bg-white-FFF border-gray-EEE relative flex flex-col items-center rounded-3xl border p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-md">
       <div className="border-ivory-F2E bg-gray-FAF relative h-24 w-24 overflow-hidden rounded-full border-2">
         <Image
-          src={`https://github.com/${githubId}.png`}
+          src={`https://avatars.githubusercontent.com/${githubId}`}
           alt={`${name} 프로필 이미지`}
           fill
           sizes="96px"
@@ -30,7 +30,7 @@ export default function MemberCard({ name, githubId, role }: MemberCardProps) {
         href={`https://github.com/${githubId}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="border-gray-DDD bg-white-FFF text-md-medium text-khaki-6B5 hover:bg-ivory-F2E/30 hover:border-khaki-6B5 hover:text-brown-2A2 mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border py-3 transition-all duration-250"
+        className="border-gray-DDD bg-white-FFF text-md-medium text-khaki-6B5 hover:bg-ivory-F2E/30 hover:border-khaki-6B5 hover:text-brown-2A2 mt-6 inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border py-3 transition-all duration-300"
       >
         <IconGithub size={16} color="currentColor" />
         GitHub 프로필
