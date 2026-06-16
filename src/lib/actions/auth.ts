@@ -12,10 +12,10 @@ import {
 
 // 토큰 쿠키 쓰기/삭제는 서버(next/headers)에서 처리한다.
 // 클라이언트에서 호출 시 서버가 Set-Cookie로 응답 → SSR(layout)이 즉시 인식한다.
-export async function setAuthCookies(
+export const setAuthCookies = async (
   accessToken: string,
   refreshToken: string,
-) {
+) => {
   const cookieStore = await cookies();
   cookieStore.set(ACCESS_TOKEN_KEY, accessToken, {
     ...AUTH_COOKIE_OPTIONS,
@@ -25,10 +25,10 @@ export async function setAuthCookies(
     ...AUTH_COOKIE_OPTIONS,
     maxAge: REFRESH_TOKEN_MAX_AGE,
   });
-}
+};
 
-export async function clearAuthCookies() {
+export const clearAuthCookies = async () => {
   const cookieStore = await cookies();
   cookieStore.delete(ACCESS_TOKEN_KEY);
   cookieStore.delete(REFRESH_TOKEN_KEY);
-}
+};

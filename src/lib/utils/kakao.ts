@@ -8,7 +8,10 @@ interface KakaoAuthUrlOptions {
   prompt?: 'login';
 }
 
-export function getKakaoAuthUrl({ state, prompt }: KakaoAuthUrlOptions = {}) {
+export const getKakaoAuthUrl = ({
+  state,
+  prompt,
+}: KakaoAuthUrlOptions = {}) => {
   const params = new URLSearchParams({
     response_type: 'code',
     client_id: process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY ?? '',
@@ -18,4 +21,4 @@ export function getKakaoAuthUrl({ state, prompt }: KakaoAuthUrlOptions = {}) {
   if (prompt) params.set('prompt', prompt);
 
   return `https://kauth.kakao.com/oauth/authorize?${params.toString()}`;
-}
+};
