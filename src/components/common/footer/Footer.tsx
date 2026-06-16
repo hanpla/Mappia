@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 const NAV_LINKS = [
+  { label: '팀 소개', href: '/about' },
   { label: '체험 둘러보기', href: '/activities' },
-  { label: '예약 내역', href: '/reservations' },
-  { label: '내 프로필', href: '/profile' },
+  { label: '고객센터', href: '/help' },
 ];
 
 export default function Footer() {

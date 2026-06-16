@@ -1,6 +1,8 @@
 'use client';
 
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
+
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 
 import { ScheduleWithTimes, TimeSlot } from '@/types/activities';
 
@@ -47,15 +49,7 @@ export default function MoblieReservationSheet({
 }: MoblieReservationSheetProps) {
   const [isClosing, setIsClosing] = useState(false);
 
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+  useBodyScrollLock(isOpen);
 
   const handleCloseAnimation = () => {
     setIsClosing(true);

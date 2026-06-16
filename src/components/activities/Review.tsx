@@ -2,10 +2,14 @@ import { getActivityReviews } from '@/lib/api/activities';
 
 import IconStarOn from '../common/icon/IconStarOn';
 import Pagination from '../common/pagination/Pagination';
+import AIReviewSection from './AiReviewSection';
 
 interface ReviewProps {
   activityId: number;
   currentPage: number;
+  title: string;
+  category: string;
+  description: string;
 }
 
 const PAGE_SIZE = 3;
@@ -23,13 +27,22 @@ const formatDate = (dateString: string) => {
   return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
 };
 
-export default async function Review({ activityId, currentPage }: ReviewProps) {
+export default async function Review({
+  activityId,
+  currentPage,
+  title,
+  category,
+  description,
+}: ReviewProps) {
   if (!activityId) return null;
 
   const res = await getActivityReviews(activityId, currentPage || 1, PAGE_SIZE);
   const reviews = res.reviews || [];
   const totalCount = res.totalCount || 0;
   const averageRating = res.averageRating || 0;
+
+  const allReviews =
+    totalCount > 0 ? (await getActivityReviews(activityId, 1, 10)).reviews : [];
 
   return (
     <section>
@@ -56,7 +69,16 @@ export default async function Review({ activityId, currentPage }: ReviewProps) {
           </div>
         </div>
       )}
-
+      <div className="mt-6 mb-6">
+        <AIReviewSection
+          activityId={activityId}
+          title={title}
+          category={category}
+          description={description}
+          reviews={allReviews}
+          totalCount={totalCount}
+        />
+      </div>
       <ul className="space-y-5">
         {reviews.length === 0 ? (
           <li className="text-gray-797 textmd-medium md:textlg-medium py-10 text-center">
