@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-function isTokenAlive(token: string): boolean {
+const isTokenAlive = (token: string): boolean => {
   try {
     const raw = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     const base64 = raw.padEnd(raw.length + ((4 - (raw.length % 4)) % 4), '=');
@@ -10,9 +10,9 @@ function isTokenAlive(token: string): boolean {
   } catch {
     return false;
   }
-}
+};
 
-export function proxy(request: NextRequest) {
+export const proxy = (request: NextRequest) => {
   const accessToken = request.cookies.get('accessToken')?.value;
   const { pathname } = request.nextUrl;
 
@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
   }
 
   return NextResponse.next();
-}
+};
 
 export const config = {
   matcher: ['/login', '/signup'],
