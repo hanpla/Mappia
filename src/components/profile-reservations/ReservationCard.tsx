@@ -264,6 +264,9 @@ export default function ReservationCard({ item }: ReservationCardProps) {
             <p className="mt-1 text-xs text-gray-500 sm:text-sm">
               {date} / {startTime}~{endTime} ({headCount}명)
             </p>
+            <p className="mt-2 text-xs text-red-400">
+              ※ 작성한 후기는 수정 및 삭제가 불가합니다.
+            </p>
           </div>
 
           <div className="mb-6 flex justify-center gap-1.5">
