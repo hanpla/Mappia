@@ -8,6 +8,17 @@ export async function POST(req: Request) {
   try {
     console.log('🚀 AI API 호출됨');
     const { title, category, description, reviews } = await req.json();
+    if (process.env.NODE_ENV === 'development') {
+      console.log(
+        '🚧 [개발 모드] 가짜 데이터를 반환하여 Gemini 사용량을 아낍니다.',
+      );
+      return NextResponse.json({
+        summary:
+          '[개발용 가짜 데이터] 이 체험은 아주 재미있고 리뷰어들의 만족도가 높습니다. 테스트 중입니다.',
+        keywords: ['로컬테스트', '가짜데이터', '비용절약'],
+        basedOnReviews: reviews?.length > 0,
+      });
+    }
 
     const reviewList = reviews ?? [];
     const hasReviews = reviewList.length > 0;
