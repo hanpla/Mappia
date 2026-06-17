@@ -25,7 +25,7 @@ export default function FaqTab({
   onCategoryChange,
 }: FaqTabProps) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 md:justify-center md:overflow-x-visible md:pb-0">
+    <div className="flex gap-2 overflow-x-auto pb-2 md:justify-center md:flex-wrap md:pb-0">
       {CATEGORIES.map((category) => {
         const isActive = activeCategory === category.value;
         return (
