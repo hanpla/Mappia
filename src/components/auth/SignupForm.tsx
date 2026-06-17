@@ -189,7 +189,12 @@ export default function SignupForm() {
             },
           )}
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-full"
+            hasHover={false}
+            disabled={isPending}
+          >
             {isPending ? '회원가입 중...' : '회원가입 하기'}
           </Button>
         </div>

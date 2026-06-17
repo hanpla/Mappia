@@ -100,7 +100,12 @@ export default function LoginForm() {
             />
           </InputField>
 
-          <Button type="submit" className="w-full" disabled={isPending}>
+          <Button
+            type="submit"
+            className="w-full"
+            hasHover={false}
+            disabled={isPending}
+          >
             {isPending ? '로그인 중...' : '로그인 하기'}
           </Button>
         </div>
