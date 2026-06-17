@@ -52,11 +52,7 @@ export default function ReservationEditModal({
   });
 
   return (
-    <StandardModal
-      isOpen={isOpen}
-      onClose={() => !isSubmitting && onClose()}
-      className="pt-0"
-    >
+    <StandardModal isOpen={isOpen} onClose={() => !isSubmitting && onClose()}>
       <div className="flex h-[500px] w-full max-w-[480px] flex-col p-0 sm:h-[600px] md:h-[530px]">
         <div className="mb-0 flex h-3 items-center justify-between">
           <h2 className="text-black-1B1 -mt-4 mb-5 flex h-0 items-center text-lg font-bold">
