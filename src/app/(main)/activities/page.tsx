@@ -126,8 +126,6 @@ function MainPageContent() {
   const popularActivities = popularData?.activities ?? [];
 
   const heroActivity = popularActivities[0];
-  const HERO_FALLBACK_IMAGE =
-    'https://images.unsplash.com/photo-1545959570-a94084071b5d';
 
   const {
     data: allData,
@@ -231,15 +229,17 @@ function MainPageContent() {
 
   return (
     <>
-      <section className="relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-137.5">
-        <ImageWithFallback
-          src={heroActivity?.bannerImageUrl ?? HERO_FALLBACK_IMAGE}
-          alt={heroActivity?.title ?? 'hero'}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+      <section className="bg-beige-8B7 relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-137.5">
+        {heroActivity?.bannerImageUrl && (
+          <ImageWithFallback
+            src={heroActivity.bannerImageUrl}
+            alt={heroActivity.title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
         {heroActivity ? (
           <Link
@@ -255,13 +255,8 @@ function MainPageContent() {
           </Link>
         ) : (
           <div className="inner absolute inset-0 flex flex-col justify-center">
-            <h1 className="text-white-FFF text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
-              함께 배우면 즐거운
-              <br />
-              스트릿 댄스
-            </h1>
-            <p className="text-white-FFF/80 mt-2 text-[14px] md:text-[26px]">
-              이달의 인기 체험 BEST 🔥
+            <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
+              🔥 이달의 인기 체험
             </p>
           </div>
         )}
