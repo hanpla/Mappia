@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { getInitialDevice } from '@/lib/utils/device';
-
 import { DEVICE_QUERIES } from '@/constants/device';
 
 import { DeviceType } from '@/types/device';
@@ -18,9 +16,7 @@ interface UseDeviceTypeResult {
 export const useDeviceType = (
   defaultDevice: DeviceType = 'pc',
 ): UseDeviceTypeResult => {
-  const [deviceType, setDeviceType] = useState<DeviceType>(() =>
-    getInitialDevice(defaultDevice),
-  );
+  const [deviceType, setDeviceType] = useState<DeviceType>(defaultDevice);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -37,6 +33,9 @@ export const useDeviceType = (
         setDeviceType('mobile');
       }
     };
+
+    // 최초 마운트 시점에 실제 클라이언트 화면 크기에 맞게 상태 업데이트
+    updateDevice();
 
     // 브레이크포인트를 지날 때만 호출되도록 리스너 등록
     mediaPC.addEventListener('change', updateDevice);
