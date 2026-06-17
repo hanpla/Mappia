@@ -36,8 +36,8 @@ export default function Button({
         'disabled:bg-beige-B9A disabled:text-white-FFF inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl border whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:border-transparent',
         variant === 'solid'
           ? [
-              'bg-brown-2A2 border-brown-2A2 text-white-FFF',
-              hasHover ? 'hover:text-brown-2A2 hover:bg-white-FFF' : '',
+              'bg-beige-8B7 border-beige-8B7 text-white-FFF',
+              hasHover ? 'hover:text-beige-8B7 hover:bg-white-FFF' : '',
             ]
           : [
               'border-brown-2A2 text-brown-2A2 bg-white-FFF',
