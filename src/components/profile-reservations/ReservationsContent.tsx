@@ -23,7 +23,6 @@ export default function ReservationsContent() {
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
 
   // '체험 완료(completed)' 필터는 날짜가 지나 자동으로 완료처리되는 'pending' 건도 포함해야 합니다.
-  // 이 경우 서버에 특정 status를 필터링하는 대신 전체를 조회하여 클라이언트에서 후처리(Post-filtering)합니다.
   const statusParam =
     currentFilter === 'completed' ? undefined : (currentFilter ?? undefined);
 
