@@ -448,7 +448,7 @@ export default function ActivityRegisterForm({
       <ImageUploadField
         name="introImages"
         label="소개 이미지 등록"
-        maxCount={4}
+        maxCount={2}
         images={introImages}
         onChange={(images) => {
           markDirty();
