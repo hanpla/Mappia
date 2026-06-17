@@ -42,7 +42,7 @@ export default function ReservationsContent() {
       getMyReservations({
         status: statusParam,
         cursorId: pageParam ?? undefined,
-        size: 10, // 원활한 클라이언트 사이드 필터링을 위해 기본 크기를 늘려 패칭합니다.
+        size: 4,
       }),
     staleTime: 5 * 60 * 1000,
   });
