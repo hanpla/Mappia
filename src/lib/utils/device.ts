@@ -16,8 +16,3 @@ export const getDeviceType = (width?: number): DeviceType => {
   if (currentWidth >= BREAKPOINTS.tablet) return 'tablet';
   return 'mobile';
 };
-
-export const getInitialDevice = (fallback: DeviceType = 'pc'): DeviceType => {
-  if (typeof window === 'undefined') return fallback;
-  return getDeviceType(window.innerWidth);
-};
