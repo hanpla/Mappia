@@ -114,8 +114,6 @@ function MainPageContent() {
   const keyword = searchParams?.get('keyword') ?? '';
   const sort = (searchParams?.get('sort') as ActivitySort | null) ?? undefined;
 
-  const [searchValue, setSearchValue] = useState(keyword);
-
   const [visibleCount, setVisibleCount] = useState(12);
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -167,7 +165,7 @@ function MainPageContent() {
     updateQuery((params) => params.delete('category'));
   };
 
-  const handleSearchSubmit = () => {
+  const handleSearchSubmit = (searchValue: string) => {
     updateQuery((params) => {
       const trimmed = searchValue.trim();
       if (trimmed) {
@@ -270,69 +268,74 @@ function MainPageContent() {
       </section>
 
       <div className="relative z-10 -mt-6">
-        <Searchbar
-          value={searchValue}
-          setValue={setSearchValue}
+        <SearchSection
+          key={keyword}
+          initialKeyword={keyword}
           onSubmit={handleSearchSubmit}
         />
       </div>
 
-      <section className="mt-6 mb-8 md:mt-8 md:mb-10">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-black-1B1 text-[21px] font-bold md:text-[43px]">
-            🔥 인기 체험
-          </h2>
-          <div className="hidden gap-1 lg:flex">
-            <button
-              aria-label="이전"
-              onClick={() => moveTrack('left')}
-              disabled={!isScrollableLeft}
-              className={`flex h-11 w-11 items-center justify-center ${
-                isScrollableLeft
-                  ? 'hover:bg-gray-FAF cursor-pointer rounded-full transition-colors'
-                  : 'cursor-default'
-              }`}
-            >
-              <IconChevronLeft
-                size={44}
-                color={isScrollableLeft ? '#4B4B4B' : '#A1A1A1'}
-              />
-            </button>
-            <button
-              aria-label="다음"
-              onClick={() => moveTrack('right')}
-              disabled={!isScrollableRight}
-              className={`flex h-11 w-11 items-center justify-center ${
-                isScrollableRight
-                  ? 'hover:bg-gray-FAF cursor-pointer rounded-full transition-colors'
-                  : 'cursor-default'
-              }`}
-            >
-              <IconChevronRight
-                size={44}
-                color={isScrollableRight ? '#4B4B4B' : '#A1A1A1'}
-              />
-            </button>
+      {!keyword && (
+        <section className="mt-6 mb-8 md:mt-8 md:mb-10">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-black-1B1 text-[21px] font-bold md:text-[43px]">
+              🔥 인기 체험
+            </h2>
+            <div className="hidden gap-1 lg:flex">
+              <button
+                aria-label="이전"
+                onClick={() => moveTrack('left')}
+                disabled={!isScrollableLeft}
+                className={`flex h-11 w-11 items-center justify-center ${
+                  isScrollableLeft
+                    ? 'hover:bg-gray-FAF cursor-pointer rounded-full transition-colors'
+                    : 'cursor-default'
+                }`}
+              >
+                <IconChevronLeft
+                  size={44}
+                  color={isScrollableLeft ? '#4B4B4B' : '#A1A1A1'}
+                />
+              </button>
+              <button
+                aria-label="다음"
+                onClick={() => moveTrack('right')}
+                disabled={!isScrollableRight}
+                className={`flex h-11 w-11 items-center justify-center ${
+                  isScrollableRight
+                    ? 'hover:bg-gray-FAF cursor-pointer rounded-full transition-colors'
+                    : 'cursor-default'
+                }`}
+              >
+                <IconChevronRight
+                  size={44}
+                  color={isScrollableRight ? '#4B4B4B' : '#A1A1A1'}
+                />
+              </button>
+            </div>
           </div>
-        </div>
-        <div
-          ref={viewportRef}
-          className="scrollbar-hide overflow-x-auto pb-2 lg:overflow-x-hidden"
-        >
           <div
-            ref={trackRef}
-            className="flex gap-3 transition-transform duration-300 ease-out md:gap-4"
-            style={{
-              transform: isPc ? `translateX(-${effectiveOffset}px)` : undefined,
-            }}
+            ref={viewportRef}
+            className="scrollbar-hide overflow-x-auto pb-2 lg:overflow-x-hidden"
           >
-            {popularActivities.map((activity) => (
-              <PopularActivityCard key={activity.id} activity={activity} />
-            ))}
+            <div
+              ref={trackRef}
+              className="flex gap-3 transition-transform duration-300 ease-out md:gap-4"
+              style={{
+                transform: isPc
+                  ? `translateX(-${effectiveOffset}px)`
+                  : undefined,
+              }}
+            >
+              {popularActivities.map((activity) => (
+                <PopularActivityCard key={activity.id} activity={activity} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
+      <div className="mt-6 mb-5 flex items-center justify-between gap-2 md:mt-8"></div>
       <div className="mb-5 flex items-center justify-between gap-2">
         <div className="scrollbar-hide flex min-w-0 flex-1 gap-2 overflow-x-auto">
           <CategoryButton
@@ -389,6 +392,24 @@ function MainPageContent() {
         <Pagination totalCount={totalCount} pageSize={visibleCount} />
       </div>
     </>
+  );
+}
+
+function SearchSection({
+  initialKeyword,
+  onSubmit,
+}: {
+  initialKeyword: string;
+  onSubmit: (value: string) => void;
+}) {
+  const [searchValue, setSearchValue] = useState(initialKeyword);
+
+  return (
+    <Searchbar
+      value={searchValue}
+      setValue={setSearchValue}
+      onSubmit={() => onSubmit(searchValue)}
+    />
   );
 }
 
