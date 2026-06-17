@@ -41,7 +41,15 @@ export default function ReservationEditModal({
     handleMonthChange,
     handleDecrease,
     handleIncrease,
-  } = useReservation(item.activity.id, price);
+  } = useReservation(item.activity.id, item.totalPrice / item.headCount, {
+    initialDate: item.date,
+    initialTimeSlot: {
+      id: item.scheduleId,
+      startTime: item.startTime,
+      endTime: item.endTime,
+    },
+    initialHeadCount: item.headCount,
+  });
 
   return (
     <StandardModal
@@ -56,7 +64,7 @@ export default function ReservationEditModal({
           </h2>
           <div className="w-6" />
         </div>
-        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-8 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-8 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:max-h-10 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
           <div className="space-y-2">
             <label className="textlg-bold block">날짜</label>
             <CalendarReverse
