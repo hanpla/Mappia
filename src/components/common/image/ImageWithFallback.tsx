@@ -12,11 +12,12 @@ interface ImageWithFallbackProps extends ImageProps {
 export default function ImageWithFallback({
   fallbackClassName = '',
   alt,
+  src,
   ...props
 }: ImageWithFallbackProps) {
   const [hasError, setHasError] = useState(false);
 
-  if (hasError) {
+  if (hasError || !src) {
     return (
       <div
         className={twMerge(
@@ -30,5 +31,7 @@ export default function ImageWithFallback({
     );
   }
 
-  return <Image alt={alt} onError={() => setHasError(true)} {...props} />;
+  return (
+    <Image alt={alt} src={src} onError={() => setHasError(true)} {...props} />
+  );
 }
