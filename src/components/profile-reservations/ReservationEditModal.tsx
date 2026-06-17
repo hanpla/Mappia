@@ -44,13 +44,19 @@ export default function ReservationEditModal({
   } = useReservation(item.activity.id, price);
 
   return (
-    <StandardModal isOpen={isOpen} onClose={() => !isSubmitting && onClose()}>
-      <div className="w-full max-w-[480px] p-2">
-        <h2 className="text-black-1B1 mb-6 text-lg font-bold">
-          {item.activity.title}
-        </h2>
-
-        <div className="max-h-[60vh] space-y-6 overflow-y-auto pr-10">
+    <StandardModal
+      isOpen={isOpen}
+      onClose={() => !isSubmitting && onClose()}
+      className="pt-0"
+    >
+      <div className="flex h-[500px] w-full max-w-[480px] flex-col p-0 sm:h-[600px] md:h-[530px]">
+        <div className="mb-0 flex h-3 items-center justify-between">
+          <h2 className="text-black-1B1 -mt-4 mb-5 flex h-0 items-center text-lg font-bold">
+            {item.activity.title}
+          </h2>
+          <div className="w-6" />
+        </div>
+        <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-8 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
           <div className="space-y-2">
             <label className="textlg-bold block">날짜</label>
             <CalendarReverse
@@ -62,7 +68,6 @@ export default function ReservationEditModal({
               onMonthChange={handleMonthChange}
             />
           </div>
-
           <div className="flex flex-row items-center justify-between">
             <label className="textlg-bold block">참여 인원 수</label>
             <div className="border-gray-EEE flex w-35 items-center justify-between rounded-3xl border px-4.75 py-1.5">
@@ -75,7 +80,6 @@ export default function ReservationEditModal({
               </button>
             </div>
           </div>
-
           <div className="space-y-2">
             <label className="textlg-bold block">예약 가능한 시간</label>
             <div className="space-y-3">
@@ -105,7 +109,6 @@ export default function ReservationEditModal({
             </div>
           </div>
         </div>
-
         <Button
           variant="solid"
           hasHover={false}
