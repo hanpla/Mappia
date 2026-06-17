@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
 import { getMyReservations } from '@/lib/api/my-reservations';
+import { getEffectiveStatus } from '@/lib/utils/reservation';
 
 import { useCursorInfiniteQuery } from '@/hooks/useCursorInfiniteQuery';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
@@ -21,6 +22,11 @@ export default function ReservationsContent() {
   const searchParams = useSearchParams();
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
 
+  // '체험 완료(completed)' 필터는 날짜가 지나 자동으로 완료처리되는 'pending' 건도 포함해야 합니다.
+  // 이 경우 서버에 특정 status를 필터링하는 대신 전체를 조회하여 클라이언트에서 후처리(Post-filtering)합니다.
+  const statusParam =
+    currentFilter === 'completed' ? undefined : (currentFilter ?? undefined);
+
   const {
     data,
     isLoading,
@@ -34,9 +40,9 @@ export default function ReservationsContent() {
     queryKey: ['myReservations', currentFilter],
     queryFn: (pageParam) =>
       getMyReservations({
-        status: currentFilter ?? undefined,
+        status: statusParam,
         cursorId: pageParam ?? undefined,
-        size: 2,
+        size: 10, // 원활한 클라이언트 사이드 필터링을 위해 기본 크기를 늘려 패칭합니다.
       }),
     staleTime: 5 * 60 * 1000,
   });
@@ -77,16 +83,22 @@ export default function ReservationsContent() {
 
   const reservations = data?.pages.flatMap((page) => page.reservations) ?? [];
 
+  // 날짜 연산을 통해 변경된 기기/예약 상태에 맞는 클라이언트 사이드 필터링 적용
+  const filteredReservations = reservations.filter((item) => {
+    if (!currentFilter) return true;
+    return getEffectiveStatus(item) === currentFilter;
+  });
+
   return (
     <div className="flex w-full flex-col">
       <Title title="예약 내역" action={<FilterDropdown filterKey="filter" />} />
 
       <div className="mt-6 flex flex-col gap-3">
-        {reservations.length === 0 ? (
+        {filteredReservations.length === 0 ? (
           <ReservationsEmpty message="아직 예약한 체험이 없어요" />
         ) : (
           <>
-            {reservations.map((item) => (
+            {filteredReservations.map((item) => (
               <ReservationCard key={item.id} item={item} />
             ))}
 
