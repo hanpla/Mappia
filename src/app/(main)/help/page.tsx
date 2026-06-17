@@ -1,9 +1,13 @@
+import { Metadata } from 'next';
+
+import FaqContent from '@/components/help/FaqContent';
+
+export const metadata: Metadata = {
+  title: '자주 묻는 질문 - Mappia 고객센터',
+  description:
+    'Mappia 서비스 이용에 대한 자주 묻는 질문과 답변을 확인하세요. 예약, 결제, 취소, 환불 및 호스트 등록 관련 안내를 제공합니다.',
+};
+
 export default function HelpPage() {
-  return (
-    <div className="py-10">
-      <h1 className="text2lg-bold md:textxl-bold">고객센터</h1>
-      {/* TODO: 섹션 컴포넌트는 src/components/help/ 에 추가하고 여기서 조합 */}
-      <p className="text-gray-4B4 mt-6">고객센터 페이지 준비 중입니다.</p>
-    </div>
-  );
+  return <FaqContent />;
 }
