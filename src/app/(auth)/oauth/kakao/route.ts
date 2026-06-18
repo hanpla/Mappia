@@ -5,9 +5,10 @@ import { isAxiosError } from 'axios';
 import { signInKakao, signUpKakao } from '@/lib/api/auth';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import {
+  ACCESS_COOKIE_OPTIONS,
   ACCESS_TOKEN_KEY,
   ACCESS_TOKEN_MAX_AGE,
-  AUTH_COOKIE_OPTIONS,
+  REFRESH_COOKIE_OPTIONS,
   REFRESH_TOKEN_KEY,
   REFRESH_TOKEN_MAX_AGE,
 } from '@/lib/utils/token';
@@ -28,11 +29,11 @@ const generateNickname = () =>
 const redirectWithAuth = (request: NextRequest, data: LoginResponse) => {
   const response = NextResponse.redirect(new URL('/?login=kakao', request.url));
   response.cookies.set(ACCESS_TOKEN_KEY, data.accessToken, {
-    ...AUTH_COOKIE_OPTIONS,
+    ...ACCESS_COOKIE_OPTIONS,
     maxAge: ACCESS_TOKEN_MAX_AGE,
   });
   response.cookies.set(REFRESH_TOKEN_KEY, data.refreshToken, {
-    ...AUTH_COOKIE_OPTIONS,
+    ...REFRESH_COOKIE_OPTIONS,
     maxAge: REFRESH_TOKEN_MAX_AGE,
   });
   return response;

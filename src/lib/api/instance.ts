@@ -1,9 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
-import { clearAuthCookies, setAuthCookies } from '@/lib/actions/auth';
-import { getAccessToken, getRefreshToken } from '@/lib/utils/token';
-
-import type { TokensResponse } from '@/types/auth';
+import { refreshTokens } from '@/lib/actions/auth';
+import { getAccessToken } from '@/lib/utils/token';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -27,40 +25,15 @@ privateInstance.interceptors.request.use((config) => {
 });
 
 // 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
+// 실제 갱신은 서버 액션(refreshTokens)이 httpOnly 리프레시 쿠키를 읽어 처리하고,
+// 새 액세스 토큰을 반환한다. 실패 시 서버 액션이 쿠키를 정리한다.
 let refreshPromise: Promise<string> | null = null;
 
 const refreshAccessToken = () => {
-  const refreshToken = getRefreshToken();
-
-  if (!refreshToken) {
-    return clearAuthCookies().then(() => {
-      throw new Error('No refresh token');
-    });
-  }
-
   if (!refreshPromise) {
-    refreshPromise = publicInstance
-      .post<TokensResponse>('/auth/tokens', undefined, {
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      })
-      .then(async ({ data }) => {
-        await setAuthCookies(data.accessToken, data.refreshToken);
-        return data.accessToken;
-      })
-      .catch(async (err) => {
-        if (
-          axios.isAxiosError(err) &&
-          err.response &&
-          err.response.status >= 400 &&
-          err.response.status < 500
-        ) {
-          await clearAuthCookies();
-        }
-        throw err;
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
+    refreshPromise = refreshTokens().finally(() => {
+      refreshPromise = null;
+    });
   }
 
   return refreshPromise;
