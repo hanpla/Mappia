@@ -8,9 +8,9 @@ import {
 
 export default function CardSkeleton() {
   return (
-    <div className={twMerge('animate-pulse', CARD_CONTAINER_CLASS)}>
+    <div className={twMerge(CARD_CONTAINER_CLASS, 'animate-pulse')}>
       {/* 이미지 스켈레톤 */}
-      <div className={twMerge('bg-gray-200', CARD_IMAGE_CLASS)} />
+      <div className={twMerge(CARD_IMAGE_CLASS, 'bg-gray-200')} />
 
       {/* 본문 스켈레톤 */}
       <div className={CARD_CONTENT_CLASS}>
