@@ -177,7 +177,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 onClick={() => setIsReviewModalOpen(true)}
                 disabled={isSubmitting}
                 hasHover={false}
-                className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                className="textsm-bold h-8 w-16 shrink-0 rounded-md px-3 md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 작성
               </Button>
@@ -188,7 +188,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 variant="outline"
                 onClick={() => setIsReviewModalOpen(true)}
                 hasHover={false}
-                className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+                className="textsm-bold h-8 w-16 shrink-0 rounded-md px-3 md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 보기
               </Button>
