@@ -86,6 +86,9 @@ export default function ActivityRegisterForm({
   const [price, setPrice] = useState(
     initialData ? String(initialData.price) : '',
   );
+  const [priceDisplay, setPriceDisplay] = useState(
+    initialData ? Number(initialData.price).toLocaleString() : '',
+  );
   const [address, setAddress] = useState(initialData?.address ?? '');
 
   const scheduleIdRef = useRef(1);
@@ -153,11 +156,23 @@ export default function ActivityRegisterForm({
     const onlyNumbers = e.target.value.replace(/[^\d]/g, '');
     if (onlyNumbers === '') {
       setPrice('');
+      setPriceDisplay('');
       return;
     }
     const numeric = Number(onlyNumbers);
     if (numeric > PRICE_MAX) return;
     setPrice(String(numeric));
+    setPriceDisplay(onlyNumbers);
+  };
+
+  const handlePriceBlur = () => {
+    if (price) {
+      setPriceDisplay(Number(price).toLocaleString());
+    }
+  };
+
+  const handlePriceFocus = () => {
+    setPriceDisplay(price);
   };
 
   const validateForm = (): string | null => {
@@ -233,9 +248,14 @@ export default function ActivityRegisterForm({
       }
 
       await updateMyActivity(activityId, body);
-      await queryClient.invalidateQueries({
-        queryKey: ['activity', activityId],
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['activity', activityId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['my-activities'],
+        }),
+      ]);
       showToast('success', '체험이 수정되었습니다.');
       router.push('/profile/manages');
     } catch (error) {
@@ -383,8 +403,10 @@ export default function ActivityRegisterForm({
           id="price"
           type="text"
           inputMode="numeric"
-          value={price ? Number(price).toLocaleString() : ''}
+          value={priceDisplay}
           onChange={handlePriceChange}
+          onFocus={handlePriceFocus}
+          onBlur={handlePriceBlur}
           placeholder="체험 금액을 입력해 주세요"
           className={INPUT_BORDER}
         />
