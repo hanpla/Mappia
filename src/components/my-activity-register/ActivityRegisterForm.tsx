@@ -321,6 +321,7 @@ export default function ActivityRegisterForm({
             setTitle(e.target.value);
           }}
           placeholder="제목을 입력해 주세요"
+          maxLength={30}
           className={INPUT_BORDER}
         />
       </div>
