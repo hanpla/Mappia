@@ -5,12 +5,10 @@ import ReservationsContent from '@/components/profile-reservations/ReservationsC
 
 export default function ReservationsPage() {
   return (
-    <div className="min-h-screen">
-      <div className="mx-auto max-w-4xl">
-        <Suspense fallback={<ReservationsSkeleton />}>
-          <ReservationsContent />
-        </Suspense>
-      </div>
+    <div className="mx-auto min-h-screen max-w-4xl">
+      <Suspense fallback={<ReservationsSkeleton />}>
+        <ReservationsContent />
+      </Suspense>
     </div>
   );
 }
