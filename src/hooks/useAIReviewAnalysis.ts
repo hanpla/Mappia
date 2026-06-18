@@ -67,5 +67,7 @@ export const useAIReviewAnalysis = (
     },
 
     staleTime: 1000 * 60 * 60 * 24,
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 };

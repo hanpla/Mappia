@@ -58,7 +58,6 @@ export default function ReservationEditModal({
           <h2 className="text-black-1B1 -mt-4 mb-5 flex h-0 items-center text-lg font-bold">
             {item.activity.title}
           </h2>
-          <div className="w-6" />
         </div>
         <div className="min-h-0 flex-1 space-y-6 overflow-y-auto pr-8 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:max-h-10 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-track]:bg-transparent">
           <div className="space-y-2">
