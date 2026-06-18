@@ -3,6 +3,8 @@ import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { useRef, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import useToastStore from '@/stores/toastStore';
 
 import { createActivity } from '@/lib/api/activities';
@@ -71,7 +73,7 @@ export default function ActivityRegisterForm({
 }: ActivityRegisterFormProps) {
   const router = useRouter();
   const { showToast } = useToastStore();
-
+  const queryClient = useQueryClient();
   const isEdit = mode === 'edit';
   const headingText = isEdit ? '내 체험 수정' : '내 체험 등록';
   const submitText = isEdit ? '수정하기' : '등록하기';
@@ -231,6 +233,9 @@ export default function ActivityRegisterForm({
       }
 
       await updateMyActivity(activityId, body);
+      await queryClient.invalidateQueries({
+        queryKey: ['activity', activityId],
+      });
       showToast('success', '체험이 수정되었습니다.');
       router.push('/profile/manages');
     } catch (error) {
