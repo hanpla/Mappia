@@ -1,9 +1,8 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
-import { clearAuthCookies, setAuthCookies } from '@/lib/actions/auth';
-import { getAccessToken, getRefreshToken } from '@/lib/utils/token';
-
-import type { TokensResponse } from '@/types/auth';
+import { refreshTokens } from '@/lib/actions/auth';
+import { buildLoginUrl } from '@/lib/utils/redirect';
+import { getAccessToken } from '@/lib/utils/token';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -26,41 +25,13 @@ privateInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<string | null> | null = null;
 
 const refreshAccessToken = () => {
-  const refreshToken = getRefreshToken();
-
-  if (!refreshToken) {
-    return clearAuthCookies().then(() => {
-      throw new Error('No refresh token');
-    });
-  }
-
   if (!refreshPromise) {
-    refreshPromise = publicInstance
-      .post<TokensResponse>('/auth/tokens', undefined, {
-        headers: { Authorization: `Bearer ${refreshToken}` },
-      })
-      .then(async ({ data }) => {
-        await setAuthCookies(data.accessToken, data.refreshToken);
-        return data.accessToken;
-      })
-      .catch(async (err) => {
-        if (
-          axios.isAxiosError(err) &&
-          err.response &&
-          err.response.status >= 400 &&
-          err.response.status < 500
-        ) {
-          await clearAuthCookies();
-        }
-        throw err;
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
+    refreshPromise = refreshTokens().finally(() => {
+      refreshPromise = null;
+    });
   }
 
   return refreshPromise;
@@ -86,12 +57,17 @@ privateInstance.interceptors.response.use(
       return privateInstance(original);
     }
     try {
-      const accessToken = await refreshAccessToken();
-      original.headers.Authorization = `Bearer ${accessToken}`;
+      const refreshedToken = await refreshAccessToken();
+      if (refreshedToken === null) {
+        return Promise.reject(error);
+      }
+      original.headers.Authorization = `Bearer ${refreshedToken}`;
       return privateInstance(original);
     } catch {
       if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+        window.location.href = buildLoginUrl(
+          window.location.pathname + window.location.search,
+        );
       }
       return Promise.reject(error);
     }
