@@ -273,6 +273,9 @@ export default function ActivityRegisterForm({
     try {
       const body = await buildCreateActivityBody(collectValues());
       await createActivity(body);
+      await queryClient.invalidateQueries({
+        queryKey: ['my-activities'],
+      });
       showToast('success', '체험이 등록되었습니다.');
       router.push('/profile/manages');
     } catch (error) {
