@@ -24,10 +24,7 @@ privateInstance.interceptors.request.use((config) => {
   return config;
 });
 
-// 여러 요청이 동시에 401을 받아도 토큰 갱신은 한 번만 실행하도록 Promise를 공유한다.
-// 실제 갱신은 서버 액션(refreshTokens)이 httpOnly 리프레시 쿠키를 읽어 처리하고,
-// 새 액세스 토큰을 반환한다. 실패 시 서버 액션이 쿠키를 정리한다.
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: Promise<string | null> | null = null;
 
 const refreshAccessToken = () => {
   if (!refreshPromise) {
@@ -59,8 +56,11 @@ privateInstance.interceptors.response.use(
       return privateInstance(original);
     }
     try {
-      const accessToken = await refreshAccessToken();
-      original.headers.Authorization = `Bearer ${accessToken}`;
+      const refreshedToken = await refreshAccessToken();
+      if (refreshedToken === null) {
+        return Promise.reject(error);
+      }
+      original.headers.Authorization = `Bearer ${refreshedToken}`;
       return privateInstance(original);
     } catch {
       if (typeof window !== 'undefined') {
