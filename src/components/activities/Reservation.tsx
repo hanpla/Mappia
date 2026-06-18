@@ -1,5 +1,6 @@
 'use client';
 
+import useActivityOwner from '@/hooks/useActivityOwner';
 import useReservation from '@/hooks/useReservation';
 
 import { ActivityDetailContent } from '@/types/activities';
@@ -9,6 +10,7 @@ import CalendarReverse from '../common/calendar/CalendarReverse';
 import IconMinus from '../common/icon/IconMinus';
 import IconPlus from '../common/icon/IconPlus';
 import LogoJoy from '../common/logo/LogoJoy';
+import LogoSurprise from '../common/logo/LogoSurprise';
 import ConfirmModal from '../common/modal/ConfirmModal';
 
 interface ReservationProps {
@@ -16,7 +18,9 @@ interface ReservationProps {
 }
 
 export default function Reservation({ activity }: ReservationProps) {
-  const { id, price } = activity;
+  const { id, userId, price } = activity;
+
+  const { isOwner } = useActivityOwner(userId);
 
   const {
     currentYear,
@@ -26,8 +30,8 @@ export default function Reservation({ activity }: ReservationProps) {
     selectedTimeSlot,
     setSelectedTimeSlot,
     headCount,
-    isModalOpen,
-    setIsModalOpen,
+    modalType,
+    setModalType,
     totalPrice,
     isSelectedDateInCurrentMonth,
     selectedDateTimes,
@@ -36,8 +40,11 @@ export default function Reservation({ activity }: ReservationProps) {
     handleDecrease,
     handleIncrease,
     handleReservation,
-    handleNavigation,
+    handleNavigationSuccess,
+    handleNavigationLogin,
   } = useReservation(id, price);
+
+  if (isOwner) return null;
 
   return (
     <section className="border-beige-8B7 space-y-6 rounded-3xl border bg-white p-7.5 shadow-[0_4px_16px_rgba(17,34,17,0.05)]">
@@ -121,13 +128,23 @@ export default function Reservation({ activity }: ReservationProps) {
       </div>
 
       <ConfirmModal
-        isOpen={isModalOpen}
+        isOpen={modalType === 'success'}
         icon={<LogoJoy className="h-13 w-13 md:h-20 md:w-20" />}
         message="예약이 완료되었습니다."
         cancelText="닫기"
         confirmText="예약확인"
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={handleNavigation}
+        onClose={() => setModalType(null)}
+        onConfirm={handleNavigationSuccess}
+      />
+
+      <ConfirmModal
+        isOpen={modalType === 'login'}
+        icon={<LogoSurprise className="h-13 w-13 md:h-20 md:w-20" />}
+        message={`로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?`}
+        cancelText="닫기"
+        confirmText="로그인하기"
+        onClose={() => setModalType(null)}
+        onConfirm={handleNavigationLogin}
       />
     </section>
   );

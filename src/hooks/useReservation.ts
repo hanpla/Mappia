@@ -1,15 +1,18 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
 import { createReservation, getAvailableSchedules } from '@/lib/api/activities';
 
-import { ScheduleWithTimes, TimeSlot } from '@/types/activities';
+import { TimeSlot } from '@/types/activities';
+
+import { useIsLogin } from '@/providers/AuthProvider';
 
 export default function useReservation(
   activityId: number,
@@ -38,41 +41,59 @@ export default function useReservation(
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
     options?.initialTimeSlot ?? null,
   );
-  const [availableSchedules, setAvailableSchedules] = useState<
-    ScheduleWithTimes[]
-  >([]);
   const [headCount, setHeadCount] = useState<number>(
     options?.initialHeadCount ?? 1,
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'success' | 'login' | null>(null);
 
   const router = useRouter();
 
   const showToast = useToastStore((state) => state.showToast);
 
-  const requestVersion = useRef(0);
+  const queryClient = useQueryClient();
 
-  const loadAvailableSchedules = useCallback(async () => {
-    const version = ++requestVersion.current;
-    const year = String(currentYear);
-    const month = String(currentMonth + 1).padStart(2, '0');
+  const isLogin = useIsLogin();
 
-    const data = await getAvailableSchedules(activityId, year, month);
-    if (version === requestVersion.current) {
-      setAvailableSchedules(data);
-    }
-  }, [activityId, currentYear, currentMonth]);
+  const yearStr = String(currentYear);
+  const monthStr = String(currentMonth + 1).padStart(2, '0');
 
-  useEffect(() => {
-    loadAvailableSchedules();
-  }, [loadAvailableSchedules]);
+  const { data: availableSchedules = [] } = useQuery({
+    queryKey: ['availableSchedules', activityId, yearStr, monthStr],
+    queryFn: () => getAvailableSchedules(activityId, yearStr, monthStr),
+    enabled: !!activityId,
+  });
+
+  const { mutate: reservationMutate, isPending } = useMutation({
+    mutationFn: (scheduleId: number) =>
+      createReservation(activityId, {
+        scheduleId,
+        headCount,
+      }),
+    onSuccess: () => {
+      setModalType('success');
+      setSelectedDateStr(null);
+      setSelectedTimeSlot(null);
+      setHeadCount(1);
+
+      queryClient.invalidateQueries({
+        queryKey: ['availableSchedules', activityId, yearStr, monthStr],
+      });
+    },
+    onError: (error) => {
+      const message =
+        axios.isAxiosError<{ message?: string }>(error) &&
+        error.response?.data?.message
+          ? error.response.data.message
+          : '체험 예약에 실패했습니다.';
+
+      showToast('error', message);
+    },
+  });
 
   const totalPrice = initialPrice * headCount;
 
   const isSelectedDateInCurrentMonth = selectedDateStr
-    ? selectedDateStr.startsWith(
-        `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}`,
-      )
+    ? selectedDateStr.startsWith(`${yearStr}-${monthStr}`)
     : false;
 
   const selectedDateTimes =
@@ -93,39 +114,32 @@ export default function useReservation(
   const handleDecrease = () => setHeadCount((prev) => Math.max(1, prev - 1));
   const handleIncrease = () => setHeadCount((prev) => prev + 1);
 
-  const handleReservation = async () => {
+  const handleReservation = () => {
+    if (isPending) return;
+
+    if (!isLogin) {
+      setModalType('login');
+      return;
+    }
+
     if (!selectedTimeSlot) {
       showToast('error', '예약할 시간을 선택해 주세요.');
       return;
     }
 
-    try {
-      await createReservation(activityId, {
-        scheduleId: selectedTimeSlot.id,
-        headCount: headCount,
-      });
-
-      setIsModalOpen(true);
-      setSelectedDateStr(null);
-      setSelectedTimeSlot(null);
-      setHeadCount(1);
-
-      await loadAvailableSchedules();
-    } catch (error) {
-      const message =
-        axios.isAxiosError<{ message?: string }>(error) &&
-        error.response?.data?.message
-          ? error.response.data.message
-          : '체험 예약에 실패했습니다.';
-
-      showToast('error', message);
-    }
+    reservationMutate(selectedTimeSlot.id);
   };
 
-  const handleNavigation = () => {
-    setIsModalOpen(false);
+  const handleNavigationSuccess = () => {
+    setModalType(null);
 
     router.push('/profile/reservations');
+  };
+
+  const handleNavigationLogin = () => {
+    setModalType(null);
+
+    router.push('/login');
   };
 
   return {
@@ -136,8 +150,8 @@ export default function useReservation(
     selectedTimeSlot,
     setSelectedTimeSlot,
     headCount,
-    isModalOpen,
-    setIsModalOpen,
+    modalType,
+    setModalType,
     totalPrice,
     isSelectedDateInCurrentMonth,
     selectedDateTimes,
@@ -146,6 +160,7 @@ export default function useReservation(
     handleDecrease,
     handleIncrease,
     handleReservation,
-    handleNavigation,
+    handleNavigationSuccess,
+    handleNavigationLogin,
   };
 }
