@@ -1,11 +1,19 @@
+import { twMerge } from 'tailwind-merge';
+
+import {
+  CARD_CONTAINER_CLASS,
+  CARD_CONTENT_CLASS,
+  CARD_IMAGE_CLASS,
+} from '@/components/profile-ui/ReservationCardContainer';
+
 export default function CardSkeleton() {
   return (
-    <div className="flex w-full animate-pulse rounded-2xl bg-white shadow-sm">
+    <div className={twMerge(CARD_CONTAINER_CLASS, 'animate-pulse')}>
       {/* 이미지 스켈레톤 */}
-      <div className="h-36 w-36 rounded-tl-2xl rounded-bl-2xl bg-gray-200 md:h-39 md:w-39" />
+      <div className={twMerge(CARD_IMAGE_CLASS, 'bg-gray-200')} />
 
       {/* 본문 스켈레톤 */}
-      <div className="flex min-w-0 flex-1 flex-col justify-between p-3">
+      <div className={CARD_CONTENT_CLASS}>
         <div className="flex flex-col gap-2">
           {/* 평점 및 리뷰 수 스켈레톤 */}
           <div className="flex items-center gap-1">

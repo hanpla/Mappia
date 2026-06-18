@@ -7,12 +7,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
 
-import { getEffectiveStatus } from '@/lib/utils/reservation';
 import {
   cancelReservation,
   createReview,
   updateReservationApplication,
 } from '@/lib/api/my-reservations';
+import { getEffectiveStatus } from '@/lib/utils/reservation';
 
 import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';

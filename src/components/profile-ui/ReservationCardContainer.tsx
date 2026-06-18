@@ -13,10 +13,18 @@ interface ReservationCardProps {
   className?: string;
 }
 
+export const CARD_CONTAINER_CLASS =
+  'flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm md:h-38 md:gap-6 lg:h-50';
+
+export const CARD_IMAGE_CLASS =
+  'w-36 shrink-0 self-stretch rounded-l-2xl md:w-38 lg:w-50';
+
+export const CARD_CONTENT_CLASS =
+  'flex min-w-0 flex-1 flex-col justify-between py-3 pr-4.5 lg:py-4';
+
 export default function ReservationCardContainer({
   imageUrl,
   children,
-  className = '',
 }: ReservationCardProps) {
   const normalizedImageUrl = imageUrl ?? null;
   const [imgSrc, setImgSrc] = useState<string | null>(normalizedImageUrl);
@@ -36,13 +44,16 @@ export default function ReservationCardContainer({
   return (
     <div
       className={twMerge(
-        `hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50 ${className ?? ''}`,
+        'hover:shadow-dropdown transition-all',
+        CARD_CONTAINER_CLASS,
       )}
     >
       <div
-        className={`relative w-36 shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-38 lg:w-50 ${
-          isFallback ? 'bg-gray-FAF flex items-center justify-center' : ''
-        }`}
+        className={twMerge(
+          CARD_IMAGE_CLASS,
+          'relative overflow-hidden',
+          isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
+        )}
       >
         <Image
           src={imgSrc || fallbackSrc}
@@ -59,9 +70,7 @@ export default function ReservationCardContainer({
           onError={() => setImgSrc(fallbackSrc)}
         />
       </div>
-      <div className="flex min-w-0 flex-1 flex-col justify-between py-3 pr-4.5 lg:py-4">
-        {children}
-      </div>
+      <div className={CARD_CONTENT_CLASS}>{children}</div>
     </div>
   );
 }
