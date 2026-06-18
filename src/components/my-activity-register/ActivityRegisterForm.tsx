@@ -15,6 +15,7 @@ import {
 } from '@/lib/utils/activityDiff';
 import { buildCreateActivityBody } from '@/lib/utils/activityPayload';
 import { getApiErrorMessage } from '@/lib/utils/error';
+import { getSafePath } from '@/lib/utils/redirect';
 
 import type { ActivityDetailContent } from '@/types/activities';
 
@@ -257,7 +258,8 @@ export default function ActivityRegisterForm({
         }),
       ]);
       showToast('success', '체험이 수정되었습니다.');
-      router.push('/profile/manages');
+      const from = new URLSearchParams(window.location.search).get('from');
+      router.push(getSafePath(from, '/profile/manages'));
     } catch (error) {
       showToast(
         'error',

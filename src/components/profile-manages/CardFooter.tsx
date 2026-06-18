@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 import useClickOutside from '@/hooks/useClickOutside';
@@ -22,6 +23,7 @@ export default function CardFooter({
   onDelete,
 }: CardFooterProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const dropdownRef = useClickOutside<HTMLDivElement>(() => {
     setIsDropdownOpen(false);
@@ -53,7 +55,11 @@ export default function CardFooter({
         {isDropdownOpen && (
           <Dropdown
             type="edit"
-            editUrl={activityId ? `/my-activities/${activityId}/edit` : '#'}
+            editUrl={
+              activityId
+                ? `/my-activities/${activityId}/edit?from=${encodeURIComponent(pathname)}`
+                : '#'
+            }
             onEdit={() => {
               if (activityId) {
                 onEdit?.(activityId);
