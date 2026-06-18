@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
 
+import { getActivityReviews } from '@/lib/api/activities';
 import {
   cancelReservation,
   createReview,
@@ -14,7 +15,10 @@ import {
 } from '@/lib/api/my-reservations';
 import { getEffectiveStatus } from '@/lib/utils/reservation';
 
+import useMe from '@/hooks/useMe';
+
 import { ReservationStatus } from '@/types/activities';
+import { Review } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
 
 import Button from '@/components/common/button/Button';
@@ -26,6 +30,7 @@ import ReservationCardContainer from '@/components/profile-ui/ReservationCardCon
 import LogoHead from '@/assets/logo/logo_head-1.svg';
 
 import ReservationEditModal from './ReservationEditModal';
+import ReservationReviewModal from './ReservationReviewModal';
 
 const STATUS_MAPPER: Record<
   ReservationStatus,
@@ -141,7 +146,9 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     cancelMutation.isPending ||
     editMutation.isPending;
 
+  const isRealCompleted = item.status === 'completed';
   const isWriteReview = item.status === 'completed' && !isReviewSubmitted;
+  const isViewReview = isRealCompleted && isReviewSubmitted;
 
   const handleReviewClick = () => {
     setRating(0);
@@ -221,6 +228,17 @@ export default function ReservationCard({ item }: ReservationCardProps) {
                 className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
               >
                 후기 작성
+              </Button>
+            )}
+            {isViewReview && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsReviewModalOpen(true)} // 혹은 별도 뷰 모달
+                hasHover={false}
+                className="h-8 w-16 shrink-0 rounded-md px-3 text-sm md:h-10 md:w-24 md:rounded-xl md:px-4 md:text-base lg:h-11 lg:w-28 lg:rounded-2xl lg:px-5"
+              >
+                후기 보기
               </Button>
             )}
           </div>
