@@ -17,16 +17,33 @@ import { useIsLogin } from '@/providers/AuthProvider';
 export default function useReservation(
   activityId: number,
   initialPrice: number,
+  options?: {
+    initialDate?: string;
+    initialTimeSlot?: TimeSlot;
+    initialHeadCount?: number;
+  },
 ) {
-  const [currentYear, setCurrentYear] = useState(() =>
-    new Date().getFullYear(),
+  const [currentYear, setCurrentYear] = useState(() => {
+    if (options?.initialDate) {
+      return new Date(options.initialDate).getFullYear();
+    }
+    return new Date().getFullYear();
+  });
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    if (options?.initialDate) {
+      return new Date(options.initialDate).getMonth();
+    }
+    return new Date().getMonth();
+  });
+  const [selectedDateStr, setSelectedDateStr] = useState<string | null>(
+    options?.initialDate ?? null,
   );
-  const [currentMonth, setCurrentMonth] = useState(() => new Date().getMonth());
-  const [selectedDateStr, setSelectedDateStr] = useState<string | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<TimeSlot | null>(
-    null,
+    options?.initialTimeSlot ?? null,
   );
-  const [headCount, setHeadCount] = useState<number>(1);
+  const [headCount, setHeadCount] = useState<number>(
+    options?.initialHeadCount ?? 1,
+  );
   const [modalType, setModalType] = useState<'success' | 'login' | null>(null);
 
   const router = useRouter();
