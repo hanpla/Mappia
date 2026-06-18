@@ -144,6 +144,20 @@ export default function ActivityRegisterForm({
     );
   };
 
+  const PRICE_MAX = 10000000;
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    markDirty();
+    const onlyNumbers = e.target.value.replace(/[^\d]/g, '');
+    if (onlyNumbers === '') {
+      setPrice('');
+      return;
+    }
+    const numeric = Number(onlyNumbers);
+    if (numeric > PRICE_MAX) return;
+    setPrice(String(numeric));
+  };
+
   const validateForm = (): string | null => {
     if (!title.trim()) return '제목을 입력해 주세요.';
     if (!category) return '카테고리를 선택해 주세요.';
@@ -362,12 +376,10 @@ export default function ActivityRegisterForm({
         </label>
         <Input
           id="price"
-          type="number"
-          value={price}
-          onChange={(e) => {
-            markDirty();
-            setPrice(e.target.value);
-          }}
+          type="text"
+          inputMode="numeric"
+          value={price ? Number(price).toLocaleString() : ''}
+          onChange={handlePriceChange}
           placeholder="체험 금액을 입력해 주세요"
           className={INPUT_BORDER}
         />
