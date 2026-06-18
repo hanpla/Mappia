@@ -12,6 +12,7 @@ import { setAuthCookies } from '@/lib/actions/auth';
 import { login } from '@/lib/api/auth';
 import { getApiErrorMessage } from '@/lib/utils/error';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
+import { getSafeCallback } from '@/lib/utils/redirect';
 import { validateEmail, validatePassword } from '@/lib/utils/validation';
 
 import Button from '@/components/common/button/Button';
@@ -35,8 +36,13 @@ export default function LoginForm() {
     onSuccess: async ({ data }) => {
       await setAuthCookies(data.accessToken, data.refreshToken);
       showToast('success', '로그인에 성공했습니다.');
+
+      const callback = new URLSearchParams(window.location.search).get(
+        'callback',
+      );
+
       router.refresh();
-      router.push('/activities');
+      router.push(getSafeCallback(callback));
     },
     onError: (err) => {
       showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));

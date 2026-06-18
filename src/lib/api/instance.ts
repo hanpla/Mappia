@@ -1,6 +1,7 @@
 import axios, { type InternalAxiosRequestConfig } from 'axios';
 
 import { refreshTokens } from '@/lib/actions/auth';
+import { buildLoginUrl } from '@/lib/utils/redirect';
 import { getAccessToken } from '@/lib/utils/token';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -64,7 +65,9 @@ privateInstance.interceptors.response.use(
       return privateInstance(original);
     } catch {
       if (typeof window !== 'undefined') {
-        window.location.href = '/login';
+        window.location.href = buildLoginUrl(
+          window.location.pathname + window.location.search,
+        );
       }
       return Promise.reject(error);
     }
