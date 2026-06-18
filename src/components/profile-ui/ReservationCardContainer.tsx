@@ -3,12 +3,23 @@
 import Image from 'next/image';
 import { ReactNode, useState } from 'react';
 
+import { twMerge } from 'tailwind-merge';
+
 import DefaultImg from '@/assets/logo/logo.svg';
 
 interface ReservationCardProps {
   imageUrl?: string;
   children: ReactNode;
 }
+
+export const CARD_CONTAINER_CLASS =
+  'flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm md:h-38 md:gap-6 lg:h-50';
+
+export const CARD_IMAGE_CLASS =
+  'w-36 shrink-0 self-stretch rounded-l-2xl md:w-38 lg:w-50';
+
+export const CARD_CONTENT_CLASS =
+  'flex min-w-0 flex-1 flex-col justify-between py-3 pr-4.5 lg:py-4';
 
 export default function ReservationCardContainer({
   imageUrl,
@@ -30,11 +41,18 @@ export default function ReservationCardContainer({
   const isFallback = !imgSrc || imgSrc === fallbackSrc;
 
   return (
-    <div className="hover:shadow-dropdown flex h-36 w-full gap-2 rounded-2xl bg-white shadow-sm transition-all md:h-38 md:gap-6 lg:h-50">
+    <div
+      className={twMerge(
+        'hover:shadow-dropdown transition-all',
+        CARD_CONTAINER_CLASS,
+      )}
+    >
       <div
-        className={`relative w-36 shrink-0 self-stretch overflow-hidden rounded-l-2xl md:w-38 lg:w-50 ${
-          isFallback ? 'bg-gray-FAF flex items-center justify-center' : ''
-        }`}
+        className={twMerge(
+          'relative overflow-hidden',
+          CARD_IMAGE_CLASS,
+          isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
+        )}
       >
         <Image
           src={imgSrc || fallbackSrc}
@@ -51,9 +69,7 @@ export default function ReservationCardContainer({
           onError={() => setImgSrc(fallbackSrc)}
         />
       </div>
-      <div className="flex min-w-0 flex-1 flex-col justify-between py-3 pr-4.5 lg:py-4">
-        {children}
-      </div>
+      <div className={CARD_CONTENT_CLASS}>{children}</div>
     </div>
   );
 }
