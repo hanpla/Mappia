@@ -12,6 +12,8 @@ import { createReservation, getAvailableSchedules } from '@/lib/api/activities';
 
 import { TimeSlot } from '@/types/activities';
 
+import { useIsLogin } from '@/providers/AuthProvider';
+
 export default function useReservation(
   activityId: number,
   initialPrice: number,
@@ -25,13 +27,15 @@ export default function useReservation(
     null,
   );
   const [headCount, setHeadCount] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<'success' | 'login' | null>(null);
 
   const router = useRouter();
 
   const showToast = useToastStore((state) => state.showToast);
 
   const queryClient = useQueryClient();
+
+  const isLogin = useIsLogin();
 
   const yearStr = String(currentYear);
   const monthStr = String(currentMonth + 1).padStart(2, '0');
@@ -49,7 +53,7 @@ export default function useReservation(
         headCount,
       }),
     onSuccess: () => {
-      setIsModalOpen(true);
+      setModalType('success');
       setSelectedDateStr(null);
       setSelectedTimeSlot(null);
       setHeadCount(1);
@@ -96,6 +100,11 @@ export default function useReservation(
   const handleReservation = () => {
     if (isPending) return;
 
+    if (!isLogin) {
+      setModalType('login');
+      return;
+    }
+
     if (!selectedTimeSlot) {
       showToast('error', '예약할 시간을 선택해 주세요.');
       return;
@@ -104,10 +113,16 @@ export default function useReservation(
     reservationMutate(selectedTimeSlot.id);
   };
 
-  const handleNavigation = () => {
-    setIsModalOpen(false);
+  const handleNavigationSuccess = () => {
+    setModalType(null);
 
     router.push('/profile/reservations');
+  };
+
+  const handleNavigationLogin = () => {
+    setModalType(null);
+
+    router.push('/login');
   };
 
   return {
@@ -118,8 +133,8 @@ export default function useReservation(
     selectedTimeSlot,
     setSelectedTimeSlot,
     headCount,
-    isModalOpen,
-    setIsModalOpen,
+    modalType,
+    setModalType,
     totalPrice,
     isSelectedDateInCurrentMonth,
     selectedDateTimes,
@@ -128,6 +143,7 @@ export default function useReservation(
     handleDecrease,
     handleIncrease,
     handleReservation,
-    handleNavigation,
+    handleNavigationSuccess,
+    handleNavigationLogin,
   };
 }

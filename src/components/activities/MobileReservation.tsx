@@ -9,6 +9,7 @@ import { ActivityDetailContent } from '@/types/activities';
 
 import Button from '../common/button/Button';
 import LogoJoy from '../common/logo/LogoJoy';
+import LogoSurprise from '../common/logo/LogoSurprise';
 import ConfirmModal from '../common/modal/ConfirmModal';
 import MobileReservationSheet from './MobileReservationSheet';
 
@@ -31,10 +32,11 @@ export default function MobileReservation({
     selectedTimeSlot,
     totalPrice,
     headCount,
-    isModalOpen,
-    setIsModalOpen,
+    modalType,
+    setModalType,
     handleReservation,
-    handleNavigation,
+    handleNavigationSuccess,
+    handleNavigationLogin,
   } = reservationState;
 
   if (isOwner) return null;
@@ -83,18 +85,34 @@ export default function MobileReservation({
       />
 
       <ConfirmModal
-        isOpen={isModalOpen}
+        isOpen={modalType === 'success'}
         icon={<LogoJoy className="h-13 w-13 md:h-20 md:w-20" />}
         message="예약이 완료되었습니다."
         cancelText="닫기"
         confirmText="예약확인"
         onClose={() => {
-          setIsModalOpen(false);
+          setModalType(null);
           setIsOpen(false);
         }}
         onConfirm={() => {
           setIsOpen(false);
-          handleNavigation();
+          handleNavigationSuccess();
+        }}
+      />
+
+      <ConfirmModal
+        isOpen={modalType === 'login'}
+        icon={<LogoSurprise className="h-13 w-13 md:h-20 md:w-20" />}
+        message={`로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?`}
+        cancelText="닫기"
+        confirmText="로그인하기"
+        onClose={() => {
+          setModalType(null);
+          setIsOpen(false);
+        }}
+        onConfirm={() => {
+          setIsOpen(false);
+          handleNavigationLogin();
         }}
       />
     </>
