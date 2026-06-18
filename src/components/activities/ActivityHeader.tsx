@@ -46,7 +46,7 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
     setIsDropdownOpen(false);
   });
 
-  const { mutate: deleteActivityMutate } = useMutation({
+  const { mutate: deleteActivityMutate, isPending: isDeleting } = useMutation({
     mutationFn: () => deleteMyActivity(id),
     onSuccess: () => {
       showToast('success', '체험이 삭제되었습니다.');
@@ -77,6 +77,8 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
   };
 
   const handleDelete = () => {
+    if (isDeleting) return;
+
     deleteActivityMutate();
   };
 

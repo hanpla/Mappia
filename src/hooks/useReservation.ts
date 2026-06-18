@@ -42,7 +42,7 @@ export default function useReservation(
     enabled: !!activityId,
   });
 
-  const { mutate: reservationMutate } = useMutation({
+  const { mutate: reservationMutate, isPending } = useMutation({
     mutationFn: (scheduleId: number) =>
       createReservation(activityId, {
         scheduleId,
@@ -94,6 +94,8 @@ export default function useReservation(
   const handleIncrease = () => setHeadCount((prev) => prev + 1);
 
   const handleReservation = () => {
+    if (isPending) return;
+
     if (!selectedTimeSlot) {
       showToast('error', '예약할 시간을 선택해 주세요.');
       return;
