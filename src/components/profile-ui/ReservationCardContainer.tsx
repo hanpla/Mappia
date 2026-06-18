@@ -10,6 +10,7 @@ import DefaultImg from '@/assets/logo/logo.svg';
 interface ReservationCardProps {
   imageUrl?: string;
   children: ReactNode;
+  className?: string;
 }
 
 export const CARD_CONTAINER_CLASS =
