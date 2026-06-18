@@ -50,8 +50,8 @@ export default function ReservationCardContainer({
     >
       <div
         className={twMerge(
-          'relative overflow-hidden',
           CARD_IMAGE_CLASS,
+          'relative overflow-hidden',
           isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
         )}
       >
