@@ -9,6 +9,7 @@ import axios from 'axios';
 import useToastStore from '@/stores/toastStore';
 
 import { createReservation, getAvailableSchedules } from '@/lib/api/activities';
+import { buildLoginUrl } from '@/lib/utils/redirect';
 
 import { TimeSlot } from '@/types/activities';
 
@@ -139,7 +140,9 @@ export default function useReservation(
   const handleNavigationLogin = () => {
     setModalType(null);
 
-    router.push('/login');
+    router.push(
+      buildLoginUrl(window.location.pathname + window.location.search),
+    );
   };
 
   return {
