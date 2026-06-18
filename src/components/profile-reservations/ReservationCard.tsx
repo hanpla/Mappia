@@ -12,6 +12,7 @@ import {
   createReview,
   updateReservationApplication,
 } from '@/lib/api/my-reservations';
+import { getEffectiveStatus } from '@/lib/utils/reservation';
 
 import { ReservationStatus } from '@/types/activities';
 import { MyReservationItem } from '@/types/my-reservations';
@@ -119,7 +120,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
   }
 
   const {
-    status,
     activity,
     date,
     startTime,
@@ -129,25 +129,19 @@ export default function ReservationCard({ item }: ReservationCardProps) {
     reviewSubmitted: isReviewSubmitted,
   } = item;
 
-  const now = new Date();
-  const endDateTime = new Date(`${date}T${endTime}`);
-  const isPastEnd = now > endDateTime;
+  const effectiveStatus = getEffectiveStatus(item);
 
-  const currentStatus = (() => {
-    if (status === 'pending' && isPastEnd) {
-      return STATUS_MAPPER['completed'];
-    }
-    return (
-      STATUS_MAPPER[status] ?? { label: status, className: 'text-black-1B1' }
-    );
-  })();
+  const currentStatus = STATUS_MAPPER[effectiveStatus] ?? {
+    label: effectiveStatus,
+    className: 'text-black-1B1',
+  };
 
   const isSubmitting =
     reviewMutation.isPending ||
     cancelMutation.isPending ||
     editMutation.isPending;
 
-  const isWriteReview = status === 'completed' && !isReviewSubmitted;
+  const isWriteReview = item.status === 'completed' && !isReviewSubmitted;
 
   const handleReviewClick = () => {
     setRating(0);
@@ -193,7 +187,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
             ₩{totalPrice.toLocaleString()}
           </span>
           <div className="flex items-center justify-end gap-2 md:gap-3">
-            {status === 'pending' && !isPastEnd && (
+            {effectiveStatus === 'pending' && (
               <>
                 <Button
                   type="button"
