@@ -16,6 +16,7 @@ export interface SelectDropdownProps {
   onChange?: (value: string) => void;
   options: SelectOption[];
   placeholder?: string;
+  showCheck?: boolean;
 }
 
 export default function SelectDropdown({
@@ -23,6 +24,7 @@ export default function SelectDropdown({
   onChange,
   options,
   placeholder = '선택하세요',
+  showCheck = true,
 }: SelectDropdownProps) {
   const { ref, isOpen, toggle, close } = useDropdown();
 
@@ -76,7 +78,7 @@ export default function SelectDropdown({
                       : 'text-black-1B1 hover:bg-gray-FAF'
                   }`}
                 >
-                  {isSelected && (
+                  {showCheck && isSelected && (
                     <IconCheck
                       size={20}
                       color="#ffffff"

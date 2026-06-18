@@ -58,6 +58,7 @@ export default function ScheduleInput({
             onChange={(value) => onChange(schedule.id, 'startTime', value)}
             options={TIME_OPTIONS}
             placeholder="00:00"
+            showCheck={false}
           />
         </div>
 
@@ -71,6 +72,7 @@ export default function ScheduleInput({
             onChange={(value) => onChange(schedule.id, 'endTime', value)}
             options={TIME_OPTIONS}
             placeholder="00:00"
+            showCheck={false}
           />
         </div>
 
