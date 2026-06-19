@@ -87,7 +87,7 @@ export default function ReservationReviewModal({
           .sort(
             (a, b) =>
               getReservationDateTime(a) - getReservationDateTime(b) ||
-              a.id - b.id, // 동일 일시일 경우 안정적인 정렬을 위한 보조 기준
+              a.id - b.id,
           );
 
         const { totalCount } = await getActivityReviews(activityId, 1, 1);
