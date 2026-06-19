@@ -278,7 +278,7 @@ export default function ReservationReviewModal({
                     <IconStarOn
                       size={48}
                       color={star <= rating ? '#FFC107' : '#E0E0E0'}
-                      className="transition-colors duration-150"
+                      className="[&>path]:transition-colors [&>path]:duration-150"
                     />
                   </button>
                 ))}
