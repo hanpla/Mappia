@@ -96,7 +96,7 @@ npm install
 # 4. 환경 변수 설정
 touch .env.local
 
-# 4. 개발 서버 실행
+# 5. 개발 서버 실행
 npm run dev
 ```
 
