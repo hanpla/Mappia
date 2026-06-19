@@ -41,8 +41,11 @@ interface ReservationReviewModalProps {
   headCount: number;
   isSubmitted: boolean;
 }
-const getReservationDateTime = (res: { date: string; startTime: string }) =>
-  new Date(`${res.date}T${res.startTime}`).getTime();
+const getReservationDateTime = (res: { date: string; startTime: string }) => {
+  const [year, month, day] = res.date.split('-').map(Number);
+  const [hour, minute] = res.startTime.split(':').map(Number);
+  return new Date(year, month - 1, day, hour, minute).getTime();
+};
 
 export default function ReservationReviewModal({
   isOpen,
@@ -90,28 +93,6 @@ export default function ReservationReviewModal({
               a.id - b.id,
           );
 
-        const { totalCount } = await getActivityReviews(activityId, 1, 1);
-
-        if (isCancelled) return;
-
-        let myAllReviews: Review[] = [];
-        if (totalCount > 0) {
-          const { reviews } = await getActivityReviews(
-            activityId,
-            1,
-            totalCount,
-          );
-          myAllReviews = reviews
-            .filter((r) => r.user.id === me.id && r.activityId === activityId)
-            .sort(
-              (a, b) =>
-                new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime(),
-            );
-        }
-
-        if (isCancelled) return;
-
         if (!isSubmitted) {
           const currentReservation = completedReservations.find(
             (res) => res.id === reservationId,
@@ -133,6 +114,26 @@ export default function ReservationReviewModal({
         }
 
         if (isSubmitted) {
+          const { totalCount } = await getActivityReviews(activityId, 1, 1);
+          if (isCancelled) return;
+
+          let myAllReviews: Review[] = [];
+          if (totalCount > 0) {
+            const { reviews } = await getActivityReviews(
+              activityId,
+              1,
+              totalCount,
+            );
+            myAllReviews = reviews
+              .filter((r) => r.user.id === me.id && r.activityId === activityId)
+              .sort(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              );
+          }
+          if (isCancelled) return;
+
           const submittedReservations = completedReservations.filter(
             (res) => res.reviewSubmitted,
           );
