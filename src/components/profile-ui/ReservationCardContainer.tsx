@@ -51,11 +51,13 @@ export default function ReservationCardContainer({
         CARD_CONTAINER_CLASS,
       )}
     >
-      <Link href={`/activities/${id}`}>
+      <Link
+        href={`/activities/${id}`}
+        className={twMerge(CARD_IMAGE_CLASS, 'relative block overflow-hidden')}
+      >
         <div
           className={twMerge(
-            CARD_IMAGE_CLASS,
-            'relative overflow-hidden',
+            'h-full w-full',
             isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
           )}
         >
