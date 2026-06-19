@@ -15,6 +15,7 @@ import useMe from '@/hooks/useMe';
 import { Review } from '@/types/activities';
 
 import Button from '@/components/common/button/Button';
+import IconStarOn from '@/components/common/icon/IconStarOn';
 import Textarea from '@/components/common/input/Textarea';
 import StandardModal from '@/components/common/modal/StandardModal';
 import ReservationReviewModalSkeleton from '@/components/profile-reservations/ReservationReviewModalSkeleton';
@@ -248,18 +249,11 @@ export default function ReservationReviewModal({
               <>
                 <div className="mb-6 flex justify-center gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
+                    <IconStarOn
                       key={star}
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      className={`h-12 w-12 ${
-                        star <= myReview.rating
-                          ? 'fill-[#FFC107]'
-                          : 'fill-[#E0E0E0]'
-                      }`}
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
+                      size={48}
+                      color={star <= myReview.rating ? '#FFC107' : '#E0E0E0'}
+                    />
                   ))}
                 </div>
                 <div className="rounded-xl border border-gray-200 p-4 text-left text-sm whitespace-pre-wrap text-gray-700">
@@ -281,15 +275,11 @@ export default function ReservationReviewModal({
                     aria-label={`${star}점 부여`}
                     className="transition-transform outline-none active:scale-95 disabled:opacity-50"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      className={`h-12 w-12 transition-colors duration-150 ${
-                        star <= rating ? 'fill-[#FFC107]' : 'fill-[#E0E0E0]'
-                      }`}
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
+                    <IconStarOn
+                      size={48}
+                      color={star <= rating ? '#FFC107' : '#E0E0E0'}
+                      className="transition-colors duration-150"
+                    />
                   </button>
                 ))}
               </div>
