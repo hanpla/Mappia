@@ -16,6 +16,7 @@ import { Review } from '@/types/activities';
 import Button from '@/components/common/button/Button';
 import Textarea from '@/components/common/input/Textarea';
 import StandardModal from '@/components/common/modal/StandardModal';
+import ReservationReviewModalSkeleton from '@/components/profile-reservations/ReservationReviewModalSkeleton';
 
 interface CompletedReservation {
   id: number;
@@ -219,9 +220,7 @@ export default function ReservationReviewModal({
   return (
     <StandardModal isOpen={isOpen} onClose={handleClose}>
       {isReviewLoading || !hasFetched ? (
-        <div className="flex h-40 items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-200 border-t-gray-600" />
-        </div>
+        <ReservationReviewModalSkeleton />
       ) : (
         <div className="w-full max-w-[480px] p-2 text-center">
           <div className="mb-6">
