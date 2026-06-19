@@ -3,8 +3,8 @@
 import SelectDropdown, {
   SelectOption,
 } from '@/components/common/dropdown/SelectDropdown';
+import IconCalendar from '@/components/common/icon/IconCalendar';
 import IconMinus from '@/components/common/icon/IconMinus';
-import IconPlus from '@/components/common/icon/IconPlus';
 
 export interface Schedule {
   id: string;
@@ -15,9 +15,7 @@ export interface Schedule {
 
 interface ScheduleInputProps {
   schedule: Schedule;
-  isFirst?: boolean;
-  onAdd?: () => void;
-  onRemove?: () => void;
+  onRemove: () => void;
   onChange: (
     id: string,
     field: keyof Omit<Schedule, 'id'>,
@@ -34,21 +32,38 @@ const TIME_OPTIONS: SelectOption[] = Array.from({ length: 48 }, (_, i) => {
 
 export default function ScheduleInput({
   schedule,
-  isFirst = false,
-  onAdd,
   onRemove,
   onChange,
 }: ScheduleInputProps) {
+  const handleCalendarClick = () => {
+    const input = document.getElementById(
+      `schedule-date-${schedule.id}`,
+    ) as HTMLInputElement | null;
+    input?.showPicker?.();
+  };
+
+  const today = new Date();
+  const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
   return (
     <div className="mobile:flex-row mobile:items-end flex flex-col gap-2">
-      <div className="mobile:flex-1">
+      <div className="mobile:flex-1 relative">
         <input
           id={`schedule-date-${schedule.id}`}
           type="date"
           value={schedule.date}
+          min={minDate}
           onChange={(e) => onChange(schedule.id, 'date', e.target.value)}
-          className="textlg-regular border-beige-8B7 focus:border-khaki-6B5 h-14 w-full rounded-2xl border bg-white px-4 transition-colors duration-200 outline-none"
+          className="textlg-regular border-beige-8B7 focus:border-khaki-6B5 h-14 w-full rounded-2xl border bg-white px-4 pr-12 transition-colors duration-200 outline-none [&::-webkit-calendar-picker-indicator]:hidden"
         />
+        <button
+          type="button"
+          onClick={handleCalendarClick}
+          aria-label="날짜 선택"
+          className="text-black-1B1 absolute top-1/2 right-4 -translate-y-1/2"
+        >
+          <IconCalendar size={24} color="currentColor" />
+        </button>
       </div>
 
       <div className="flex items-center gap-2">
@@ -76,25 +91,14 @@ export default function ScheduleInput({
           />
         </div>
 
-        {isFirst ? (
-          <button
-            type="button"
-            onClick={onAdd}
-            aria-label="시간대 추가"
-            className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
-          >
-            <IconPlus size={24} color="#ffffff" />
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={onRemove}
-            aria-label="시간대 삭제"
-            className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
-          >
-            <IconMinus size={24} color="#ffffff" />
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="시간대 삭제"
+          className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
+        >
+          <IconMinus size={24} color="#ffffff" />
+        </button>
       </div>
     </div>
   );
