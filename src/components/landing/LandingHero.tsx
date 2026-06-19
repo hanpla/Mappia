@@ -190,8 +190,8 @@ export default function LandingHero() {
             variants={itemVariants}
           >
             문화 &middot; 예술, 식음료, 스포츠, 투어, 관광, 웰빙 등
-            <br className="max-[413px]:hidden" />
-            분야별로 다양한 체험이 무대 위에서 기다리고 있습니다.
+            <br className="max-[413px]:hidden" /> 분야별로 다양한 체험이 무대
+            위에서 기다리고 있습니다.
           </motion.p>
 
           <motion.div
