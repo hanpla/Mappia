@@ -158,7 +158,7 @@ export default function LandingHero() {
       )}
 
       {/* 콘텐츠 */}
-      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-12 py-16 md:gap-20 md:py-24 lg:flex-row lg:gap-10 lg:py-28">
+      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-6 md:gap-20 lg:flex-row lg:gap-12 lg:py-28">
         <motion.div
           className="flex flex-col items-center lg:items-start"
           variants={contentVariants}
@@ -174,7 +174,7 @@ export default function LandingHero() {
           </motion.span>
 
           <motion.h1
-            className="text3xl-medium md:text4xl-medium mt-6 text-center text-white lg:text-left"
+            className="text3xl-medium md:text4xl-medium mt-3 text-center break-keep text-white lg:mt-6 lg:text-left"
             variants={itemVariants}
           >
             <span className="inline-flex items-center md:items-end">
@@ -186,11 +186,12 @@ export default function LandingHero() {
           </motion.h1>
 
           <motion.p
-            className="textlg-regular md:text2lg-regular mt-6 text-center text-white/75 md:mt-8 lg:text-left"
+            className="textlg-regular md:text2lg-regular mt-6 text-center break-keep text-white/75 md:mt-8 lg:text-left"
             variants={itemVariants}
           >
-            문화 &middot; 예술, 식음료, 스포츠, 투어, 관광, 웰빙 등<br />
-            분야별로 다양한 체험이 무대 위에서 기다리고 있습니다.
+            문화 &middot; 예술, 식음료, 스포츠, 투어, 관광, 웰빙 등
+            <br className="max-[413px]:hidden" /> 분야별로 다양한 체험이 무대
+            위에서 기다리고 있습니다.
           </motion.p>
 
           <motion.div
@@ -235,7 +236,7 @@ export default function LandingHero() {
             className="stage-cursor-glow absolute -inset-8 rounded-full blur-3xl"
             aria-hidden="true"
           />
-          <div className="relative flex h-70 w-70 items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_32%,#fdf7ea,#f2ebdc_46%,#d9c7a3_78%,#bda478_100%)] shadow-[0_0_90px_rgba(228,196,132,0.35)] md:h-100 md:w-100 lg:h-136 lg:w-136">
+          <div className="relative flex h-50 w-50 items-center justify-center rounded-full bg-[radial-gradient(circle_at_50%_32%,#fdf7ea,#f2ebdc_46%,#d9c7a3_78%,#bda478_100%)] shadow-[0_0_90px_rgba(228,196,132,0.35)] md:h-100 md:w-100 lg:h-136 lg:w-136">
             <motion.div
               animate={
                 isReady && !shouldReduceMotion ? { y: [0, -16, 0] } : { y: 0 }
@@ -247,7 +248,7 @@ export default function LandingHero() {
                 repeat: Infinity,
               }}
             >
-              <Logo404 className="h-auto w-42 translate-y-4 md:w-60 md:translate-y-6 lg:w-82.5 lg:translate-y-8" />
+              <Logo404 className="h-auto w-30 translate-y-4 md:w-60 md:translate-y-6 lg:w-82.5 lg:translate-y-8" />
             </motion.div>
           </div>
           <div
