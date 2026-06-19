@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+import { getSafeCallback } from '@/lib/utils/redirect';
+
 const isTokenAlive = (token: string): boolean => {
   try {
     const raw = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -13,6 +15,7 @@ const isTokenAlive = (token: string): boolean => {
 };
 
 const AUTH_ROUTES = ['/login', '/signup'];
+const GUEST_ONLY_ROUTES = ['/', ...AUTH_ROUTES];
 const PROTECTED_PREFIXES = ['/profile', '/my-activities'];
 
 const hasSession = (request: NextRequest): boolean => {
@@ -25,8 +28,11 @@ export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   const isLoggedIn = hasSession(request);
 
-  if (isLoggedIn && (pathname === '/' || AUTH_ROUTES.includes(pathname))) {
-    return NextResponse.redirect(new URL('/activities', request.url));
+  if (isLoggedIn && GUEST_ONLY_ROUTES.includes(pathname)) {
+    const callback = request.nextUrl.searchParams.get('callback');
+    return NextResponse.redirect(
+      new URL(getSafeCallback(callback), request.url),
+    );
   }
 
   const isProtected = PROTECTED_PREFIXES.some(
