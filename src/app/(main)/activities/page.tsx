@@ -14,7 +14,9 @@ import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
 import IconChevronRight from '@/components/common/icon/IconChevronRight';
+import IconFire from '@/components/common/icon/IconFire';
 import ImageWithFallback from '@/components/common/image/ImageWithFallback';
+import LogoJoy from '@/components/common/logo/LogoJoy';
 import Pagination from '@/components/common/pagination/Pagination';
 import Searchbar from '@/components/searchbar/Searchbar';
 
@@ -116,6 +118,8 @@ function MainPageContent() {
 
   const [visibleCount, setVisibleCount] = useState(12);
 
+  const allActivitiesRef = useRef<HTMLElement>(null);
+
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState(0);
@@ -171,6 +175,12 @@ function MainPageContent() {
       } else {
         params.delete('keyword');
       }
+    });
+    requestAnimationFrame(() => {
+      allActivitiesRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     });
   };
 
@@ -246,17 +256,19 @@ function MainPageContent() {
             href={`/activities/${heroActivity.id}`}
             className="inner absolute inset-0 flex flex-col justify-center"
           >
-            <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
-              🔥 이달의 인기 체험
+            <p className="text-white-FFF/80 flex items-center gap-1.5 text-[14px] md:text-[26px]">
+              <IconFire size={28} className="size-4 md:size-7" />
+              이달의 인기 체험
             </p>
-            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold md:text-[54px] lg:text-[68px]">
+            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold break-keep md:text-[54px] lg:text-[68px]">
               {heroActivity.title}
             </h1>
           </Link>
         ) : (
           <div className="inner absolute inset-0 flex flex-col justify-center">
-            <p className="text-white-FFF/80 text-[14px] md:text-[26px]">
-              🔥 이달의 인기 체험
+            <p className="text-white-FFF/80 flex items-center gap-1.5 text-[14px] md:text-[26px]">
+              <IconFire size={28} className="size-4 md:size-7" />
+              이달의 인기 체험
             </p>
           </div>
         )}
@@ -273,8 +285,9 @@ function MainPageContent() {
       {!keyword && (
         <section className="mt-6 mb-8 md:mt-8 md:mb-10">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-black-1B1 text-[21px] font-bold md:text-[43px]">
-              🔥 인기 체험
+            <h2 className="text-black-1B1 flex items-center gap-2 text-[21px] font-bold md:text-[43px]">
+              <IconFire size={48} className="size-7 shrink-0 md:size-12" />
+              인기 체험
             </h2>
             <div className="hidden gap-1 lg:flex">
               <button
@@ -331,8 +344,8 @@ function MainPageContent() {
       )}
 
       <div className="mt-6 mb-5 flex items-center justify-between gap-2 md:mt-8"></div>
-      <div className="mb-5 flex items-center justify-between gap-2">
-        <div className="scrollbar-hide flex min-w-0 flex-1 gap-2 overflow-x-auto">
+      <div className="mb-5">
+        <div className="scrollbar-hide flex gap-2 overflow-x-auto">
           <CategoryButton
             size="sm"
             isActive={activeCategory === null}
@@ -353,19 +366,16 @@ function MainPageContent() {
             </CategoryButton>
           ))}
         </div>
-        <div className="relative shrink-0">
-          <div
-            aria-hidden
-            className="via-ivory-F2E/80 to-ivory-F2E pointer-events-none absolute top-0 right-full bottom-0 w-10 bg-linear-to-r from-transparent lg:hidden"
-          />
-          <SortDropdown className="h-10.25 w-20 min-w-0 px-3 md:h-14.5 md:w-30 md:px-5 lg:w-31.75" />
-        </div>
       </div>
 
-      <section className="mb-8 md:mb-10">
-        <h2 className="text-black-1B1 mb-4 text-[21px] font-bold md:text-[43px]">
-          🛼 모든 체험
-        </h2>
+      <section ref={allActivitiesRef} className="mb-8 scroll-mt-6 md:mb-10">
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <h2 className="text-black-1B1 flex items-center gap-2 text-[21px] font-bold md:text-[43px]">
+            <LogoJoy size={48} className="size-7 shrink-0 md:size-12" />
+            모든 체험
+          </h2>
+          <SortDropdown className="h-10.25 w-28 shrink-0 px-3 whitespace-nowrap md:h-14.5 md:w-36 md:px-5 lg:w-40" />
+        </div>
         <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
           {allActivities.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />

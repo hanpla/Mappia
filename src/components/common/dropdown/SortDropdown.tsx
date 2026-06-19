@@ -27,6 +27,9 @@ export default function SortDropdown({
   const { ref, isOpen, toggle, close } = useDropdown();
 
   const currentSort = searchParams ? searchParams.get(sortKey) : null;
+  const currentLabel =
+    SORT_OPTIONS.find((option) => option.value === currentSort)?.label ??
+    '정렬';
 
   const handleSelect = (value: string) => {
     if (!searchParams) return;
@@ -55,7 +58,7 @@ export default function SortDropdown({
           className,
         )}
       >
-        <span>정렬</span>
+        <span>{currentLabel}</span>
         <svg
           width="14"
           height="14"
