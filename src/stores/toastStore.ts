@@ -13,6 +13,11 @@ interface ToastState {
 const useToastStore = create<ToastState>((set, get) => ({
   toasts: [],
   showToast: (type, message) => {
+    const isDuplicate = get().toasts.some(
+      (toast) => toast.type === type && toast.message === message,
+    );
+    if (isDuplicate) return;
+
     const id = crypto.randomUUID();
 
     set((state) => ({
