@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
@@ -37,6 +37,7 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
   const { addActivity } = useRecentActivitiesStore();
 
   const router = useRouter();
+  const pathname = usePathname();
 
   const showToast = useToastStore((state) => state.showToast);
 
@@ -128,7 +129,7 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
           {isDropdownOpen && (
             <Dropdown
               type="edit"
-              editUrl={`/my-activities/${id}/edit`}
+              editUrl={`/my-activities/${id}/edit?from=${encodeURIComponent(pathname)}`}
               onDelete={handleDeleteClick}
               onClose={() => setIsDropdownOpen(false)}
             />

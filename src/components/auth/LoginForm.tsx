@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -30,6 +30,7 @@ export default function LoginForm() {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const isSubmittingRef = useRef(false);
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: () => login(email, password),
@@ -47,15 +48,20 @@ export default function LoginForm() {
     onError: (err) => {
       showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));
     },
+    onSettled: () => {
+      isSubmittingRef.current = false;
+    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmittingRef.current) return;
     const emailErr = validateEmail(email);
     const passwordErr = validatePassword(password);
     setEmailError(emailErr);
     setPasswordError(passwordErr);
     if (emailErr || passwordErr) return;
+    isSubmittingRef.current = true;
     loginMutate();
   };
 
