@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { ReactNode, useState } from 'react';
 
 import { twMerge } from 'tailwind-merge';
@@ -11,6 +12,7 @@ interface ReservationCardProps {
   imageUrl?: string;
   children: ReactNode;
   className?: string;
+  id: number;
 }
 
 export const CARD_CONTAINER_CLASS =
@@ -25,6 +27,7 @@ export const CARD_CONTENT_CLASS =
 export default function ReservationCardContainer({
   imageUrl,
   children,
+  id,
 }: ReservationCardProps) {
   const normalizedImageUrl = imageUrl ?? null;
   const [imgSrc, setImgSrc] = useState<string | null>(normalizedImageUrl);
@@ -48,28 +51,32 @@ export default function ReservationCardContainer({
         CARD_CONTAINER_CLASS,
       )}
     >
-      <div
-        className={twMerge(
-          CARD_IMAGE_CLASS,
-          'relative overflow-hidden',
-          isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
-        )}
+      <Link
+        href={`/activities/${id}`}
+        className={twMerge(CARD_IMAGE_CLASS, 'relative block overflow-hidden')}
       >
-        <Image
-          src={imgSrc || fallbackSrc}
-          alt="예약 이미지"
-          width={140}
-          height={140}
-          priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className={
-            isFallback
-              ? 'h-14 w-14 object-contain opacity-40 md:h-16 md:w-16'
-              : 'h-full w-full object-cover'
-          }
-          onError={() => setImgSrc(fallbackSrc)}
-        />
-      </div>
+        <div
+          className={twMerge(
+            'h-full w-full',
+            isFallback ? 'bg-gray-FAF flex items-center justify-center' : '',
+          )}
+        >
+          <Image
+            src={imgSrc || fallbackSrc}
+            alt="예약 이미지"
+            width={140}
+            height={140}
+            priority
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className={
+              isFallback
+                ? 'h-14 w-14 object-contain opacity-40 md:h-16 md:w-16'
+                : 'h-full w-full object-cover'
+            }
+            onError={() => setImgSrc(fallbackSrc)}
+          />
+        </div>
+      </Link>
       <div className={CARD_CONTENT_CLASS}>{children}</div>
     </div>
   );

@@ -41,7 +41,7 @@ export default function ReservationsContent() {
       getMyReservations({
         status: statusParam,
         cursorId: pageParam ?? undefined,
-        size: 4,
+        size: 10,
       }),
     staleTime: 5 * 60 * 1000,
   });
