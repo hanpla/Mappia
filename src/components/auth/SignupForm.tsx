@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
@@ -95,6 +95,7 @@ export default function SignupForm() {
   const showToast = useToastStore((state) => state.showToast);
   const [values, setValues] = useState(EMPTY_FIELDS);
   const [errors, setErrors] = useState(EMPTY_FIELDS);
+  const isSubmittingRef = useRef(false);
 
   const { mutate: signupMutate, isPending } = useMutation({
     mutationFn: () => signup(values.email, values.nickname, values.password),
@@ -114,6 +115,9 @@ export default function SignupForm() {
       }
 
       showToast('error', message ?? SIGNUP_ERROR_MESSAGE);
+    },
+    onSettled: () => {
+      isSubmittingRef.current = false;
     },
   });
 
@@ -140,7 +144,7 @@ export default function SignupForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isPending) return;
+    if (isSubmittingRef.current) return;
     const nextErrors: Record<FieldName, string> = {
       email: validateField('email', values),
       nickname: validateField('nickname', values),
@@ -149,6 +153,7 @@ export default function SignupForm() {
     };
     setErrors(nextErrors);
     if (Object.values(nextErrors).some(Boolean)) return;
+    isSubmittingRef.current = true;
     signupMutate();
   };
 
