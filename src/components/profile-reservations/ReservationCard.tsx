@@ -215,7 +215,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         cancelText="아니오"
         confirmText={isSubmitting ? '처리 중...' : '취소하기'}
       />
-      {isRealCompleted && (
+      {isRealCompleted && isReviewModalOpen && (
         <ReservationReviewModal
           isOpen={isReviewModalOpen}
           onClose={() => setIsReviewModalOpen(false)}
