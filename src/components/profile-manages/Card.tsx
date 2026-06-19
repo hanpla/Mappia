@@ -12,12 +12,17 @@ interface CardProps {
 }
 
 export default function Card({ activity, onEdit, onDelete }: CardProps) {
-  const { rating = 0, reviewCount = 0, title = '', price = 0 } = activity;
+  const { rating = 0, reviewCount = 0, title = '', price = 0, id } = activity;
   const imageUrl = activity.bannerImageUrl;
 
   return (
-    <ReservationCardContainer imageUrl={imageUrl}>
-      <CardInfo rating={rating} reviewCount={reviewCount} title={title} />
+    <ReservationCardContainer id={id} imageUrl={imageUrl}>
+      <CardInfo
+        rating={rating}
+        reviewCount={reviewCount}
+        title={title}
+        id={id}
+      />
       <CardFooter
         price={price}
         activityId={activity.id}
