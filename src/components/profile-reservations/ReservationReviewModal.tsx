@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
@@ -151,12 +152,13 @@ export default function ReservationReviewModal({
         }
       } catch (error) {
         if (!isCancelled) {
-          showToast(
-            'error',
-            error instanceof Error
-              ? error.message
-              : '데이터를 불러오는 데 실패했습니다.',
-          );
+          let message = '후기를 불러오는 데 실패했습니다.';
+
+          if (axios.isAxiosError(error) && error.response?.status === 404) {
+            message = '존재하지 않는 예약입니다.';
+          }
+
+          showToast('error', message);
         }
       } finally {
         if (!isCancelled) {
@@ -191,10 +193,13 @@ export default function ReservationReviewModal({
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
-      showToast(
-        'error',
-        error instanceof Error ? error.message : '후기 등록에 실패했습니다.',
-      );
+      let message = '후기 등록하는 데 실패했습니다.';
+
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        message = '존재하지 않는 체험입니다.';
+      }
+
+      showToast('error', message);
     },
   });
 
