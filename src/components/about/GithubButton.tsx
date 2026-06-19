@@ -2,7 +2,7 @@ import IconGithub from '@/components/common/icon/IconGithub';
 
 export default function GithubButton() {
   return (
-    <div className="bg-ivory-F2E/40 border border-ivory-F2E">
+    <div className="bg-ivory-F2E/40 border-ivory-F2E border">
       <a
         href="https://github.com/hanpla/Mappia"
         target="_blank"

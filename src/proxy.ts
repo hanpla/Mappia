@@ -12,21 +12,42 @@ const isTokenAlive = (token: string): boolean => {
   }
 };
 
-export const proxy = (request: NextRequest) => {
-  const accessToken = request.cookies.get('accessToken')?.value;
-  const { pathname } = request.nextUrl;
+const AUTH_ROUTES = ['/login', '/signup'];
+const PROTECTED_PREFIXES = ['/profile', '/my-activities'];
 
-  if (
-    accessToken &&
-    isTokenAlive(accessToken) &&
-    ['/login', '/signup'].includes(pathname)
-  ) {
+const hasSession = (request: NextRequest): boolean => {
+  const accessToken = request.cookies.get('accessToken')?.value;
+  const refreshToken = request.cookies.get('refreshToken')?.value;
+  return (!!accessToken && isTokenAlive(accessToken)) || !!refreshToken;
+};
+
+export const proxy = (request: NextRequest) => {
+  const { pathname } = request.nextUrl;
+  const isLoggedIn = hasSession(request);
+
+  if (isLoggedIn && AUTH_ROUTES.includes(pathname)) {
     return NextResponse.redirect(new URL('/activities', request.url));
+  }
+
+  const isProtected = PROTECTED_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+
+  if (!isLoggedIn && isProtected) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('callback', pathname + request.nextUrl.search);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 };
 
 export const config = {
-  matcher: ['/login', '/signup'],
+  matcher: [
+    '/login',
+    '/signup',
+    '/profile',
+    '/profile/:path*',
+    '/my-activities/:path*',
+  ],
 };

@@ -3,6 +3,8 @@ import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { useRef, useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import useToastStore from '@/stores/toastStore';
 
 import { createActivity } from '@/lib/api/activities';
@@ -71,7 +73,7 @@ export default function ActivityRegisterForm({
 }: ActivityRegisterFormProps) {
   const router = useRouter();
   const { showToast } = useToastStore();
-
+  const queryClient = useQueryClient();
   const isEdit = mode === 'edit';
   const headingText = isEdit ? '내 체험 수정' : '내 체험 등록';
   const submitText = isEdit ? '수정하기' : '등록하기';
@@ -83,6 +85,9 @@ export default function ActivityRegisterForm({
   );
   const [price, setPrice] = useState(
     initialData ? String(initialData.price) : '',
+  );
+  const [priceDisplay, setPriceDisplay] = useState(
+    initialData ? Number(initialData.price).toLocaleString() : '',
   );
   const [address, setAddress] = useState(initialData?.address ?? '');
 
@@ -142,6 +147,32 @@ export default function ActivityRegisterForm({
     setSchedules((prev) =>
       prev.map((s) => (s.id === id ? { ...s, [field]: value } : s)),
     );
+  };
+
+  const PRICE_MAX = 10000000;
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    markDirty();
+    const onlyNumbers = e.target.value.replace(/[^\d]/g, '');
+    if (onlyNumbers === '') {
+      setPrice('');
+      setPriceDisplay('');
+      return;
+    }
+    const numeric = Number(onlyNumbers);
+    if (numeric > PRICE_MAX) return;
+    setPrice(String(numeric));
+    setPriceDisplay(onlyNumbers);
+  };
+
+  const handlePriceBlur = () => {
+    if (price) {
+      setPriceDisplay(Number(price).toLocaleString());
+    }
+  };
+
+  const handlePriceFocus = () => {
+    setPriceDisplay(price);
   };
 
   const validateForm = (): string | null => {
@@ -217,6 +248,14 @@ export default function ActivityRegisterForm({
       }
 
       await updateMyActivity(activityId, body);
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ['activity', activityId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ['my-activities'],
+        }),
+      ]);
       showToast('success', '체험이 수정되었습니다.');
       router.push('/profile/manages');
     } catch (error) {
@@ -234,6 +273,9 @@ export default function ActivityRegisterForm({
     try {
       const body = await buildCreateActivityBody(collectValues());
       await createActivity(body);
+      await queryClient.invalidateQueries({
+        queryKey: ['my-activities'],
+      });
       showToast('success', '체험이 등록되었습니다.');
       router.push('/profile/manages');
     } catch (error) {
@@ -321,6 +363,7 @@ export default function ActivityRegisterForm({
             setTitle(e.target.value);
           }}
           placeholder="제목을 입력해 주세요"
+          maxLength={30}
           className={INPUT_BORDER}
         />
       </div>
@@ -361,12 +404,12 @@ export default function ActivityRegisterForm({
         </label>
         <Input
           id="price"
-          type="number"
-          value={price}
-          onChange={(e) => {
-            markDirty();
-            setPrice(e.target.value);
-          }}
+          type="text"
+          inputMode="numeric"
+          value={priceDisplay}
+          onChange={handlePriceChange}
+          onFocus={handlePriceFocus}
+          onBlur={handlePriceBlur}
           placeholder="체험 금액을 입력해 주세요"
           className={INPUT_BORDER}
         />
@@ -448,7 +491,7 @@ export default function ActivityRegisterForm({
       <ImageUploadField
         name="introImages"
         label="소개 이미지 등록"
-        maxCount={4}
+        maxCount={2}
         images={introImages}
         onChange={(images) => {
           markDirty();

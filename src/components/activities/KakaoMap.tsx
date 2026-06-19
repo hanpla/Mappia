@@ -1,71 +1,61 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
+
+import { useQuery } from '@tanstack/react-query';
 
 interface KakaoMapProps {
   address: string;
 }
 
-interface MapCoordinate {
-  lat: number;
-  lng: number;
-}
-
 const MESSAGE_STYLE = `textmd-medium md:textlg-medium text-gray-797 flex h-[180px] w-full items-center justify-center overflow-hidden rounded-3xl bg-stone-50 md:h-[450px]`;
 
 export default function KakaoMap({ address }: KakaoMapProps) {
-  const [coords, setCoords] = useState<MapCoordinate | null>(null);
-  const [isGeocodeError, setIsGeocodeError] = useState(false);
-
-  const [isLoading, hasError] = useKakaoLoader({
+  const [isLoadingLoader, hasLoaderError] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_JS_KEY!,
     libraries: ['services'],
   });
 
-  useEffect(() => {
-    if (
-      isLoading ||
-      hasError ||
-      !address ||
-      !window.kakao ||
-      !window.kakao.maps ||
-      !window.kakao.maps.services
-    ) {
-      return;
-    }
+  const isKakaoReady =
+    !isLoadingLoader &&
+    !hasLoaderError &&
+    typeof window !== 'undefined' &&
+    !!window.kakao?.maps?.services;
 
-    let isActive = true;
-    const geocoder = new window.kakao.maps.services.Geocoder();
+  const {
+    data: coords,
+    isError: isGeocodeError,
+    isLoading: isLoadingGeocode,
+  } = useQuery({
+    queryKey: ['mapCoordinate', address],
+    queryFn: () => {
+      return new Promise<{ lat: number; lng: number }>((resolve, reject) => {
+        const geocoder = new window.kakao.maps.services.Geocoder();
 
-    geocoder.addressSearch(address, (result, status) => {
-      if (!isActive) return;
-
-      if (
-        status === window.kakao.maps.services.Status.OK &&
-        result.length > 0
-      ) {
-        setCoords({
-          lat: Number(result[0].y),
-          lng: Number(result[0].x),
+        geocoder.addressSearch(address, (result, status) => {
+          if (
+            status === window.kakao.maps.services.Status.OK &&
+            result.length > 0
+          ) {
+            resolve({
+              lat: Number(result[0].y),
+              lng: Number(result[0].x),
+            });
+          } else {
+            reject(new Error('Geocoding failed'));
+          }
         });
-        setIsGeocodeError(false);
-      } else {
-        setIsGeocodeError(true);
-        setCoords(null);
-      }
-    });
+      });
+    },
+    enabled: isKakaoReady && !!address,
+    staleTime: Infinity,
+  });
 
-    return () => {
-      isActive = false;
-    };
-  }, [address, isLoading, hasError]);
-
-  if (hasError || isGeocodeError) {
+  if (hasLoaderError || isGeocodeError) {
     return <div className={MESSAGE_STYLE}>지도를 불러오지 못했습니다.</div>;
   }
 
-  if (isLoading || !coords) {
+  if (isLoadingLoader || isLoadingGeocode || !coords) {
     return <div className={MESSAGE_STYLE}>지도를 불러오는 중입니다...</div>;
   }
 
