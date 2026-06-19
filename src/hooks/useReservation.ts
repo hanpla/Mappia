@@ -81,11 +81,16 @@ export default function useReservation(
       });
     },
     onError: (error) => {
-      const message =
-        axios.isAxiosError<{ message?: string }>(error) &&
-        error.response?.data?.message
-          ? error.response.data.message
-          : '체험 예약에 실패했습니다.';
+      let message = '체험 예약에 실패했습니다.';
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        if (status === 400) {
+          message = '이미 지난 일정은 예약할 수 없습니다.';
+        } else if (status === 409) {
+          message = '확정 예약이 있는 일정은 예약할 수 없습니다.';
+        }
+      }
 
       showToast('error', message);
     },
