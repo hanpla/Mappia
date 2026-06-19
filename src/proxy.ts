@@ -25,7 +25,7 @@ export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
   const isLoggedIn = hasSession(request);
 
-  if (isLoggedIn && AUTH_ROUTES.includes(pathname)) {
+  if (isLoggedIn && (pathname === '/' || AUTH_ROUTES.includes(pathname))) {
     return NextResponse.redirect(new URL('/activities', request.url));
   }
 
@@ -44,6 +44,7 @@ export const proxy = (request: NextRequest) => {
 
 export const config = {
   matcher: [
+    '/',
     '/login',
     '/signup',
     '/profile',
