@@ -146,7 +146,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-1 pl-1 md:pl-0">
-          <span className="text-black-1B1 textxl-bold shrink-0 pt-1 pb-0 text-sm md:text-base">
+          <span className="text-black-1B1 font-bold shrink-0 pt-1 pb-0 text-sm md:text-base">
             ₩{totalPrice.toLocaleString()}
           </span>
           <div className="flex items-center justify-end gap-2 md:gap-3">
