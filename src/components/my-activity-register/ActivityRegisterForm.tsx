@@ -227,7 +227,8 @@ export default function ActivityRegisterForm({
     const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     for (const schedule of filledSchedules) {
       if (!schedule.date) return '예약 가능한 시간대의 날짜를 입력해 주세요.';
-      if (schedule.date < todayStr) {
+      const isExisting = schedule.id.startsWith('schedule-server-');
+      if (!isExisting && schedule.date < todayStr) {
         return '오늘 이전의 날짜는 선택할 수 없습니다.';
       }
       if (schedule.startTime >= schedule.endTime) {
@@ -527,15 +528,6 @@ export default function ActivityRegisterForm({
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={handleAddSchedule}
-          aria-label="시간대 추가"
-          className="border-beige-8B7 text-beige-8B7 hover:bg-beige-8B7/5 flex h-14 w-full items-center justify-center rounded-2xl border border-dashed bg-white transition-colors"
-        >
-          <IconPlus size={24} color="currentColor" />
-        </button>
-
         <div className="flex flex-col gap-2">
           {schedules.map((schedule) => (
             <ScheduleInput
@@ -546,6 +538,15 @@ export default function ActivityRegisterForm({
             />
           ))}
         </div>
+
+        <button
+          type="button"
+          onClick={handleAddSchedule}
+          aria-label="시간대 추가"
+          className="border-beige-8B7 text-beige-8B7 hover:bg-beige-8B7/5 flex h-14 w-full items-center justify-center rounded-2xl border border-dashed bg-white transition-colors"
+        >
+          <IconPlus size={24} color="currentColor" />
+        </button>
       </div>
 
       <ImageUploadField

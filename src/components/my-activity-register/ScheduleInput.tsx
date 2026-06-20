@@ -1,5 +1,7 @@
 'use client';
 
+import { useRef } from 'react';
+
 import SelectDropdown, {
   SelectOption,
 } from '@/components/common/dropdown/SelectDropdown';
@@ -35,11 +37,10 @@ export default function ScheduleInput({
   onRemove,
   onChange,
 }: ScheduleInputProps) {
+  const dateInputRef = useRef<HTMLInputElement>(null);
+
   const handleCalendarClick = () => {
-    const input = document.getElementById(
-      `schedule-date-${schedule.id}`,
-    ) as HTMLInputElement | null;
-    input?.showPicker?.();
+    dateInputRef.current?.showPicker?.();
   };
 
   const today = new Date();
@@ -49,7 +50,7 @@ export default function ScheduleInput({
     <div className="mobile:flex-row mobile:items-end flex flex-col gap-2">
       <div className="mobile:flex-1 relative">
         <input
-          id={`schedule-date-${schedule.id}`}
+          ref={dateInputRef}
           type="date"
           value={schedule.date}
           min={minDate}
