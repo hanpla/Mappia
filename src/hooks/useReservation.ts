@@ -79,6 +79,9 @@ export default function useReservation(
       queryClient.invalidateQueries({
         queryKey: ['availableSchedules', activityId, yearStr, monthStr],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['myReservations'],
+      });
     },
     onError: (error) => {
       let message = '체험 예약에 실패했습니다.';

@@ -22,7 +22,6 @@ export default function ReservationsContent() {
   const searchParams = useSearchParams();
   const currentFilter = searchParams?.get('filter') as ReservationStatus | null;
 
-  // '체험 완료(completed)' 필터는 날짜가 지나 자동으로 완료처리되는 'pending' 건도 포함해야 합니다.
   const statusParam =
     currentFilter === 'completed' ? undefined : (currentFilter ?? undefined);
 
@@ -82,7 +81,6 @@ export default function ReservationsContent() {
 
   const reservations = data?.pages.flatMap((page) => page.reservations) ?? [];
 
-  // 날짜 연산을 통해 변경된 기기/예약 상태에 맞는 클라이언트 사이드 필터링 적용
   const filteredReservations = reservations.filter((item) => {
     if (!currentFilter) return true;
     return getEffectiveStatus(item) === currentFilter;
