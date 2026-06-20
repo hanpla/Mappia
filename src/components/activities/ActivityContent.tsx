@@ -1,4 +1,10 @@
-import { ActivityDetailContent } from '@/types/activities';
+'use client';
+
+import { notFound } from 'next/navigation';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import { getActivityDetail } from '@/lib/api/activities';
 
 import ActivityDescription from '@/components/activities/ActivityDescription';
 import ActivityHeader from '@/components/activities/ActivityHeader';
@@ -11,14 +17,27 @@ import Review from '@/components/activities/Review';
 import ActivityWeather from './ActivityWeather';
 
 interface ActivityContentProps {
-  activity: ActivityDetailContent;
+  activityId: number;
   currentPage: number;
 }
 
 export default function ActivityContent({
-  activity,
+  activityId,
   currentPage,
 }: ActivityContentProps) {
+  const { data: activity, isError } = useSuspenseQuery({
+    queryKey: ['activityDetail', activityId],
+    queryFn: () => getActivityDetail(activityId),
+    staleTime: 1000 * 60 * 5,
+    retry: false,
+  });
+
+  if (isError) {
+    notFound();
+  }
+
+  if (!activity) return null;
+
   return (
     <div className="pt-6 lg:pt-18">
       <div className="flex flex-col lg:grid lg:grid-cols-8 lg:gap-10">

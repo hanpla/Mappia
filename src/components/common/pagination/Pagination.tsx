@@ -47,7 +47,7 @@ export default function Pagination({
   const disabledButton = `${commonButton} bg-white border-gray-DDD cursor-not-allowed`;
 
   return (
-    <div className="flex items-center gap-2.5 select-none">
+    <div className="flex items-center gap-1.5 select-none md:gap-2.5">
       {isFirstPage ? (
         <div className={disabledButton} aria-label="이전 페이지 비활성화">
           <IconPaginationLeft color="#A1A1A1" />

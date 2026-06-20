@@ -55,7 +55,7 @@ export default function ReviewSkeleton() {
       </ul>
 
       <div className="mt-10 flex justify-center">
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5 md:gap-2.5">
           {ARR_LEN_5.map((btn) => (
             <div
               key={btn}
