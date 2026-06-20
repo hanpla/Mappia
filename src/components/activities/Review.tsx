@@ -1,8 +1,13 @@
+'use client';
+
+import { useQuery } from '@tanstack/react-query';
+
 import { getActivityReviews } from '@/lib/api/activities';
 
 import IconStarOn from '../common/icon/IconStarOn';
 import Pagination from '../common/pagination/Pagination';
 import AIReviewSection from './AiReviewSection';
+import ReviewSkeleton from './skeletons/ReviewSkeleton';
 
 interface ReviewProps {
   activityId: number;
@@ -27,22 +32,36 @@ const formatDate = (dateString: string) => {
   return `${date.getFullYear()}. ${date.getMonth() + 1}. ${date.getDate()}`;
 };
 
-export default async function Review({
+export default function Review({
   activityId,
   currentPage,
   title,
   category,
   description,
 }: ReviewProps) {
+  const { data: res, isLoading } = useQuery({
+    queryKey: ['activityReviews', activityId, currentPage || 1],
+    queryFn: () => getActivityReviews(activityId, currentPage || 1, PAGE_SIZE),
+    placeholderData: (previousData) => previousData,
+    enabled: !!activityId,
+  });
+
+  const { data: allReviewsRes } = useQuery({
+    queryKey: ['activityReviewsAll', activityId],
+    queryFn: () => getActivityReviews(activityId, 1, 10),
+    enabled: !!activityId && !!res && (res.totalCount || 0) > 0,
+  });
+
   if (!activityId) return null;
 
-  const res = await getActivityReviews(activityId, currentPage || 1, PAGE_SIZE);
-  const reviews = res.reviews || [];
-  const totalCount = res.totalCount || 0;
-  const averageRating = res.averageRating || 0;
+  const reviews = res?.reviews || [];
+  const totalCount = res?.totalCount || 0;
+  const averageRating = res?.averageRating || 0;
+  const allReviews = allReviewsRes?.reviews || [];
 
-  const allReviews =
-    totalCount > 0 ? (await getActivityReviews(activityId, 1, 10)).reviews : [];
+  if (isLoading && !res) {
+    return <ReviewSkeleton />;
+  }
 
   return (
     <section>

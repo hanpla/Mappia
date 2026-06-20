@@ -82,7 +82,7 @@ export default function MoblieReservationSheet({
           </button>
         </div>
 
-        <div className="overflow-y-auto pt-6 pb-20 md:pb-28">
+        <div className="overflow-y-auto pt-6 pb-20 md:pr-6 md:pb-28">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-[1.5fr_1fr]">
             <div>
               <CalendarReverse

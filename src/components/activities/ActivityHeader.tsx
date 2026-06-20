@@ -19,6 +19,7 @@ import { ActivityDetailContent } from '@/types/activities';
 import Dropdown from '../common/dropdown/Dropdown';
 import IconMap from '../common/icon/IconMap';
 import IconMeatball from '../common/icon/IconMeatball';
+import IconShare from '../common/icon/IconShare';
 import IconStarOn from '../common/icon/IconStarOn';
 import LogoSurprise from '../common/logo/LogoSurprise';
 import ConfirmModal from '../common/modal/ConfirmModal';
@@ -83,6 +84,16 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
     deleteActivityMutate();
   };
 
+  const handleShareClick = async () => {
+    try {
+      const currentUrl = window.location.href;
+      await navigator.clipboard.writeText(currentUrl);
+      showToast('success', '클립보드에 복사되었습니다.');
+    } catch {
+      showToast('error', '링크 복사에 실패했습니다.');
+    }
+  };
+
   useEffect(() => {
     if (id && !isNaN(id)) {
       addActivity({
@@ -111,31 +122,42 @@ export default function ActivityHeader({ activity }: ActivityHeaderProps) {
         </div>
       </div>
 
-      {isOwner && (
-        <div className="relative shrink-0" ref={dropdownRef}>
-          <button
-            type="button"
-            onClick={handleDropdown}
-            className="group hover:bg-beige-8B7 flex size-8 items-center justify-center rounded-full transition-colors hover:text-white"
-            aria-label="메뉴 열기"
-          >
-            <IconMeatball
-              size={24}
-              color="currentColor"
-              className="cursor-pointer"
-            />
-          </button>
+      <div className="flex shrink-0 items-start gap-1">
+        <button
+          type="button"
+          onClick={handleShareClick}
+          className="flex size-6 cursor-pointer items-center justify-center rounded-full transition-colors hover:bg-gray-100 md:size-8"
+          title="링크 공유"
+          aria-label="링크 공유"
+        >
+          <IconShare className="h-4 w-4 md:h-5 md:w-5" />
+        </button>
 
-          {isDropdownOpen && (
-            <Dropdown
-              type="edit"
-              editUrl={`/my-activities/${id}/edit?from=${encodeURIComponent(pathname)}`}
-              onDelete={handleDeleteClick}
-              onClose={() => setIsDropdownOpen(false)}
-            />
-          )}
-        </div>
-      )}
+        {isOwner && (
+          <div className="relative shrink-0" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={handleDropdown}
+              className="group hover:bg-beige-8B7 flex size-6 cursor-pointer items-center justify-center rounded-full transition-colors hover:text-white md:size-8"
+              aria-label="메뉴 열기"
+            >
+              <IconMeatball
+                color="currentColor"
+                className="h-5 w-5 md:h-6 md:w-6"
+              />
+            </button>
+
+            {isDropdownOpen && (
+              <Dropdown
+                type="edit"
+                editUrl={`/my-activities/${id}/edit?from=${encodeURIComponent(pathname)}`}
+                onDelete={handleDeleteClick}
+                onClose={() => setIsDropdownOpen(false)}
+              />
+            )}
+          </div>
+        )}
+      </div>
 
       <ConfirmModal
         isOpen={isModalOpen}
