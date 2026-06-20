@@ -61,8 +61,9 @@ export default function UserSection() {
   });
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const notificationRef = useClickOutside<HTMLDivElement>(() =>
-    setIsNotificationOpen(false),
+  const notificationRef = useClickOutside<HTMLDivElement>(
+    () => setIsNotificationOpen(false),
+    { enabled: isNotificationOpen, swallowEvent: true },
   );
 
   return (
