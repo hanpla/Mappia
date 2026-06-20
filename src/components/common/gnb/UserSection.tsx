@@ -12,7 +12,9 @@ import {
   getMyNotifications,
 } from '@/lib/api/my-notifications';
 
+import useBodyScrollLock from '@/hooks/useBodyScrollLock';
 import useClickOutside from '@/hooks/useClickOutside';
+import { useDeviceType } from '@/hooks/useDeviceType';
 import useMe from '@/hooks/useMe';
 
 import IconNotification from '../icon/IconNotification';
@@ -61,9 +63,13 @@ export default function UserSection() {
   });
 
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const notificationRef = useClickOutside<HTMLDivElement>(() =>
-    setIsNotificationOpen(false),
+  const notificationRef = useClickOutside<HTMLDivElement>(
+    () => setIsNotificationOpen(false),
+    { enabled: isNotificationOpen, swallowEvent: true },
   );
+
+  const { isMobile } = useDeviceType();
+  useBodyScrollLock(isMobile && isNotificationOpen);
 
   return (
     <div className="flex items-center justify-center gap-6.25 max-md:gap-3">
