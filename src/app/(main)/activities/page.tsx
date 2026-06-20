@@ -352,7 +352,7 @@ function MainPageContent() {
             <LogoJoy size={48} className="size-7 shrink-0 md:size-12" />
             모든 체험
           </h2>
-          <SortDropdown className="h-10.25 w-28 shrink-0 px-3 whitespace-nowrap lg:hidden" />
+          <SortDropdown className="h-10.25 w-30 shrink-0 px-3 whitespace-nowrap md:h-14.5 md:w-36 md:px-5 lg:hidden" />
         </div>
 
         <div className="mb-5 flex items-center justify-between gap-2">
