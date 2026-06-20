@@ -27,7 +27,6 @@ export default function Input({
     <div
       className={twMerge(
         'border-gray-A4A relative flex h-14 items-center rounded-2xl border bg-white transition-colors duration-200',
-        isFloating ? '' : 'overflow-hidden',
         hasError ? 'border-red-FF4' : 'focus-within:border-beige-8B7',
         className,
       )}
