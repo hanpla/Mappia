@@ -20,7 +20,8 @@ export default function useClickOutside<T extends HTMLElement>(
     if (!enabled) return;
 
     function handleClickOutside(e: MouseEvent) {
-      if (!ref.current || ref.current.contains(e.target as Node)) return;
+      if (!ref.current || !e.target || ref.current.contains(e.target as Node))
+        return;
       if (swallowEvent) {
         e.preventDefault();
         e.stopPropagation();

@@ -151,7 +151,7 @@ export default function LandingHero() {
         />
       )}
 
-      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-6 pt-8 pb-20 md:gap-20 lg:flex-row lg:gap-12 lg:py-28">
+      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-6 pt-8 pb-20 md:gap-20 lg:flex-row lg:gap-12">
         <motion.div
           className="flex flex-col items-center lg:items-start"
           variants={contentVariants}
