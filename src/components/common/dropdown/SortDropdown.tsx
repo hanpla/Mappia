@@ -29,7 +29,7 @@ export default function SortDropdown({
   const currentSort = searchParams ? searchParams.get(sortKey) : null;
   const currentLabel =
     SORT_OPTIONS.find((option) => option.value === currentSort)?.label ??
-    '정렬';
+    '최신순';
 
   const handleSelect = (value: string) => {
     if (!searchParams) return;
