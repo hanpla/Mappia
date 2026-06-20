@@ -1,5 +1,10 @@
 import { notFound } from 'next/navigation';
 
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from '@tanstack/react-query';
 import axios from 'axios';
 
 import { getActivityDetail } from '@/lib/api/activities';
@@ -25,10 +30,19 @@ export default async function ActivityPage({
 
   if (Number.isNaN(activityId) || activityId <= 0) notFound();
 
-  let activity;
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
+    },
+  });
 
   try {
-    activity = await getActivityDetail(activityId);
+    await queryClient.prefetchQuery({
+      queryKey: ['activityDetail', activityId],
+      queryFn: () => getActivityDetail(activityId),
+    });
   } catch (error) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       notFound();
@@ -36,7 +50,16 @@ export default async function ActivityPage({
     throw error;
   }
 
-  if (!activity) notFound();
+  const state = dehydrate(queryClient);
+  const prefetchedData = state.queries.find(
+    (q) => q.queryKey[0] === 'activityDetail',
+  )?.state.data;
 
-  return <ActivityContent activity={activity} currentPage={currentPage} />;
+  if (!prefetchedData) notFound();
+
+  return (
+    <HydrationBoundary state={state}>
+      <ActivityContent activityId={activityId} currentPage={currentPage} />
+    </HydrationBoundary>
+  );
 }
