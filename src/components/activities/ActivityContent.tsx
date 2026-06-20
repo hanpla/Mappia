@@ -1,6 +1,8 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
+import { notFound } from 'next/navigation';
+
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { getActivityDetail } from '@/lib/api/activities';
 
@@ -23,11 +25,16 @@ export default function ActivityContent({
   activityId,
   currentPage,
 }: ActivityContentProps) {
-  const { data: activity } = useQuery({
+  const { data: activity, isError } = useSuspenseQuery({
     queryKey: ['activityDetail', activityId],
     queryFn: () => getActivityDetail(activityId),
     staleTime: 1000 * 60 * 5,
+    retry: false,
   });
+
+  if (isError) {
+    notFound();
+  }
 
   if (!activity) return null;
 
