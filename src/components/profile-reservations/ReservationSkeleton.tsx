@@ -34,8 +34,8 @@ export default function ReservationsSkeleton({
               <div className="mt-4 flex flex-wrap items-center justify-between gap-1 pl-1 md:pl-0">
                 <div className="h-5 w-20 rounded bg-gray-200 md:h-6 md:w-24" />
                 <div className="flex items-center justify-end gap-2 md:gap-3">
-                  <div className="h-8 w-16 rounded-md bg-gray-200 md:h-10 md:w-24 md:rounded-xl lg:h-11 lg:w-28 lg:rounded-2xl" />
-                  <div className="h-8 w-16 rounded-md bg-gray-200 md:h-10 md:w-24 md:rounded-xl lg:h-11 lg:w-28 lg:rounded-2xl" />
+                  <div className="h-8 w-16 shrink-0 rounded-md bg-gray-200 md:h-10 md:w-24 md:rounded-xl lg:h-11 lg:w-28 lg:rounded-2xl" />
+                  <div className="h-8 w-16 shrink-0 rounded-md bg-gray-200 md:h-10 md:w-24 md:rounded-xl lg:h-11 lg:w-28 lg:rounded-2xl" />
                 </div>
               </div>
             </div>
