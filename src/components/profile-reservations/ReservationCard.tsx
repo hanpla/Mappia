@@ -129,7 +129,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       <ReservationCardContainer
         id={activity.id}
         imageUrl={activity.bannerImageUrl}
-        className="h-95"
+        className="h-200"
       >
         <div className="pl-1 md:pl-0">
           <span className={`text-sm font-semibold ${currentStatus.className}`}>
