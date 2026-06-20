@@ -22,6 +22,7 @@ import type { ActivityDetailContent } from '@/types/activities';
 import Button from '@/components/common/button/Button';
 import SelectDropdown from '@/components/common/dropdown/SelectDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
+import IconPlus from '@/components/common/icon/IconPlus';
 import IconX from '@/components/common/icon/IconX';
 import ImageUploadField, {
   UploadImage,
@@ -80,6 +81,7 @@ export default function ActivityRegisterForm({
   const submitText = isEdit ? '수정하기' : '등록하기';
 
   const [title, setTitle] = useState(initialData?.title ?? '');
+  const [titleError, setTitleError] = useState('');
   const [category, setCategory] = useState<string>(initialData?.category ?? '');
   const [description, setDescription] = useState(
     initialData?.description ?? '',
@@ -87,6 +89,7 @@ export default function ActivityRegisterForm({
   const [price, setPrice] = useState(
     initialData ? String(initialData.price) : '',
   );
+  const [priceError, setPriceError] = useState('');
   const [priceDisplay, setPriceDisplay] = useState(
     initialData ? Number(initialData.price).toLocaleString() : '',
   );
@@ -102,7 +105,7 @@ export default function ActivityRegisterForm({
           startTime: s.startTime,
           endTime: s.endTime,
         }))
-      : [{ id: 'schedule-0', date: '', startTime: '00:00', endTime: '00:00' }],
+      : [],
   );
 
   const [bannerImages, setBannerImages] = useState<UploadImage[]>(
@@ -151,9 +154,19 @@ export default function ActivityRegisterForm({
   };
 
   const PRICE_MAX = 10000000;
+  const TITLE_MAX = 30;
+
+  const handleTitleBlur = () => {
+    if (title.length > TITLE_MAX) {
+      setTitleError(`제목은 ${TITLE_MAX}자 이하로 입력해 주세요.`);
+    } else {
+      setTitleError('');
+    }
+  };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     markDirty();
+    if (priceError) setPriceError('');
     const onlyNumbers = e.target.value.replace(/[^\d]/g, '');
     if (onlyNumbers === '') {
       setPrice('');
@@ -161,7 +174,6 @@ export default function ActivityRegisterForm({
       return;
     }
     const numeric = Number(onlyNumbers);
-    if (numeric > PRICE_MAX) return;
     setPrice(String(numeric));
     setPriceDisplay(onlyNumbers);
   };
@@ -169,6 +181,13 @@ export default function ActivityRegisterForm({
   const handlePriceBlur = () => {
     if (price) {
       setPriceDisplay(Number(price).toLocaleString());
+      if (Number(price) <= 0) {
+        setPriceError('가격은 0보다 큰 금액으로 입력해 주세요.');
+      } else if (Number(price) > PRICE_MAX) {
+        setPriceError('가격은 10,000,000원 이하로 입력해 주세요.');
+      } else {
+        setPriceError('');
+      }
     }
   };
 
@@ -178,19 +197,22 @@ export default function ActivityRegisterForm({
 
   const validateForm = (): string | null => {
     if (!title.trim()) return '제목을 입력해 주세요.';
+    if (title.length > TITLE_MAX) {
+      return `제목은 ${TITLE_MAX}자 이하로 입력해 주세요.`;
+    }
     if (!category) return '카테고리를 선택해 주세요.';
     if (!description.trim()) return '설명을 입력해 주세요.';
-    if (!address.trim()) return '주소를 입력해 주세요.';
 
     if (!price.trim()) return '가격을 입력해 주세요.';
     const priceNumber = Number(price);
-    if (Number.isNaN(priceNumber) || priceNumber < 0) {
-      return '가격은 0 이상의 숫자로 입력해 주세요.';
+    if (Number.isNaN(priceNumber) || priceNumber <= 0) {
+      return '가격은 0보다 큰 금액으로 입력해 주세요.';
+    }
+    if (priceNumber > PRICE_MAX) {
+      return '가격은 10,000,000원 이하로 입력해 주세요.';
     }
 
-    if (bannerImages.length === 0) {
-      return '배너 이미지를 최소 1개 이상 등록해 주세요.';
-    }
+    if (!address.trim()) return '주소를 입력해 주세요.';
 
     const filledSchedules = schedules.filter(
       (schedule) =>
@@ -198,15 +220,45 @@ export default function ActivityRegisterForm({
         schedule.startTime !== '00:00' ||
         schedule.endTime !== '00:00',
     );
+    if (filledSchedules.length === 0) {
+      return '예약 가능한 시간대를 입력해 주세요.';
+    }
+    const now = new Date();
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     for (const schedule of filledSchedules) {
       if (!schedule.date) return '예약 가능한 시간대의 날짜를 입력해 주세요.';
+      const isExisting = schedule.id.startsWith('schedule-server-');
+      if (!isExisting && schedule.date < todayStr) {
+        return '오늘 이전의 날짜는 선택할 수 없습니다.';
+      }
       if (schedule.startTime >= schedule.endTime) {
         return '시작 시간은 종료 시간보다 빨라야 합니다.';
       }
     }
 
+    if (bannerImages.length === 0) {
+      return '배너 이미지를 최소 1개 이상 등록해 주세요.';
+    }
+
     return null;
   };
+
+  const isScheduleUntouched = schedules.every(
+    (schedule) =>
+      !schedule.date &&
+      schedule.startTime === '00:00' &&
+      schedule.endTime === '00:00',
+  );
+
+  const isEmpty =
+    !title.trim() &&
+    !category &&
+    !description.trim() &&
+    !price.trim() &&
+    !address.trim() &&
+    isScheduleUntouched &&
+    bannerImages.length === 0 &&
+    introImages.length === 0;
 
   const collectValues = (): ActivityFormValues => ({
     title,
@@ -295,7 +347,7 @@ export default function ActivityRegisterForm({
 
     const errorMessage = validateForm();
     if (errorMessage) {
-      showToast('information', errorMessage);
+      showToast('error', errorMessage);
       return;
     }
 
@@ -363,11 +415,16 @@ export default function ActivityRegisterForm({
           onChange={(e) => {
             markDirty();
             setTitle(e.target.value);
+            if (titleError) setTitleError('');
           }}
+          onBlur={handleTitleBlur}
           placeholder="제목을 입력해 주세요"
-          maxLength={30}
+          hasError={!!titleError}
           className={INPUT_BORDER}
         />
+        {titleError && (
+          <p className="text-red-FF4 textsm-regular">{titleError}</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -413,8 +470,12 @@ export default function ActivityRegisterForm({
           onFocus={handlePriceFocus}
           onBlur={handlePriceBlur}
           placeholder="체험 금액을 입력해 주세요"
+          hasError={!!priceError}
           className={INPUT_BORDER}
         />
+        {priceError && (
+          <p className="text-red-FF4 textsm-regular">{priceError}</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-2">
@@ -457,26 +518,35 @@ export default function ActivityRegisterForm({
       <div className="flex flex-col gap-3">
         <span className="textlg-bold text-black-1B1">예약 가능한 시간대</span>
 
-        <div className="text-gray-4B4 mobile:flex hidden items-center gap-2 text-sm">
-          <span className="flex-1">날짜</span>
-          <span className="w-[120px]">시작 시간</span>
-          <span className="w-[12px]" />
-          <span className="w-[120px]">종료 시간</span>
-          <span className="w-14" />
-        </div>
+        {schedules.length > 0 && (
+          <div className="text-gray-4B4 mobile:flex hidden items-center gap-2 text-sm">
+            <span className="flex-1">날짜</span>
+            <span className="w-[120px]">시작 시간</span>
+            <span className="w-[12px]" />
+            <span className="w-[120px]">종료 시간</span>
+            <span className="w-14" />
+          </div>
+        )}
 
         <div className="flex flex-col gap-2">
-          {schedules.map((schedule, index) => (
+          {schedules.map((schedule) => (
             <ScheduleInput
               key={schedule.id}
               schedule={schedule}
-              isFirst={index === 0}
-              onAdd={handleAddSchedule}
               onRemove={() => handleRemoveSchedule(schedule.id)}
               onChange={handleScheduleChange}
             />
           ))}
         </div>
+
+        <button
+          type="button"
+          onClick={handleAddSchedule}
+          aria-label="시간대 추가"
+          className="border-beige-8B7 text-beige-8B7 hover:bg-beige-8B7/5 flex h-14 w-full items-center justify-center rounded-2xl border border-dashed bg-white transition-colors"
+        >
+          <IconPlus size={24} color="currentColor" />
+        </button>
       </div>
 
       <ImageUploadField
@@ -505,8 +575,9 @@ export default function ActivityRegisterForm({
         <Button
           size="lg"
           className="w-30"
+          hasHover={false}
           onClick={handleSubmit}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isEmpty}
         >
           {submitText}
         </Button>
