@@ -122,13 +122,10 @@ export default function LandingHero() {
       ref={stageRef}
       className="is-landing-page relative isolate flex min-h-screen w-full items-center overflow-hidden bg-[#160f07]"
     >
-      {/* 1. 탐정 패턴 (천천히 표류) */}
       <DetectivePattern className="animate-stage-drift text-beige-8B7 absolute inset-[-25%] z-0 h-[150%] w-[150%] opacity-[0.55]" />
 
-      {/* 2. 무대 안개 — 불빛 주변만 선명하게 뚫린다 */}
       <div className="stage-fog pointer-events-none absolute inset-0 z-10" />
 
-      {/* 3. 진입 시 위에서 좌우로 훑는 무대 조명 (캐릭터/설명 등장 전까지) */}
       {!shouldReduceMotion && (
         <motion.div
           className="pointer-events-none absolute inset-0 z-20 overflow-hidden"
@@ -136,18 +133,15 @@ export default function LandingHero() {
           animate={{ opacity: isReady ? 0 : 1 }}
           transition={{ duration: 0.6, ease: 'easeInOut' }}
         >
-          {/* 왼쪽 조명 2개 */}
           <div className="absolute inset-0">
             <SearchlightPair />
           </div>
-          {/* 같은 조명을 좌우 반전해 오른쪽에도 복사 */}
           <div className="absolute inset-0 transform-[scaleX(-1)]">
             <SearchlightPair />
           </div>
         </motion.div>
       )}
 
-      {/* 4. 무대를 비추는 동그란 불빛 — 서서히 나타나며 이동 → 이후 커서 추적 */}
       {!shouldReduceMotion && (
         <motion.div
           className="stage-cursor-glow pointer-events-none absolute top-(--my,40%) left-(--mx,50%) z-20 h-136 w-136 -translate-x-1/2 -translate-y-1/2 rounded-full mix-blend-screen blur-2xl"
@@ -157,8 +151,7 @@ export default function LandingHero() {
         />
       )}
 
-      {/* 콘텐츠 */}
-      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-6 md:gap-20 lg:flex-row lg:gap-12 lg:py-28">
+      <div className="inner relative z-30 flex flex-col-reverse items-center justify-between gap-6 pt-8 pb-20 md:gap-20 lg:flex-row lg:gap-12 lg:py-28">
         <motion.div
           className="flex flex-col items-center lg:items-start"
           variants={contentVariants}
@@ -224,7 +217,6 @@ export default function LandingHero() {
           </motion.div>
         </motion.div>
 
-        {/* 캐릭터 스포트라이트 무대 */}
         <motion.div
           ref={characterRef}
           className="relative flex shrink-0 items-center justify-center"
