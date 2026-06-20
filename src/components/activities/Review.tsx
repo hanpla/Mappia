@@ -49,7 +49,8 @@ export default function Review({
   const { data: allReviewsRes } = useQuery({
     queryKey: ['activityReviewsAll', activityId],
     queryFn: () => getActivityReviews(activityId, 1, 10),
-    enabled: !!activityId && !!res && (res.totalCount || 0) > 0,
+    enabled: !!activityId,
+    staleTime: Infinity,
   });
 
   if (!activityId) return null;

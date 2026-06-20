@@ -192,6 +192,13 @@ export default function ReservationReviewModal({
       showToast('success', '후기가 성공적으로 저장되었습니다!');
       onClose();
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
+      queryClient.invalidateQueries({
+        queryKey: ['activityReviews', activityId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ['activityReviewsAll', activityId],
+      });
     },
     onError: (error) => {
       let message = '후기 등록하는 데 실패했습니다.';

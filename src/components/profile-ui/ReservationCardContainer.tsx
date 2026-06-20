@@ -28,6 +28,7 @@ export default function ReservationCardContainer({
   imageUrl,
   children,
   id,
+  className,
 }: ReservationCardProps) {
   const normalizedImageUrl = imageUrl ?? null;
   const [imgSrc, setImgSrc] = useState<string | null>(normalizedImageUrl);
@@ -49,6 +50,7 @@ export default function ReservationCardContainer({
       className={twMerge(
         'hover:shadow-dropdown transition-all',
         CARD_CONTAINER_CLASS,
+        className,
       )}
     >
       <Link
