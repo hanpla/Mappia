@@ -509,6 +509,7 @@ export default function ActivityRegisterForm({
             variant="outline"
             onClick={handleAddressSearchClick}
             className="h-14"
+            hasHover={false}
           >
             주소 검색
           </Button>
@@ -518,15 +519,13 @@ export default function ActivityRegisterForm({
       <div className="flex flex-col gap-3">
         <span className="textlg-bold text-black-1B1">예약 가능한 시간대</span>
 
-        {schedules.length > 0 && (
-          <div className="text-gray-4B4 mobile:flex hidden items-center gap-2 text-sm">
-            <span className="flex-1">날짜</span>
-            <span className="w-[120px]">시작 시간</span>
-            <span className="w-[12px]" />
-            <span className="w-[120px]">종료 시간</span>
-            <span className="w-14" />
-          </div>
-        )}
+        <div className="text-gray-4B4 hidden items-center gap-2 text-sm min-[602px]:flex">
+          <span className="flex-1">날짜</span>
+          <span className="w-[120px]">시작 시간</span>
+          <span className="w-[12px]" />
+          <span className="w-[120px]">종료 시간</span>
+          <span className="w-14" />
+        </div>
 
         <div className="flex flex-col gap-2">
           {schedules.map((schedule) => (
@@ -543,7 +542,7 @@ export default function ActivityRegisterForm({
           type="button"
           onClick={handleAddSchedule}
           aria-label="시간대 추가"
-          className="border-beige-8B7 text-beige-8B7 hover:bg-beige-8B7/5 flex h-14 w-full items-center justify-center rounded-2xl border border-dashed bg-white transition-colors"
+          className="border-beige-8B7 text-beige-8B7 hover:bg-beige-8B7/5 flex h-14 w-full cursor-pointer items-center justify-center rounded-2xl border border-dashed bg-white transition-colors"
         >
           <IconPlus size={24} color="currentColor" />
         </button>
