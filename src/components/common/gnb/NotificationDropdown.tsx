@@ -14,7 +14,7 @@ export default function NotificationDropdown({
   onClose,
 }: NotificationDropdownProps) {
   return (
-    <div className="bg-ivory-F2E absolute top-full right-0 z-50 mt-2 w-96 rounded-lg p-4 shadow-[0px_2px_8px_rgba(120,116,134,0.25)] max-md:fixed max-md:top-16 max-md:right-4 max-md:left-4 max-md:mx-auto max-md:mt-0 max-md:w-auto max-md:max-w-100">
+    <div className="bg-green-CED absolute top-full right-0 z-50 mt-2 w-96 rounded-lg p-4 shadow-[0px_2px_8px_rgba(120,116,134,0.25)] max-md:fixed max-md:top-16 max-md:right-4 max-md:left-4 max-md:mx-auto max-md:mt-0 max-md:w-auto max-md:max-w-100">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="font-medium text-[#111322]">
@@ -23,10 +23,10 @@ export default function NotificationDropdown({
           {notifications.length > 0 && (
             <button
               onClick={onDismissAll}
-              aria-label="알림 전체 닫기"
+              aria-label="알림 전체 지우기"
               className="text-gray-797 text-xs font-normal underline hover:text-[#111322]"
             >
-              전체 닫기
+              전체 지우기
             </button>
           )}
         </div>
