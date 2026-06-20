@@ -274,13 +274,11 @@ function MainPageContent() {
         )}
       </section>
 
-      <div className="relative z-10 -mt-6">
-        <SearchSection
-          key={keyword}
-          initialKeyword={keyword}
-          onSubmit={handleSearchSubmit}
-        />
-      </div>
+      <SearchSection
+        key={keyword}
+        initialKeyword={keyword}
+        onSubmit={handleSearchSubmit}
+      />
 
       {!keyword && (
         <section className="mt-6 mb-8 md:mt-8 md:mb-10">
