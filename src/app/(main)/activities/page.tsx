@@ -10,6 +10,8 @@ import { useActivities, usePopularActivities } from '@/hooks/useActivities';
 
 import type { ActivityCategory, BaseActivity } from '@/types/activities';
 
+import AllActivitiesSkeleton from '@/components/activities/skeletons/AllActivitiesSkeleton';
+import PopularActivitiesSkeleton from '@/components/activities/skeletons/PopularActivitiesSkeleton';
 import CategoryButton from '@/components/common/button/CategoryButton';
 import SortDropdown from '@/components/common/dropdown/SortDropdown';
 import IconChevronLeft from '@/components/common/icon/IconChevronLeft';
@@ -126,7 +128,8 @@ function MainPageContent() {
   const [maxOffset, setMaxOffset] = useState(0);
   const [isPc, setIsPc] = useState(false);
 
-  const { data: popularData } = usePopularActivities(10);
+  const { data: popularData, isLoading: isPopularLoading } =
+    usePopularActivities(10);
   const popularActivities = popularData?.activities ?? [];
 
   const heroActivity = popularActivities[0];
@@ -322,24 +325,28 @@ function MainPageContent() {
               </button>
             </div>
           </div>
-          <div
-            ref={viewportRef}
-            className="scrollbar-hide overflow-x-auto pb-2 lg:overflow-x-hidden"
-          >
+          {isPopularLoading ? (
+            <PopularActivitiesSkeleton />
+          ) : (
             <div
-              ref={trackRef}
-              className="flex gap-3 transition-transform duration-300 ease-out md:gap-4"
-              style={{
-                transform: isPc
-                  ? `translateX(-${effectiveOffset}px)`
-                  : undefined,
-              }}
+              ref={viewportRef}
+              className="scrollbar-hide overflow-x-auto pb-2 lg:overflow-x-hidden"
             >
-              {popularActivities.map((activity) => (
-                <PopularActivityCard key={activity.id} activity={activity} />
-              ))}
+              <div
+                ref={trackRef}
+                className="flex gap-3 transition-transform duration-300 ease-out md:gap-4"
+                style={{
+                  transform: isPc
+                    ? `translateX(-${effectiveOffset}px)`
+                    : undefined,
+                }}
+              >
+                {popularActivities.map((activity) => (
+                  <PopularActivityCard key={activity.id} activity={activity} />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </section>
       )}
 
@@ -376,11 +383,15 @@ function MainPageContent() {
           </h2>
           <SortDropdown className="h-10.25 w-28 shrink-0 px-3 whitespace-nowrap md:h-14.5 md:w-36 md:px-5 lg:w-40" />
         </div>
-        <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
-          {allActivities.map((activity) => (
-            <ActivityCard key={activity.id} activity={activity} />
-          ))}
-        </div>
+        {isLoading ? (
+          <AllActivitiesSkeleton count={visibleCount} />
+        ) : (
+          <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
+            {allActivities.map((activity) => (
+              <ActivityCard key={activity.id} activity={activity} />
+            ))}
+          </div>
+        )}
         {!isLoading && isError && (
           <p className="text-gray-A1A py-20 text-center">
             체험 목록을 불러오지 못했습니다.
