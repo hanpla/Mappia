@@ -15,7 +15,7 @@ export default function Gnb() {
   const { isHidden } = useHideOnScroll();
 
   return (
-    <div
+    <header
       className={`border-gray-DDD sticky top-0 z-50 border-b bg-white transition-transform duration-300 ${
         isHidden ? '-translate-y-full' : 'translate-y-0'
       }`}
@@ -26,6 +26,6 @@ export default function Gnb() {
         </Link>
         {isLogin ? <UserSection /> : <AuthButtons />}
       </div>
-    </div>
+    </header>
   );
 }

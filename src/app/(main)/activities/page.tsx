@@ -354,7 +354,7 @@ function MainPageContent() {
       >
         <div className="mb-4 flex items-center justify-between gap-2">
           <h2 className="text-black-1B1 flex items-center gap-2 text-[21px] font-bold md:text-[43px]">
-            <LogoJoy size={48} className="size-7 shrink-0 md:size-12" />
+            <LogoJoy size={48} className="size-9 shrink-0 md:size-16" />
             모든 체험
           </h2>
           <SortDropdown className="h-10.25 w-30 shrink-0 px-3 whitespace-nowrap md:h-14.5 md:w-36 md:px-5 lg:hidden" />
