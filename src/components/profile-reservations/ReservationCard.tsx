@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 import useToastStore from '@/stores/toastStore';
 
@@ -64,10 +65,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
-      showToast(
-        'error',
-        error instanceof Error ? error.message : '예약 취소에 실패했습니다.',
-      );
+      showToast('error', '예약 취소에 실패했습니다.');
     },
   });
 
@@ -85,12 +83,19 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
     onError: (error) => {
-      showToast(
-        'error',
-        error instanceof Error
-          ? error.message
-          : '예약 정보 수정에 실패했습니다.',
-      );
+      let message = '예약 정보 수정에 실패했습니다.';
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+
+        if (status === 400) {
+          message = '이미 지난 일정은 예약할 수 없습니다.';
+        } else if (status === 409) {
+          message = '확정 예약이 있는 일정은 예약할 수 없습니다.';
+        }
+      }
+
+      showToast('error', message);
     },
   });
 
