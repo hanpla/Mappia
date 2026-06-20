@@ -114,7 +114,7 @@ function MainPageContent() {
   const activeCategory =
     (searchParams?.get('category') as ActivityCategory | null) ?? null;
   const keyword = searchParams?.get('keyword') ?? '';
-  const sort = (searchParams?.get('sort') as ActivitySort | null) ?? undefined;
+  const sort = (searchParams?.get('sort') as ActivitySort | null) ?? 'latest';
 
   const [visibleCount, setVisibleCount] = useState(12);
 
@@ -239,7 +239,7 @@ function MainPageContent() {
 
   return (
     <>
-      <section className="bg-beige-8B7 relative right-1/2 left-1/2 mx-[-50vw] h-60 w-screen overflow-hidden md:h-137.5">
+      <section className="bg-beige-8B7 relative h-60 w-full overflow-hidden md:h-[440px]">
         {heroActivity?.bannerImageUrl && (
           <ImageWithFallback
             src={heroActivity.bannerImageUrl}
@@ -343,39 +343,43 @@ function MainPageContent() {
         </section>
       )}
 
-      <div className="mt-6 mb-5 flex items-center justify-between gap-2 md:mt-8"></div>
-      <div className="mb-5">
-        <div className="scrollbar-hide flex gap-2 overflow-x-auto">
-          <CategoryButton
-            size="sm"
-            isActive={activeCategory === null}
-            className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
-            onClick={handleAllClick}
-          >
-            전체
-          </CategoryButton>
-          {CATEGORIES.map((category) => (
-            <CategoryButton
-              key={category}
-              size="sm"
-              isActive={activeCategory === category}
-              className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category}
-            </CategoryButton>
-          ))}
-        </div>
-      </div>
-
-      <section ref={allActivitiesRef} className="mb-8 scroll-mt-6 md:mb-10">
+      <section
+        ref={allActivitiesRef}
+        className="mt-6 mb-8 scroll-mt-6 md:mt-8 md:mb-10"
+      >
         <div className="mb-4 flex items-center justify-between gap-2">
           <h2 className="text-black-1B1 flex items-center gap-2 text-[21px] font-bold md:text-[43px]">
             <LogoJoy size={48} className="size-7 shrink-0 md:size-12" />
             모든 체험
           </h2>
-          <SortDropdown className="h-10.25 w-28 shrink-0 px-3 whitespace-nowrap md:h-14.5 md:w-36 md:px-5 lg:w-40" />
+          <SortDropdown className="h-10.25 w-28 shrink-0 px-3 whitespace-nowrap lg:hidden" />
         </div>
+
+        <div className="mb-5 flex items-center justify-between gap-2">
+          <div className="scrollbar-hide flex gap-2 overflow-x-auto">
+            <CategoryButton
+              size="sm"
+              isActive={activeCategory === null}
+              className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
+              onClick={handleAllClick}
+            >
+              전체
+            </CategoryButton>
+            {CATEGORIES.map((category) => (
+              <CategoryButton
+                key={category}
+                size="sm"
+                isActive={activeCategory === category}
+                className="h-10.25 w-20 shrink-0 px-1 whitespace-nowrap md:h-14.5 md:w-30 md:px-5 lg:w-31.75"
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </CategoryButton>
+            ))}
+          </div>
+          <SortDropdown className="hidden shrink-0 px-5 whitespace-nowrap lg:flex lg:h-14.5 lg:w-40" />
+        </div>
+
         <div className="grid grid-cols-2 gap-x-3 gap-y-6 md:grid-cols-3 md:gap-x-4 lg:grid-cols-4">
           {allActivities.map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
