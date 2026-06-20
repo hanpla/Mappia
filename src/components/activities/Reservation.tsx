@@ -70,11 +70,19 @@ export default function Reservation({ activity }: ReservationProps) {
       <div className="flex flex-row items-center justify-between">
         <label className="textlg-bold block">참여 인원 수</label>
         <div className="border-gray-EEE flex w-35 items-center justify-between rounded-3xl border px-4.75 py-1.5">
-          <button type="button" onClick={handleDecrease}>
+          <button
+            type="button"
+            onClick={handleDecrease}
+            className="cursor-pointer"
+          >
             <IconMinus size="16" color="#4B4B4B" />
           </button>
           <span className="textlg-bold text-gray-4B4">{headCount}</span>
-          <button type="button" onClick={handleIncrease}>
+          <button
+            type="button"
+            onClick={handleIncrease}
+            className="cursor-pointer"
+          >
             <IconPlus size="16" color="#4B4B4B" />
           </button>
         </div>

@@ -52,14 +52,14 @@ const FIELDS: FieldConfig[] = [
   },
   {
     name: 'password',
-    label: '비밀번호',
+    label: '새 비밀번호',
     placeholder: '비밀번호를 입력해 주세요',
     autoComplete: 'new-password',
     secure: true,
   },
   {
     name: 'passwordConfirm',
-    label: '비밀번호 재입력',
+    label: '새 비밀번호 확인',
     placeholder: '비밀번호를 한번 더 입력해 주세요',
     autoComplete: 'new-password',
     secure: true,

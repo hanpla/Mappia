@@ -20,7 +20,7 @@ export default function Gnb() {
         isHidden ? '-translate-y-full' : 'translate-y-0'
       }`}
     >
-      <div className="inner flex h-17.5 items-center justify-between">
+      <div className="inner flex h-14.5 items-center justify-between md:h-17.5">
         <Link href="/activities" className="cursor-pointer">
           <LogoText width={116} height={31} />
         </Link>

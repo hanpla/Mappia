@@ -32,7 +32,7 @@ export default function EditDropdown({
 
   return (
     <div
-      className={`shadow-dropdown border-gray-DDD bg-white-FFF absolute right-0 z-50 mt-1 w-40 overflow-hidden rounded-lg border ${className}`}
+      className={`shadow-dropdown border-gray-DDD bg-white-FFF absolute right-0 z-50 mt-1 w-36 overflow-hidden rounded-lg border ${className}`}
     >
       <ul className="flex flex-col">
         <li className="border-gray-EEE border-b">

@@ -18,14 +18,14 @@ const safeLocalStorage = {
     try {
       localStorage.setItem(key, value);
     } catch (e) {
-      console.warn('localStorage 저장 불가', e);
+      console.warn(e);
     }
   },
   removeItem: (key: string): void => {
     try {
       localStorage.removeItem(key);
     } catch (e) {
-      console.warn('localStorage 저장 불가', e);
+      console.warn(e);
     }
   },
 };
@@ -44,15 +44,12 @@ export const useAIReviewAnalysis = (
         const parsed: CachedAIReviewAnalysis = JSON.parse(cached);
 
         if (parsed.totalCount === params.totalCount) {
-          console.log('📦 캐시 사용');
           return parsed.analysis;
         }
 
-        console.log('🔄 후기 수 변경 감지 → 재분석');
         safeLocalStorage.removeItem(storageKey);
       }
 
-      console.log('🤖 Gemini 호출');
       const result = await getAIReviewAnalysis(params);
 
       safeLocalStorage.setItem(

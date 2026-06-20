@@ -54,7 +54,7 @@ export default function SortDropdown({
         type="button"
         onClick={toggle}
         className={twMerge(
-          'bg-white-FFF text-khaki-6B5 textlg-medium border-beige-8B7 flex h-10.25 min-w-30 cursor-pointer items-center justify-between gap-2 rounded-2xl border px-5 transition-all duration-200 outline-none',
+          'bg-white-FFF text-khaki-6B5 textlg-medium border-beige-8B7 flex h-10.25 min-w-30 cursor-pointer items-center justify-center gap-2 rounded-2xl border px-5 transition-all duration-200 outline-none',
           className,
         )}
       >
@@ -86,7 +86,7 @@ export default function SortDropdown({
                   <button
                     type="button"
                     onClick={() => handleSelect(option.value)}
-                    className={`textlg-medium block w-full cursor-pointer py-3.5 text-center transition-all duration-150 outline-none ${
+                    className={`textlg-medium block w-full cursor-pointer py-2 text-center transition-all duration-150 outline-none lg:py-3.5 ${
                       isActive
                         ? 'bg-khaki-6B5 text-white-FFF font-semibold'
                         : 'text-khaki-6B5 hover:bg-khaki-6B5/20'
