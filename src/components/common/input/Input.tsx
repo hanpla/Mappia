@@ -42,7 +42,7 @@ export default function Input({
         <input
           id={id}
           type={type}
-          className={`textlg-regular peer h-full w-full min-w-0 border-0 px-4 outline-none ${leftIcon && 'pr-2 pl-0'}`}
+          className={`textlg-regular peer h-full w-full min-w-0 rounded-2xl border-0 px-4 outline-none ${leftIcon && 'pr-2 pl-0'}`}
           placeholder={isFloating ? ' ' : placeholder}
           {...props}
         />
