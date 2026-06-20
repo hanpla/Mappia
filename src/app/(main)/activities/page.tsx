@@ -179,12 +179,6 @@ function MainPageContent() {
         params.delete('keyword');
       }
     });
-    requestAnimationFrame(() => {
-      allActivitiesRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    });
   };
 
   useEffect(() => {
@@ -242,40 +236,37 @@ function MainPageContent() {
 
   return (
     <>
-      <section className="bg-beige-8B7 relative h-60 w-full overflow-hidden md:h-[440px]">
-        {heroActivity?.bannerImageUrl && (
-          <ImageWithFallback
-            src={heroActivity.bannerImageUrl}
-            alt={heroActivity.title}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-        )}
-        <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
-        {heroActivity ? (
-          <Link
-            href={`/activities/${heroActivity.id}`}
-            className="inner absolute inset-0 flex flex-col justify-center"
-          >
-            <p className="text-white-FFF/80 flex items-center gap-1.5 text-[14px] md:text-[26px]">
-              <IconFire size={28} className="size-4 md:size-7" />
-              이달의 인기 체험
-            </p>
-            <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold break-keep md:text-[54px] lg:text-[68px]">
-              {heroActivity.title}
-            </h1>
-          </Link>
-        ) : (
-          <div className="inner absolute inset-0 flex flex-col justify-center">
-            <p className="text-white-FFF/80 flex items-center gap-1.5 text-[14px] md:text-[26px]">
-              <IconFire size={28} className="size-4 md:size-7" />
-              이달의 인기 체험
-            </p>
-          </div>
-        )}
-      </section>
+      {!keyword && (
+        <section className="bg-beige-8B7 relative mt-12 h-60 w-full overflow-hidden rounded-2xl md:h-[440px]">
+          {heroActivity?.bannerImageUrl && (
+            <ImageWithFallback
+              src={heroActivity.bannerImageUrl}
+              alt={heroActivity.title}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          )}
+          <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30" />
+          {heroActivity ? (
+            <Link
+              href={`/activities/${heroActivity.id}`}
+              className="absolute inset-0 flex flex-col justify-center pl-6 md:pl-12"
+            >
+              <p className="text-white-FFF/80 flex items-center gap-1.5 text-[14px] md:text-[26px]">
+                <IconFire size={28} className="size-4 md:size-7" />
+                이달의 인기 체험
+              </p>
+              <h1 className="text-white-FFF mt-2 line-clamp-2 max-w-150 text-[24px] leading-tight font-bold break-keep md:text-[48px] lg:text-[58px]">
+                {heroActivity.title}
+              </h1>
+            </Link>
+          ) : (
+            <div className="absolute inset-0 flex animate-pulse flex-col justify-center bg-stone-300"></div>
+          )}
+        </section>
+      )}
 
       <SearchSection
         key={keyword}

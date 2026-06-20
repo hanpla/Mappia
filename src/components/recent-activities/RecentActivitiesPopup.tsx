@@ -10,7 +10,7 @@ export default function RecentActivitiesPopup({
   activities,
 }: RecentActivitiesPopupProps) {
   return (
-    <div className="pointer-events-auto w-70 rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_8px_30px_rgba(42,34,24,0.12)]">
+    <div className="pointer-events-auto w-64 rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_8px_30px_rgba(42,34,24,0.12)]">
       <div className="flex items-center justify-between border-b border-gray-100 pb-2">
         <span className="text-xs font-bold text-gray-400">최근 본 체험</span>
         <span className="text-[10px] text-gray-400">최근 5개</span>

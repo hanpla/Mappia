@@ -23,7 +23,7 @@ export default function CardInfo({
         <span className="text-gray-A4A">({reviewCount})</span>
       </div>
 
-      <Link href={`/activities/${id}`}>
+      <Link href={`/activities/${id}`} className="w-fit">
         <h3 className="textlg-bold md:text2lg-bold truncate hover:underline">
           {title}
         </h3>

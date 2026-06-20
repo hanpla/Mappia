@@ -57,7 +57,7 @@ export default function UserProfile({
             />
           )}
         </div>
-        <span>{nickname}</span>
+        <span className="hidden sm:block">{nickname}</span>
       </button>
       {isOpen && <UserDropdown onClose={() => setIsOpen(false)} />}
     </div>

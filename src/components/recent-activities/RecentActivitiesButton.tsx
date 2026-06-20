@@ -27,7 +27,7 @@ export default function RecentActivitiesButton() {
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none fixed right-6 bottom-20 z-50 flex flex-col items-end gap-3 md:right-8 md:bottom-8"
+      className="pointer-events-none fixed right-6 bottom-8 z-50 flex flex-col items-end gap-3 md:right-8"
     >
       {/* 플로팅 팝업 UI */}
       {isOpen && <RecentActivitiesPopup activities={activities} />}

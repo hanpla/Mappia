@@ -129,7 +129,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       <ReservationCardContainer
         id={activity.id}
         imageUrl={activity.bannerImageUrl}
-        className="h-40 md:h-48"
+        className="min-h-40 md:h-48"
       >
         <div className="pl-1 md:pl-0">
           <span className={`text-sm font-semibold ${currentStatus.className}`}>
@@ -137,7 +137,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           </span>
           <Link href={`/activities/${activity.id}`}>
             <h3 className="text-black-1B1 textlg-bold mt-1 mb-1 line-clamp-1 text-sm hover:underline md:mt-1.5 md:mb-2 md:text-base">
-              {activity.title}
+              {activity.title}{' '}
             </h3>
           </Link>
           <p className="md:textlg-medium text-xs text-gray-500 md:text-sm">
@@ -239,7 +239,6 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           item={item}
           isOpen={isEditModalOpen}
           isSubmitting={editMutation.isPending}
-          price={totalPrice / headCount}
           onClose={() => setIsEditModalOpen(false)}
           onConfirm={(scheduleId, headCount) =>
             editMutation.mutate({ scheduleId, headCount })

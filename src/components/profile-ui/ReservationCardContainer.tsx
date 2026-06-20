@@ -73,7 +73,7 @@ export default function ReservationCardContainer({
             className={
               isFallback
                 ? 'h-14 w-14 object-contain opacity-40 md:h-16 md:w-16'
-                : 'h-full w-full object-cover'
+                : 'h-full w-full border-r border-gray-100 object-cover'
             }
             onError={() => setImgSrc(fallbackSrc)}
           />
