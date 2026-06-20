@@ -47,15 +47,15 @@ export default function ScheduleInput({
   const minDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   return (
-    <div className="mobile:flex-row mobile:items-end flex flex-col gap-2">
-      <div className="mobile:flex-1 relative">
+    <div className="flex flex-col gap-2 min-[602px]:flex-row min-[602px]:items-end">
+      <div className="relative min-[602px]:flex-1">
         <input
           ref={dateInputRef}
           type="date"
           value={schedule.date}
           min={minDate}
           onChange={(e) => onChange(schedule.id, 'date', e.target.value)}
-          className="textlg-regular border-beige-8B7 focus:border-khaki-6B5 h-14 w-full rounded-2xl border bg-white px-4 pr-12 transition-colors duration-200 outline-none [&::-webkit-calendar-picker-indicator]:hidden"
+          className="textlg-regular border-beige-8B7 focus:border-khaki-6B5 h-14 w-full cursor-pointer rounded-2xl border bg-white px-4 pr-12 transition-colors duration-200 outline-none [&::-webkit-calendar-picker-indicator]:hidden"
         />
         <button
           type="button"
@@ -68,7 +68,7 @@ export default function ScheduleInput({
       </div>
 
       <div className="flex items-center gap-2">
-        <div className="mobile:w-[120px] mobile:flex-none flex-1">
+        <div className="flex-1 min-[602px]:w-[120px] min-[602px]:flex-none">
           <SelectDropdown
             value={schedule.startTime}
             onChange={(value) => onChange(schedule.id, 'startTime', value)}
@@ -82,7 +82,7 @@ export default function ScheduleInput({
           -
         </span>
 
-        <div className="mobile:w-[120px] mobile:flex-none flex-1">
+        <div className="flex-1 min-[602px]:w-[120px] min-[602px]:flex-none">
           <SelectDropdown
             value={schedule.endTime}
             onChange={(value) => onChange(schedule.id, 'endTime', value)}
@@ -96,7 +96,7 @@ export default function ScheduleInput({
           type="button"
           onClick={onRemove}
           aria-label="시간대 삭제"
-          className="bg-beige-8B7 flex h-14 w-14 shrink-0 items-center justify-center rounded-full transition-colors hover:opacity-90"
+          className="bg-beige-8B7 flex h-14 w-14 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors hover:opacity-90"
         >
           <IconMinus size={24} color="#ffffff" />
         </button>
