@@ -8,6 +8,7 @@ export interface InputProps extends ComponentPropsWithoutRef<'input'> {
   rightIcon?: ReactNode;
   hasError?: boolean;
   labelType?: 'default' | 'floating';
+  labelBgClass?: string;
 }
 
 export default function Input({
@@ -19,6 +20,7 @@ export default function Input({
   hasError,
   className = '',
   labelType = 'default',
+  labelBgClass = 'bg-white peer-focus:bg-white',
   ...props
 }: InputProps) {
   const isFloating = labelType === 'floating';
@@ -45,7 +47,12 @@ export default function Input({
           {...props}
         />
         {isFloating && (
-          <span className="text-gray-A1A pointer-events-none absolute top-0 left-2 z-10 max-w-[calc(100%-1rem)] -translate-y-1/2 truncate bg-white px-1 text-xs whitespace-nowrap transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:bg-transparent peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:bg-white peer-focus:text-xs peer-focus:text-[#8B7355]">
+          <span
+            className={twMerge(
+              'text-black-1B1 peer-placeholder-shown:text-gray-A1A peer-focus:text-brown-2A2 pointer-events-none absolute top-0 left-2 z-10 max-w-[calc(100%-1rem)] -translate-y-1/2 truncate px-1 text-xs whitespace-nowrap transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:bg-transparent peer-placeholder-shown:bg-none peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:text-xs',
+              labelBgClass,
+            )}
+          >
             {placeholder}
           </span>
         )}

@@ -26,7 +26,7 @@ export default function Searchbar({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`border-gray-DDD flex w-full flex-col gap-3.75 rounded-2xl border bg-white p-6 shadow-[0_4px_20px_rgba(0,0,0,0.04)] md:gap-8 md:p-8 ${className}`}
+      className={`border-gray-DDD flex w-full flex-col gap-3.75 md:gap-8 md:p-8 ${className}`}
     >
       <h2 className="textlg-bold text-black-1B1 md:text2xl-bold">
         무엇을 체험하고 싶으신가요?
@@ -41,6 +41,7 @@ export default function Searchbar({
           onChange={(e) => setValue(e.target.value)}
           leftIcon={<IconBed color="#8b7c55" />}
           labelType="floating"
+          labelBgClass="bg-[linear-gradient(to_bottom,#f2ebdc_50%,#ffffff_50%)] peer-focus:bg-[linear-gradient(to_bottom,#f2ebdc_50%,#ffffff_50%)]"
           className="min-w-0 flex-1"
         />
         <Button
