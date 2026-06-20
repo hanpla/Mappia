@@ -1,5 +1,7 @@
 import { formatTimeAgo } from '@/lib/utils/date';
 
+import IconX from '../icon/IconX';
+
 type NotificationType = 'approved' | 'rejected' | 'new';
 
 export interface NotificationData {
@@ -63,9 +65,9 @@ export default function NotificationItem({
         <button
           onClick={onDismiss}
           aria-label="알림 닫기"
-          className="flex h-6 w-6 items-center justify-center text-2xl leading-none text-gray-400 hover:text-gray-600"
+          className="flex h-6 w-6 items-center justify-center text-gray-400 hover:text-gray-600"
         >
-          ×
+          <IconX size={24} color="currentColor" />
         </button>
       </div>
       <p className="mb-1 pr-6 text-sm font-normal text-[#111322]">
