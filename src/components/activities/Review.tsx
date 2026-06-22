@@ -76,7 +76,7 @@ export default function Review({
       {totalCount > 0 && (
         <div className="mb-7.5 flex flex-col items-center justify-center">
           <div className="text2xl-bold md:text3xl-bold mb-0.5">
-            {averageRating.toFixed(1)}
+            {averageRating.toFixed(2)}
           </div>
           <div className="textmd-bold md:textlg-bold mb-1.5">
             {getRatingText(averageRating)}
