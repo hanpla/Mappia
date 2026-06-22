@@ -64,7 +64,7 @@ export default function ReservationCard({ item }: ReservationCardProps) {
       setIsCancelModalOpen(false);
       queryClient.invalidateQueries({ queryKey: ['myReservations'] });
     },
-    onError: (error) => {
+    onError: () => {
       showToast('error', '예약 취소에 실패했습니다.');
     },
   });
@@ -140,8 +140,8 @@ export default function ReservationCard({ item }: ReservationCardProps) {
           <span className={`text-sm font-semibold ${currentStatus.className}`}>
             {currentStatus.label}
           </span>
-          <Link href={`/activities/${activity.id}`}>
-            <h3 className="text-black-1B1 textlg-bold mt-1 mb-1 line-clamp-1 text-sm hover:underline md:mt-1.5 md:mb-2 md:text-base">
+          <Link href={`/activities/${activity.id}`} className="block w-fit">
+            <h3 className="textlg-bold mt-1 mb-1 line-clamp-1 text-sm hover:underline md:mt-1.5 md:mb-2 md:text-base">
               {activity.title}{' '}
             </h3>
           </Link>
