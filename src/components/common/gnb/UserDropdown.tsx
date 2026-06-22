@@ -39,7 +39,7 @@ export default function UserDropdown({ onClose }: UserDropdownProps) {
       <hr className="border-gray-200" />
       <button
         onClick={handleLogout}
-        className="text-red-FF4 w-full rounded-b-lg px-4 py-3 text-center text-sm hover:bg-gray-50"
+        className="text-red-FF4 w-full cursor-pointer rounded-b-lg px-4 py-3 text-center text-sm hover:bg-gray-50"
       >
         로그아웃
       </button>
