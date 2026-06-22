@@ -238,7 +238,7 @@ export default function ReservationReviewModal({
       ) : (
         <div className="w-full max-w-[480px] p-2 text-center">
           <div className="mb-6">
-            <h2 className="text-black-1B1 text-lg font-bold sm:text-xl">
+            <h2 className="text-black-1B1 line-clamp-1 text-lg font-bold sm:text-xl">
               {activityTitle}
             </h2>
             <p className="mt-1 text-xs text-gray-500 sm:text-sm">
