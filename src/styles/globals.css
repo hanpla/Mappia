@@ -1,7 +1,463 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme inline {
+/* ==========================================================================
+   FONTS
+   ========================================================================== */
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
 }
 
-body {
+/* ==========================================================================
+   THEME SYSTEM
+   ========================================================================== */
+@theme {
+  --font-family-pretendard: 'Pretendard', sans-serif;
+
+  /* Black & Nomad Black */
+  --color-black-1B1: #1b1b1b;
+  --color-nomad-112: #112211;
+  --color-black-242: #242429;
+  --color-black-333: #333236;
+
+  /* Gray */
+  --color-gray-FAF: #fafafa;
+  --color-gray-EEE: #eeeeee;
+  --color-gray-DDD: #dddddd;
+  --color-gray-D6D: #d6d5d9;
+  --color-gray-CBC: #cbc9cf;
+  --color-gray-ADA: #adaeb8;
+  --color-gray-A4A: #a4a1aa;
+  --color-gray-A1A: #a1a1a1;
+  --color-gray-797: #79747e;
+  --color-gray-4B4: #4b4b4b;
+
+  /* Blue */
+  --color-blue-008: #0085ff;
+  --color-blue-2EB: #2eb4ff;
+  --color-blue-E5F: #e5f3ff;
+
+  /* Green */
+  --color-green-0B3: #0b3b2d;
+  --color-green-CED: #ced8d5;
+  --color-green-066: #066839;
+
+  /* Orange */
+  --color-orange-FF7: #ff7c1d;
+  --color-orange-FFF: #fff4e8;
+
+  /* Red */
+  --color-red-FF4: #ff472e;
+  --color-red-FFC: #ffc2ba;
+  --color-red-FFE: #ffe4e0;
+
+  /* Yellow */
+  --color-yellow-FFC: #ffc23d;
+
+  /* White */
+  --color-white-FFF: #ffffff;
+
+  /* Ivory */
+  --color-ivory-F2E: #f2ebdc;
+
+  /* Beige */
+  --color-beige-8B7: #8b7355;
+
+  --color-beige-B9A: #b9ab99;
+
+  /* Khaki */
+  --color-khaki-6B5: #6b5747;
+
+  /* Brown */
+  --color-brown-2A2: #2a2218;
+
+  /* Shadows */
+  --shadow-dropdown: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  /* Breakpoints */
+  --breakpoint-mobile: 376px;
+}
+
+/* ==========================================================================
+   BASE LAYER (기본 브라우저 초기화 및 폰트 적용)
+   ========================================================================== */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--font-family-pretendard);
+    background-color: var(--color-gray-FAF);
+    color: var(--color-black-1B1);
+  }
+}
+
+/* ==========================================================================
+   TYPOGRAPHY UTILITIES
+   ========================================================================== */
+/* Text 4xl (48px / 56px) */
+@utility text4xl-medium {
+  font-size: 3rem; /* 48px */
+  line-height: 3.5rem; /* 56px */
+  font-weight: 500;
+}
+
+/* Text 3xl (32px / 42px) */
+@utility text3xl-bold {
+  font-size: 2rem; /* 32px */
+  line-height: 2.625rem; /* 42px */
+  font-weight: 700;
+}
+@utility text3xl-semibold {
+  font-size: 2rem;
+  line-height: 2.625rem;
+  font-weight: 600;
+}
+@utility text3xl-medium {
+  font-size: 2rem;
+  line-height: 2.625rem;
+  font-weight: 500;
+}
+
+/* Text 2xl (24px / 32px) */
+@utility text2xl-bold {
+  font-size: 1.5rem; /* 24px */
+  line-height: 2rem; /* 32px */
+  font-weight: 700;
+}
+@utility text2xl-semibold {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+@utility text2xl-medium {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 500;
+}
+@utility text2xl-regular {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+/* Text xl (20px / 32px) */
+@utility textxl-bold {
+  font-size: 1.25rem; /* 20px */
+  line-height: 2rem; /* 32px */
+  font-weight: 700;
+}
+@utility textxl-semibold {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+@utility textxl-medium {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 500;
+}
+@utility textxl-regular {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-weight: 400;
+}
+
+/* Text 2lg (18px / 26px) */
+@utility text2lg-bold {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.625rem; /* 26px */
+  font-weight: 700;
+}
+@utility text2lg-semibold {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 600;
+}
+@utility text2lg-medium {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 500;
+}
+@utility text2lg-regular {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 400;
+}
+
+/* Text lg (16px / 26px) */
+@utility textlg-bold {
+  font-size: 1rem; /* 16px */
+  line-height: 1.625rem; /* 26px */
+  font-weight: 700;
+}
+@utility textlg-semibold {
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 600;
+}
+@utility textlg-medium {
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 500;
+}
+@utility textlg-regular {
+  font-size: 1rem;
+  line-height: 1.625rem;
+  font-weight: 400;
+}
+
+/* Text md (14px / 24px) */
+@utility textmd-bold {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.5rem; /* 24px */
+  font-weight: 700;
+}
+@utility textmd-semibold {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  font-weight: 600;
+}
+@utility textmd-medium {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+@utility textmd-regular {
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+
+/* Text sm (13px / 22px) */
+@utility textsm-bold {
+  font-size: 0.8125rem; /* 13px */
+  line-height: 1.375rem; /* 22px */
+  font-weight: 700;
+}
+@utility textsm-semibold {
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
+  font-weight: 600;
+}
+@utility textsm-medium {
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
+  font-weight: 500;
+}
+@utility textsm-regular {
+  font-size: 0.8125rem;
+  line-height: 1.375rem;
+  font-weight: 400;
+}
+
+/* Text xs (12px / 18px) */
+@utility textxs-bold {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.125rem; /* 18px */
+  font-weight: 700;
+}
+@utility textxs-semibold {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 600;
+}
+@utility textxs-medium {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 500;
+}
+@utility textxs-regular {
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   LAYOUT UTILITIES
+   ========================================================================== */
+@utility inner {
+  max-width: 1224px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+/* ==========================================================================
+   ANIMATIONS (Bottom Sheet & Modal)
+   ========================================================================== */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@utility animate-slide-up {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-slide-down {
+  animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-zoom-in {
+  animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@utility animate-fade-in {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+@utility scrollbar-custom {
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-color: theme(colors.gray.400);
+    background-clip: padding-box;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
+
+@utility animate-fade-out {
+  animation: fadeOut 0.2s ease-out forwards;
+}
+
+/* ==========================================================================
+   LANDING — DETECTIVE STAGE
+   ========================================================================== */
+@keyframes stage-drift {
+  from {
+    transform: translate3d(-10%, -7%, 0);
+  }
+  to {
+    transform: translate3d(7%, 9%, 0);
+  }
+}
+
+/* 진입 시 위에서 좌우로 훑는 무대 조명 */
+@keyframes searchlight-sweep-a {
+  0% {
+    transform: translateX(-50%) rotate(-26deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(22deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(-26deg);
+  }
+}
+
+@keyframes searchlight-sweep-b {
+  0% {
+    transform: translateX(-50%) rotate(20deg);
+  }
+  50% {
+    transform: translateX(-50%) rotate(-24deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(20deg);
+  }
+}
+
+/* 불빛 주변만 선명하게 뚫리는 다크 무대 안개 */
+@utility stage-fog {
+  background: radial-gradient(
+    circle 15rem at var(--mx, 50%) var(--my, 40%),
+    transparent 0%,
+    rgba(18, 13, 7, 0.45) 34%,
+    rgba(12, 9, 5, 0.94) 72%
+  );
+}
+
+/* 따뜻한 스포트라이트 불빛 */
+@utility stage-cursor-glow {
+  background: radial-gradient(
+    circle at center,
+    rgba(226, 192, 132, 0.45) 0%,
+    rgba(198, 158, 96, 0.14) 32%,
+    transparent 68%
+  );
+}
+
+@utility animate-stage-drift {
+  animation: stage-drift 26s ease-in-out infinite alternate;
+}
+
+@utility animate-searchlight-a {
+  animation: searchlight-sweep-a 3s ease-in-out infinite;
+}
+
+@utility animate-searchlight-b {
+  animation: searchlight-sweep-b 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-stage-drift,
+  .animate-searchlight-a,
+  .animate-searchlight-b {
+    animation: none;
+  }
+}
+
+/* input창 자동완성 시 배경색과 글자색 제어 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1b1b1b !important;
 }

@@ -1,28 +1,115 @@
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
+import js from '@eslint/js';
+import typescriptParser from '@typescript-eslint/parser';
+import importXPlugin from 'eslint-plugin-import-x';
+import prettierConfig from 'eslint-config-prettier';
 
-const eslintConfig = [
-  // 1. Next.js 기본 권장 설정 및 TypeScript 설정 포함
+const eslintConfig = defineConfig([
+  js.configs.recommended,
   ...nextVitals,
   ...nextTs,
 
-  // 2. 사용자 정의 규칙
+  globalIgnores([
+    '.next/**',
+    'node_modules/**',
+    'dist/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
+
   {
+    files: ['**/*.{ts,tsx,js,jsx}'],
+    plugins: {
+      'import-x': importXPlugin,
+    },
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+        projectService: true,
+      },
+    },
     rules: {
-      // 콘솔 로그 사용 시 경고 (배포 전 확인용)
-      "no-console": ["warn", {allow: ["warn", "error"]}],
+      // 컴포넌트는 함수 선언식, 내부 익명 컴포넌트는 화살표 함수
+      'react/function-component-definition': [
+        'error',
+        {
+          namedComponents: 'function-declaration',
+          unnamedComponents: 'arrow-function',
+        },
+      ],
 
-      // 정의되었지만 사용하지 않는 변수 에러 처리
-      "no-unused-vars": "off", // TS 규칙과 충돌 방지를 위해 off
-      "@typescript-eslint/no-unused-vars": ["error"],
+      // Import 순서 (빈 줄은 Prettier가 처리하므로 ignore)
+      'import-x/order': [
+        'error',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+          ],
+          pathGroups: [
+            {
+              pattern: '{react,react/**,next,next/**}',
+              group: 'external',
+              position: 'before',
+            },
+            { pattern: '@/stores/**', group: 'internal', position: 'before' },
+            { pattern: '@/lib/**', group: 'internal', position: 'before' },
+            { pattern: '@/hooks/**', group: 'internal', position: 'before' },
+            {
+              pattern: '@/constants/**',
+              group: 'internal',
+              position: 'before',
+            },
+            { pattern: '@/types/**', group: 'internal', position: 'before' },
+            { pattern: '@/styles/**', group: 'internal', position: 'before' },
+            {
+              pattern: '@/components/**',
+              group: 'internal',
+              position: 'before',
+            },
+            { pattern: '@/**', group: 'internal' },
+          ],
+          pathGroupsExcludedImportTypes: [],
+          'newlines-between': 'ignore',
+        },
+      ],
 
-      // React 컴포넌트 만들 때 React 임포트 생략 허용 (Next.js는 자동임)
-      "react/react-in-jsx-scope": "off",
-
-      // <img> 태그 대신 Next.js의 <Image /> 컴포넌트 사용 권장
-      "@next/next/no-img-element": "warn",
+      // 네이밍 컨벤션
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          // 변수는 camelCase, 상수는 UPPER_CASE, 컴포넌트 참조는 PascalCase
+          selector: 'variable',
+          format: ['camelCase', 'PascalCase', 'UPPER_CASE'],
+        },
+        {
+          // 함수는 camelCase(일반 함수, hook), PascalCase(컴포넌트)
+          selector: 'function',
+          format: ['camelCase', 'PascalCase'],
+        },
+        {
+          // boolean 변수는 is, has, should 접두사 필수
+          selector: 'variable',
+          types: ['boolean'],
+          format: ['PascalCase'],
+          prefix: ['is', 'has', 'should'],
+        },
+      ],
     },
   },
-];
+  // Prettier와 충돌하는 포맷팅 규칙 일괄 off
+  prettierConfig,
+]);
 
 export default eslintConfig;

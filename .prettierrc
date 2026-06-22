@@ -13,13 +13,16 @@
     "prettier-plugin-tailwindcss"
   ],
   "importOrder": [
-    "^(react|next)(.)$",
+    "^(react|next)(.*)$",
     "<THIRD_PARTY_MODULES>",
-    "^@/stores/(.)$",
-    "^@/lib/(.)$",
-    "^@/hooks/(.)$",
-    "^@/constants/(.)$",
-    "^@/components/(.)$",
+    "^@/stores/(.*)$",
+    "^@/lib/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/constants/(.*)$",
+    "^@/types/(.*)$",
+    "^@/styles/(.*)$",
+    "^@/components/(.*)$",
+    "^@/(.*)$",
     "^[./]"
   ],
   "importOrderSeparation": true,
