@@ -26,7 +26,7 @@ export default function ActivityContent({
   currentPage,
 }: ActivityContentProps) {
   const { data: activity, isError } = useSuspenseQuery({
-    queryKey: ['activityDetail', activityId],
+    queryKey: ['activity', activityId],
     queryFn: () => getActivityDetail(activityId),
     staleTime: 1000 * 60 * 5,
     retry: false,
