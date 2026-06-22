@@ -24,7 +24,7 @@ export default function CardInfo({
       </div>
 
       <Link href={`/activities/${id}`} className="w-fit">
-        <h3 className="textlg-bold md:text2lg-bold truncate hover:underline">
+        <h3 className="textlg-bold md:text2lg-bold line-clamp-1 hover:underline">
           {title}
         </h3>
       </Link>

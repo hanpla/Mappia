@@ -24,7 +24,7 @@ export default function FaqAccordion({
         className="group flex w-full cursor-pointer items-center justify-between py-5 text-left"
       >
         <div className="flex flex-col gap-1.5 pr-4">
-          <span className="textxs-medium text-beige-8B7 bg-ivory-F2E/30 w-fit rounded px-2 py-0.5">
+          <span className="textxs-medium text-beige-8B7 bg-ivory-F2E/30 w-fit rounded py-0.5">
             {categoryLabel}
           </span>
           <span className="textmd-semibold text-brown-2A2 group-hover:text-khaki-6B5 md:textlg-semibold transition-colors duration-200">
