@@ -11,7 +11,7 @@ import {
   REFRESH_TOKEN_MAX_AGE,
 } from '@/lib/utils/token';
 
-import type { TokensResponse } from '@/types/auth';
+import type { LoginResponse, TokensResponse } from '@/types/auth';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -34,6 +34,38 @@ export const clearAuthCookies = async () => {
   const cookieStore = await cookies();
   cookieStore.delete(ACCESS_TOKEN_KEY);
   cookieStore.delete(REFRESH_TOKEN_KEY);
+};
+
+export type LoginResult = { ok: true } | { ok: false; message: string };
+
+// 이메일 로그인을 서버에서 처리한다. 로그인 API를 호출해 받은 토큰을 곧바로 httpOnly
+// 쿠키에 저장하고, 클라이언트에는 성공/실패만 반환한다. 덕분에 액세스/리프레시 토큰이
+// 클라이언트 JS에 전혀 노출되지 않는다(카카오 OAuth 콜백과 동일한 보안 수준).
+export const login = async (
+  email: string,
+  password: string,
+): Promise<LoginResult> => {
+  const response = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    // 백엔드가 보낸 에러 message를 그대로 노출하되, 없으면 기본 메시지로 대체한다.
+    const data = (await response.json().catch(() => null)) as {
+      message?: string;
+    } | null;
+    return {
+      ok: false,
+      message: data?.message ?? '로그인에 실패했습니다. 정보를 확인해 주세요.',
+    };
+  }
+
+  const data = (await response.json()) as LoginResponse;
+  await setAuthCookies(data.accessToken, data.refreshToken);
+  return { ok: true };
 };
 
 export const refreshTokens = async (): Promise<string | null> => {

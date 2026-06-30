@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 import { isAxiosError } from 'axios';
 
-import { signInKakao, signUpKakao } from '@/lib/api/auth';
+import { loginKakao, signupKakao } from '@/lib/api/auth';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import {
   ACCESS_COOKIE_OPTIONS,
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
   // 가입 의도로 재인증되어 돌아온 경우: 새 인가코드로 회원가입
   if (state === 'signup') {
     try {
-      const { data } = await signUpKakao(code, generateNickname());
+      const { data } = await signupKakao(code, generateNickname());
       return redirectWithAuth(request, data);
     } catch {
       return redirectToLoginError(request);
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
 
   // 기본: 로그인 시도
   try {
-    const { data } = await signInKakao(code);
+    const { data } = await loginKakao(code);
     return redirectWithAuth(request, data);
   } catch (err) {
     // 404(미가입)일 때만 가입용으로 재인증(새 코드 발급). 그 외 오류는 로그인 페이지로.

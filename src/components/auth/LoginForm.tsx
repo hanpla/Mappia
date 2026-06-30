@@ -8,9 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
 
-import { setAuthCookies } from '@/lib/actions/auth';
-import { login } from '@/lib/api/auth';
-import { getApiErrorMessage } from '@/lib/utils/error';
+import { login } from '@/lib/actions/auth';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import { getSafeCallback } from '@/lib/utils/redirect';
 import { validateEmail, validatePassword } from '@/lib/utils/validation';
@@ -33,9 +31,14 @@ export default function LoginForm() {
   const isSubmittingRef = useRef(false);
 
   const { mutate: loginMutate, isPending } = useMutation({
+    // 로그인 API 호출과 토큰 쿠키 저장을 모두 서버 액션에서 처리한다.
+    // 클라이언트는 토큰을 받지 않고 성공/실패 결과만 받는다.
     mutationFn: () => login(email, password),
-    onSuccess: async ({ data }) => {
-      await setAuthCookies(data.accessToken, data.refreshToken);
+    onSuccess: (result) => {
+      if (!result.ok) {
+        showToast('error', result.message);
+        return;
+      }
       showToast('success', '로그인에 성공했습니다.');
 
       const callback = new URLSearchParams(window.location.search).get(
@@ -45,8 +48,9 @@ export default function LoginForm() {
       router.refresh();
       router.push(getSafeCallback(callback));
     },
-    onError: (err) => {
-      showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));
+    onError: () => {
+      // 결과 객체로 처리되는 인증 실패와 달리, 여기는 네트워크 오류 등 예외 상황만 처리한다.
+      showToast('error', LOGIN_ERROR_MESSAGE);
     },
     onSettled: () => {
       isSubmittingRef.current = false;
