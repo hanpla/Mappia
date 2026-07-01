@@ -59,7 +59,15 @@ export const login = async (
     };
   }
 
-  const data = (await response.json()) as LoginResponse;
+  const data = (await response
+    .json()
+    .catch(() => null)) as LoginResponse | null;
+  if (!data?.accessToken || !data?.refreshToken) {
+    return {
+      ok: false,
+      message: '로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+    };
+  }
   await setAuthCookies(data.accessToken, data.refreshToken);
   return { ok: true };
 };
