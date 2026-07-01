@@ -11,7 +11,7 @@ export const signup = (email: string, nickname: string, password: string) => {
 export const loginKakao = (code: string) => {
   return publicInstance.post<LoginResponse>('/oauth/sign-in/kakao', {
     redirectUri: KAKAO_REDIRECT_URI,
-    token: code, // 백엔드가 인가 코드를 token 키로 받음
+    token: code,
   });
 };
 
@@ -19,6 +19,6 @@ export const signupKakao = (code: string, nickname: string) => {
   return publicInstance.post<LoginResponse>('/oauth/sign-up/kakao', {
     nickname,
     redirectUri: KAKAO_REDIRECT_URI,
-    token: code, // 백엔드가 인가 코드를 token 키로 받음
+    token: code,
   });
 };

@@ -31,8 +31,6 @@ export default function LoginForm() {
   const isSubmittingRef = useRef(false);
 
   const { mutate: loginMutate, isPending } = useMutation({
-    // 로그인 API 호출과 토큰 쿠키 저장을 모두 서버 액션에서 처리한다.
-    // 클라이언트는 토큰을 받지 않고 성공/실패 결과만 받는다.
     mutationFn: () => login(email, password),
     onSuccess: (result) => {
       if (!result.ok) {
@@ -49,7 +47,6 @@ export default function LoginForm() {
       router.push(getSafeCallback(callback));
     },
     onError: () => {
-      // 결과 객체로 처리되는 인증 실패와 달리, 여기는 네트워크 오류 등 예외 상황만 처리한다.
       showToast('error', LOGIN_ERROR_MESSAGE);
     },
     onSettled: () => {
