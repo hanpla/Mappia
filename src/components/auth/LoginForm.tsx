@@ -8,9 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import useToastStore from '@/stores/toastStore';
 
-import { setAuthCookies } from '@/lib/actions/auth';
-import { login } from '@/lib/api/auth';
-import { getApiErrorMessage } from '@/lib/utils/error';
+import { login } from '@/lib/actions/auth';
 import { getKakaoAuthUrl } from '@/lib/utils/kakao';
 import { getSafeCallback } from '@/lib/utils/redirect';
 import { validateEmail, validatePassword } from '@/lib/utils/validation';
@@ -34,8 +32,11 @@ export default function LoginForm() {
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: () => login(email, password),
-    onSuccess: async ({ data }) => {
-      await setAuthCookies(data.accessToken, data.refreshToken);
+    onSuccess: (result) => {
+      if (!result.ok) {
+        showToast('error', result.message);
+        return;
+      }
       showToast('success', '로그인에 성공했습니다.');
 
       const callback = new URLSearchParams(window.location.search).get(
@@ -45,8 +46,8 @@ export default function LoginForm() {
       router.refresh();
       router.push(getSafeCallback(callback));
     },
-    onError: (err) => {
-      showToast('error', getApiErrorMessage(err, LOGIN_ERROR_MESSAGE));
+    onError: () => {
+      showToast('error', LOGIN_ERROR_MESSAGE);
     },
     onSettled: () => {
       isSubmittingRef.current = false;

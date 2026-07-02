@@ -56,7 +56,6 @@ export default function UserSection() {
         error instanceof Error ? error.message : '전체 삭제에 실패했어요.',
       );
     },
-    // 일부만 성공해도 성공분을 즉시 반영하기 위해, 성공/실패 무관하게 항상 재조회한다.
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['my-notifications'] });
     },

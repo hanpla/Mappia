@@ -11,7 +11,7 @@ import {
   REFRESH_TOKEN_MAX_AGE,
 } from '@/lib/utils/token';
 
-import type { TokensResponse } from '@/types/auth';
+import type { LoginResponse, TokensResponse } from '@/types/auth';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -36,6 +36,42 @@ export const clearAuthCookies = async () => {
   cookieStore.delete(REFRESH_TOKEN_KEY);
 };
 
+export type LoginResult = { ok: true } | { ok: false; message: string };
+
+export const login = async (
+  email: string,
+  password: string,
+): Promise<LoginResult> => {
+  const response = await fetch(`${BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    const data = (await response.json().catch(() => null)) as {
+      message?: string;
+    } | null;
+    return {
+      ok: false,
+      message: data?.message ?? '로그인에 실패했습니다. 정보를 확인해 주세요.',
+    };
+  }
+
+  const data = (await response
+    .json()
+    .catch(() => null)) as LoginResponse | null;
+  if (!data?.accessToken || !data?.refreshToken) {
+    return {
+      ok: false,
+      message: '로그인에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+    };
+  }
+  await setAuthCookies(data.accessToken, data.refreshToken);
+  return { ok: true };
+};
+
 export const refreshTokens = async (): Promise<string | null> => {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get(REFRESH_TOKEN_KEY)?.value;
@@ -52,7 +88,6 @@ export const refreshTokens = async (): Promise<string | null> => {
   });
 
   if (!response.ok) {
-    // 4xx(만료/무효): 쿠키를 정리하고 throw → 클라이언트 인터셉터가 로그인 페이지로 보낸다.
     if (response.status >= 400 && response.status < 500) {
       await clearAuthCookies();
       throw new Error('Failed to refresh token');
